@@ -96,7 +96,6 @@
           <el-button type="danger" size="mini" align="center" @click="handleOutBound(row)">
             出库
           </el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -104,142 +103,124 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 1200px; margin-left:30px;">
+      <el-form ref="dataForm" :rules="tempRules" :model="temp" :label-position="labelPosition" :inline="true" label-width="140px">
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="客户采购订单号:" prop="po">
-              <el-input v-model="temp.po" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="货物款号:" prop="sku">
-              <el-input v-model="temp.sku" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="入仓落货纸号:" prop="so">
-              <el-input v-model="temp.so" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="供应商名称:" prop="supplierName">
+            <el-input v-model="temp.supplierName" />
+          </el-form-item>
+          <el-form-item label="入仓落货纸号:" prop="so">
+            <el-input v-model="temp.so" />
+          </el-form-item>
+          <el-form-item label="客户采购订单号:" prop="po">
+            <el-input v-model="temp.po" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="物料号:">
-              <el-input v-model="temp.customsMeterialNo" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="实收箱数:">
-              <el-input v-model="temp.rcvdCtns" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="实收件数:">
-              <el-input v-model="temp.rcvdPcs" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="货物款号:" prop="sku">
+            <el-input v-model="temp.sku" />
+          </el-form-item>
+          <el-form-item label="入仓号:" prop="inboundNo">
+            <el-input v-model="temp.inboundNo" />
+          </el-form-item>
+          <el-form-item label="海关系统物料号:" prop="customsMeterialNo">
+            <el-input v-model="temp.customsMeterialNo" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="单箱毛重:">
-              <el-input v-model="temp.gwPerBoxActul" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="单箱净重:">
-              <el-input v-model="temp.custsDeclaPieceWeigh" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="报关单件净重:">
-              <el-input v-model="temp.boxLengthActul" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="收货日期:" prop="rcvdDate">
+            <el-input v-model="temp.rcvdDate" />
+          </el-form-item>
+          <el-form-item label="实收箱数:" prop="rcvdCtns">
+            <el-input v-model="temp.rcvdCtns" />
+          </el-form-item>
+          <el-form-item label="实收件数:" prop="rcvdPcs">
+            <el-input v-model="temp.rcvdPcs" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="长(CM):">
-              <el-input v-model="temp.boxLengthActul" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="宽(CM):">
-              <el-input v-model="temp.boxWidthActul" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="高(CM):">
-              <el-input v-model="temp.boxHighActul" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="一箱几件:" prop="itemsPerBox">
+            <el-input v-model="temp.itemsPerBox" />
+          </el-form-item>
+          <el-form-item label="单箱毛重:" prop="gwPerBoxActul">
+            <el-input v-model="temp.gwPerBoxActul" />
+          </el-form-item>
+          <el-form-item label="实收总毛重:" prop="gwAllActul">
+            <el-input v-model="temp.gwAllActul" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="成交数量:">
-              <el-input v-model="temp.declaCount" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="申报单位:">
-              <el-input v-model="temp.declaUnit" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="申报单价:">
-              <el-input v-model="temp.declaUnitPrice" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="实测外箱长:" prop="boxLengthActul">
+            <el-input v-model="temp.boxLengthActul" />
+          </el-form-item>
+          <el-form-item label="实测外箱宽:" prop="boxWidthActul">
+            <el-input v-model="temp.boxWidthActul" />
+          </el-form-item>
+          <el-form-item label="实测外箱高:" prop="boxHighActul">
+            <el-input v-model="temp.boxHighActul" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="币制:">
-              <el-input v-model="temp.declaCurrency" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="商品编码:">
-              <el-input v-model="temp.customsMerchNo" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="商品名称:">
-              <el-input v-model="temp.merchName" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="实测单箱体积:" prop="boxPerVolumeActul">
+            <el-input v-model="temp.boxPerVolumeActul" />
+          </el-form-item>
+          <el-form-item label="实收总体积:" prop="boxAllVolumeActul">
+            <el-input v-model="temp.boxAllVolumeActul" />
+          </el-form-item>
+          <el-form-item label="入仓报关单件净重:" prop="custsDeclaPieceWeigh">
+            <el-input v-model="temp.custsDeclaPieceWeigh" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="原产国:">
-              <el-input v-model="temp.originCountry" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="目的国:">
-              <el-input v-model="temp.destCountry" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="仓位:">
-              <el-input v-model="temp.warehousePosition" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="入仓报关总净重:" prop="custsDeclaAllWeigh">
+            <el-input v-model="temp.custsDeclaAllWeigh" />
+          </el-form-item>
+          <el-form-item label="仓库位置:" prop="warehousePosition">
+            <el-input v-model="temp.warehousePosition" />
+          </el-form-item>
+          <el-form-item label="总出仓箱数:" prop="shippedCtns">
+            <el-input v-model="temp.shippedCtns" />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-col :span="80">
-            <el-form-item label="入仓号">
-              <el-input v-model="temp.inboundNo" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="供应商名称">
-              <el-input v-model="temp.supplierName" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="80">
-            <el-form-item label="备注:">
-              <el-input v-model="temp.remarks" />
-            </el-form-item>
-          </el-col>
+          <el-form-item label="总出仓件数:" prop="shippedPcs">
+            <el-input v-model="temp.shippedPcs" />
+          </el-form-item>
+          <el-form-item label="总出仓毛重:" prop="shippedGw">
+            <el-input v-model="temp.shippedGw" />
+          </el-form-item>
+          <el-form-item label="总出仓净重:" prop="shippedWeigh">
+            <el-input v-model="temp.shippedWeigh" />
+          </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="总出仓体积:" prop="shippedVolume">
+            <el-input v-model="temp.shippedVolume" />
+          </el-form-item>
+          <el-form-item label="总库存箱数:" prop="stockCtns">
+            <el-input v-model="temp.stockCtns" />
+          </el-form-item>
+          <el-form-item label="总库存件数:" prop="stockPcs">
+            <el-input v-model="temp.stockPcs" />
+          </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="总库存毛重:" prop="stockGw">
+            <el-input v-model="temp.stockGw" />
+          </el-form-item>
+          <el-form-item label="总库存净重:" prop="stockWeigh">
+            <el-input v-model="temp.stockWeigh" />
+          </el-form-item>
+          <el-form-item label="总库存体积:" prop="stockVolume">
+            <el-input v-model="temp.stockVolume" />
+          </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-form-item label="备注:" prop="remark">
+            <el-input v-model="temp.remark" />
+          </el-form-item>
         </el-row>
       </el-form>
       <div slot="footer" align="center" class="dialog-footer">
@@ -254,7 +235,7 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="outBoundFormVisible" width="60%">
       <div class="filter-container">
-        <el-form ref="outBoundForm" :rules="rules" :model="temp" label-position="left" label-width="120px" style="width: 1200px; margin-left:30px;">
+        <el-form ref="outBoundForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="120px">
           <el-form-item label="出仓单号：" prop="clp">
             <el-input v-model="temp.clp" placeholder="clp" style="width: 200px;" class="filter-item" clearable />
           </el-form-item>
@@ -353,13 +334,13 @@
           >
             <template slot-scope="scope">
               <el-button
-                v-show="scope.row.status == 'fail'"
+                v-show="scope.row.status === 'fail'"
                 size="mini"
                 :type="loadType(scope.row.status)"
                 @click="againUpload(scope.$index, scope.row)"
               >重传</el-button>
               <el-button
-                v-show="scope.row.status != 'load'"
+                v-show="scope.row.status !== 'load'"
                 size="mini"
                 type="danger"
                 @click="beforeRemove(scope.$index, scope.row)"
@@ -375,7 +356,7 @@
 <script>
 import { fetchInboundList, addStock, updateStock, outBoundStock, uploadFile } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
+// import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -386,6 +367,7 @@ export default {
   },
   data() {
     return {
+      labelPosition: 'right',
       tableKey: 0,
       list: null,
       total: 0,
@@ -398,7 +380,6 @@ export default {
         sku: undefined
       },
       temp: {
-        id: '',
         supplierName: '',
         so: '',
         po: '',
@@ -429,7 +410,9 @@ export default {
         stockGw: '',
         stockWeigh: '',
         stockVolume: '',
-        stockCheck: ''
+        stockCheck: '',
+        clp: '',
+        pcs: ''
       },
       dialogStatus: '',
       textMap: {
@@ -438,6 +421,8 @@ export default {
         outbound: '出库'
       },
       rules: {
+      },
+      tempRules: {
         po: [{ required: true, message: 'po is required', trigger: 'blur' }],
         sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
       },
@@ -500,7 +485,6 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: '',
         supplierName: '',
         so: '',
         po: '',
@@ -531,7 +515,9 @@ export default {
         stockGw: '',
         stockWeigh: '',
         stockVolume: '',
-        stockCheck: ''
+        stockCheck: '',
+        clp: '',
+        pcs: ''
       }
     },
     handleCreate() {
@@ -599,7 +585,7 @@ export default {
     outBoundData() {
       this.$refs['outBoundForm'].validate((valid) => {
         if (valid) {
-          this.temp.author = 'vue-element-admin'
+          console.info(this.temp)
           outBoundStock(this.temp).then(response => {
             this.outBoundFormVisible = false
 
@@ -658,7 +644,7 @@ export default {
         for (const key in this.asyncValue) {
           if (this.asyncValue.hasOwnProperty(key)) {
             const item = this.asyncValue[key]
-            if (key == 'file') {
+            if (key === 'file') {
               fd.append('excelFile', this.tableData.list[i].file)
             } else {
               fd.append(key, item)
@@ -690,7 +676,7 @@ export default {
       for (const key in this.asyncValue) {
         if (this.asyncValue.hasOwnProperty(key)) {
           const item = this.asyncValue[key]
-          if (key == 'file') {
+          if (key === 'file') {
             fd.append('excelFile', this.tableData.list[i].file)
           } else {
             fd.append(key, item)
@@ -711,7 +697,7 @@ export default {
       this.tableData.list = []
       this.asyncValue = {
         file: null
-      },
+      }
       this.$emit('input', '')
       this.getList()
     },
@@ -720,16 +706,10 @@ export default {
       switch (status) {
         case 'fail':
           return 'primary'
-          break
         case 'success':
           return 'primary'
-          break
-        case 'fail':
-          return 'info'
-          break
         case 'existed':
           return 'info'
-          break
         default:
           return 'primary'
       }
