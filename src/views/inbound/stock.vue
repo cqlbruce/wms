@@ -161,19 +161,19 @@
         label-width="140px"
       >
         <el-row>
-          <el-form-item label="供应商名称:" prop="supplierName">
-            <el-input v-model="temp.supplierName" />
+          <el-form-item label="货物款号:" prop="sku">
+            <el-input v-model="temp.sku" placeholder="sku" />
           </el-form-item>
           <el-form-item label="入仓落货纸号:" prop="so">
-            <el-input v-model="temp.so" />
+            <el-input v-model="temp.so" placeholder="so" />
           </el-form-item>
           <el-form-item label="客户采购订单号:" prop="po">
-            <el-input v-model="temp.po" />
+            <el-input v-model="temp.po" placeholder="po" />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="货物款号:" prop="sku">
-            <el-input v-model="temp.sku" />
+          <el-form-item label="供应商名称:" prop="supplierName">
+            <el-input v-model="temp.supplierName" />
           </el-form-item>
           <el-form-item label="入仓号:" prop="inboundNo">
             <el-input v-model="temp.inboundNo" />
@@ -194,14 +194,14 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="一箱几件:" prop="itemsPerBox">
-            <el-input v-model="temp.itemsPerBox" />
-          </el-form-item>
           <el-form-item label="单箱毛重:" prop="gwPerBoxActul">
             <el-input v-model="temp.gwPerBoxActul" />
           </el-form-item>
-          <el-form-item label="实收总毛重:" prop="gwAllActul">
-            <el-input v-model="temp.gwAllActul" />
+          <el-form-item label="实测单箱体积:" prop="boxPerVolumeActul">
+            <el-input v-model="temp.boxPerVolumeActul" />
+          </el-form-item>
+          <el-form-item label="入仓报关单件净重:" prop="custsDeclaPieceWeigh">
+            <el-input v-model="temp.custsDeclaPieceWeigh" />
           </el-form-item>
         </el-row>
         <el-row>
@@ -216,64 +216,12 @@
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="实测单箱体积:" prop="boxPerVolumeActul">
-            <el-input v-model="temp.boxPerVolumeActul" />
-          </el-form-item>
-          <el-form-item label="实收总体积:" prop="boxAllVolumeActul">
-            <el-input v-model="temp.boxAllVolumeActul" />
-          </el-form-item>
-          <el-form-item label="入仓报关单件净重:" prop="custsDeclaPieceWeigh">
-            <el-input v-model="temp.custsDeclaPieceWeigh" />
-          </el-form-item>
-        </el-row>
-        <el-row>
           <el-form-item label="入仓报关总净重:" prop="custsDeclaAllWeigh">
             <el-input v-model="temp.custsDeclaAllWeigh" />
           </el-form-item>
           <el-form-item label="仓库位置:" prop="warehousePosition">
             <el-input v-model="temp.warehousePosition" />
           </el-form-item>
-          <el-form-item label="总出仓箱数:" prop="shippedCtns">
-            <el-input v-model="temp.shippedCtns" />
-          </el-form-item>
-        </el-row>
-        <el-row>
-          <el-form-item label="总出仓件数:" prop="shippedPcs">
-            <el-input v-model="temp.shippedPcs" />
-          </el-form-item>
-          <el-form-item label="总出仓毛重:" prop="shippedGw">
-            <el-input v-model="temp.shippedGw" />
-          </el-form-item>
-          <el-form-item label="总出仓净重:" prop="shippedWeigh">
-            <el-input v-model="temp.shippedWeigh" />
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-form-item label="总出仓体积:" prop="shippedVolume">
-            <el-input v-model="temp.shippedVolume" />
-          </el-form-item>
-          <el-form-item label="总库存箱数:" prop="stockCtns">
-            <el-input v-model="temp.stockCtns" />
-          </el-form-item>
-          <el-form-item label="总库存件数:" prop="stockPcs">
-            <el-input v-model="temp.stockPcs" />
-          </el-form-item>
-        </el-row>
-
-        <el-row>
-          <el-form-item label="总库存毛重:" prop="stockGw">
-            <el-input v-model="temp.stockGw" />
-          </el-form-item>
-          <el-form-item label="总库存净重:" prop="stockWeigh">
-            <el-input v-model="temp.stockWeigh" />
-          </el-form-item>
-          <el-form-item label="总库存体积:" prop="stockVolume">
-            <el-input v-model="temp.stockVolume" />
-          </el-form-item>
-        </el-row>
-
-        <el-row>
           <el-form-item label="备注:" prop="remark">
             <el-input v-model="temp.remark" />
           </el-form-item>
@@ -312,6 +260,7 @@
               clearable
             />
           </el-form-item>
+          <el-form-item label="总库存件数:">{{ temp.stockPcs }}</el-form-item>
         </el-form>
       </div>
       <div slot="footer" align="center" class="dialog-footer">
@@ -574,8 +523,8 @@ export default {
       },
       rules: {},
       tempRules: {
-        po: [{ required: true, message: 'po is required', trigger: 'blur' }],
-        sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
+        // po: [{ required: true, message: 'po is required', trigger: 'blur' }],
+        // sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
       },
       loading: false,
       progress: 0,
