@@ -94,57 +94,24 @@ export const asyncRoutes = [
   {
     path: '/inbound',
     component: Layout,
-    redirect: '/inbound/list',
-    name: 'Inbound',
-    meta: {
-      title: '入库',
-      icon: 'example'
-    },
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/inbound/create'),
-        name: 'CreateArticle',
-        meta: { title: '入库管理', icon: 'list' }
-
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/example/list' },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/inbound/list'),
-        name: 'ArticleList',
-        meta: { title: '入库', icon: 'list' }
+        path: 'stock',
+        component: () => import('@/views/inbound/stock'),
+        name: 'Stock',
+        meta: { title: '入库', icon: 'component' }
       }
     ]
   },
   {
     path: '/outbound',
     component: Layout,
-    redirect: '/outbound/complex-table',
-    name: 'Outbound',
-    meta: {
-      title: '出库',
-      icon: 'example'
-    },
     children: [
       {
-        path: 'create',
-        component: () => import('@/views/outbound/complex-table'),
-        name: 'CreateArticle',
-        meta: { title: '出库查询', icon: 'list' }
-
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/outbound/create'),
-        name: 'ArticleList',
-        meta: { title: '出库管理', icon: 'list' }
+        path: 'shipped',
+        component: () => import('@/views/outbound/shipped'),
+        name: 'Shipped',
+        meta: { title: '出库', icon: 'clipboard' }
       }
     ]
   },

@@ -15,9 +15,6 @@
         <el-form-item label="车牌号：">
           <el-input v-model="listQuery.car" placeholder="car" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
-        <el-form-item label="运输路线：">
-          <el-input v-model="listQuery.route" placeholder="route" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
-        </el-form-item>
         <el-form-item label="柜型：">
           <el-select v-model="listQuery.cabinetType" placeholder="请选择" clearable style="width: 190px" class="filter-item">
             <el-option v-for="item in cabinettypeOption" :key="item.display_name" :label="item.key" :value="item.key" />
@@ -104,8 +101,7 @@ export default {
         endDate: undefined,
         shptNo: undefined,
         clp: undefined,
-        car: undefined,
-        route: undefined
+        car: undefined
       },
       downloadLoading: false,
       cabinettypeOption

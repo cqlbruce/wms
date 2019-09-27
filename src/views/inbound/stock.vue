@@ -3,26 +3,67 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="form-inline">
         <el-form-item label="入仓落货纸号：">
-          <el-input v-model="listQuery.so" placeholder="so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input
+            v-model="listQuery.so"
+            placeholder="so"
+            style="width: 200px;"
+            class="filter-item"
+            clearable
+            @keyup.enter.native="handleFilter"
+          />
         </el-form-item>
         <el-form-item label="客户采购订单号：">
-          <el-input v-model="listQuery.po" placeholder="po" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input
+            v-model="listQuery.po"
+            placeholder="po"
+            style="width: 200px;"
+            class="filter-item"
+            clearable
+            @keyup.enter.native="handleFilter"
+          />
         </el-form-item>
         <el-form-item label="货物款号：">
-          <el-input v-model="listQuery.sku" placeholder="sku" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input
+            v-model="listQuery.sku"
+            placeholder="sku"
+            style="width: 200px;"
+            class="filter-item"
+            clearable
+            @keyup.enter.native="handleFilter"
+          />
         </el-form-item>
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-          查询
-        </el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-          新增
-        </el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleImport">
-          导入
-        </el-button>
+        <el-button
+          v-waves
+          class="filter-item"
+          type="primary"
+          icon="el-icon-search"
+          @click="handleFilter"
+        >查询</el-button>
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-edit"
+          @click="handleCreate"
+        >新增</el-button>
+        <el-button
+          class="filter-item"
+          style="margin-left: 10px;"
+          type="primary"
+          icon="el-icon-edit"
+          @click="handleImport"
+        >导入</el-button>
       </el-form>
     </div>
-    <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+    >
       <el-table-column label="客户采购订单号" min-width="120px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.po }}</span>
@@ -88,22 +129,37 @@
           <span>{{ scope.row.boxAllVolumeActul }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column
+        label="Actions"
+        align="center"
+        width="250"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            修改
-          </el-button>
-          <el-button type="danger" size="mini" align="center" @click="handleOutBound(row)">
-            出库
-          </el-button>
+          <el-button size="mini" @click="handleDetail(row)">详情</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">修改</el-button>
+          <el-button type="danger" size="mini" align="center" @click="handleOutBound(row)">出库</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
-      <el-form ref="dataForm" :rules="tempRules" :model="temp" :label-position="labelPosition" :inline="true" label-width="140px">
+      <el-form
+        ref="dataForm"
+        :rules="tempRules"
+        :model="temp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="140px"
+      >
         <el-row>
           <el-form-item label="供应商名称:" prop="supplierName">
             <el-input v-model="temp.supplierName" />
@@ -224,48 +280,48 @@
         </el-row>
       </el-form>
       <div slot="footer" align="center" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'? createData() : updateData()">
-          确认
-        </el-button>
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogStatus==='create'? createData() : updateData()">确认</el-button>
       </div>
     </el-dialog>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="outBoundFormVisible" width="60%">
       <div class="filter-container">
-        <el-form ref="outBoundForm" :rules="rules" :model="temp" :label-position="labelPosition" label-width="120px">
+        <el-form
+          ref="outBoundForm"
+          :rules="rules"
+          :model="temp"
+          :label-position="labelPosition"
+          label-width="120px"
+        >
           <el-form-item label="出仓单号：" prop="clp">
-            <el-input v-model="temp.clp" placeholder="clp" style="width: 200px;" class="filter-item" clearable />
+            <el-input
+              v-model="temp.clp"
+              placeholder="clp"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+            />
           </el-form-item>
           <el-form-item label="出仓件数：" prop="pcs">
-            <el-input v-model="temp.pcs" placeholder="pcs" style="width: 200px;" class="filter-item" clearable />
+            <el-input
+              v-model="temp.pcs"
+              placeholder="pcs"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+            />
           </el-form-item>
         </el-form>
       </div>
       <div slot="footer" align="center" class="dialog-footer">
-        <el-button @click="outBoundFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="outBoundData()">
-          确认
-        </el-button>
+        <el-button @click="outBoundFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="outBoundData()">确认</el-button>
       </div>
     </el-dialog>
 
-    <el-dialog
-      title="导入"
-      width="60%"
-      :visible.sync="dialogVisible"
-      @close="closeImport"
-    >
-      <el-form
-        ref="form"
-        class="pedetail_Summary"
-        :rules="rules"
-        :model="asyncValue"
-      />
+    <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" @close="closeImport">
+      <el-form ref="form" class="pedetail_Summary" :rules="rules" :model="asyncValue" />
       <div class="pedetail-title clearfix">
         <div class="btnList">
           <el-upload
@@ -278,20 +334,9 @@
             :on-change="handleChange"
             :auto-upload="false"
           >
-            <el-button
-              slot="trigger"
-              size="small"
-              type="primary"
-            >选择多文件</el-button>
-            <div
-              slot="tip"
-              class="el-upload__tip"
-            >只能上传excel文件，最多只能选5个</div>
-            <el-button
-              type="success"
-              size="small"
-              @click="allUpload"
-            >开始上传</el-button>
+            <el-button slot="trigger" size="small" type="primary">选择多文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传excel文件，最多只能选5个</div>
+            <el-button type="success" size="small" @click="allUpload">开始上传</el-button>
           </el-upload>
         </div>
         <div class="progress">
@@ -303,35 +348,11 @@
           />
         </div>
 
-        <el-table
-          v-loading="loading"
-          :data="tableData.list"
-          class="table"
-        >
-          <el-table-column
-            prop="fileName"
-            align="center"
-            min-width="160"
-            label="文件名"
-          />
-          <el-table-column
-            prop="size"
-            align="center"
-            min-width="100"
-            label="大小"
-          />
-          <el-table-column
-            prop="statusTxt"
-            align="center"
-            min-width="100"
-            label="状态"
-          />
-          <el-table-column
-            align="center"
-            min-width="80"
-            fixed="right"
-            label="操作"
-          >
+        <el-table v-loading="loading" :data="tableData.list" class="table">
+          <el-table-column prop="fileName" align="center" min-width="160" label="文件名" />
+          <el-table-column prop="size" align="center" min-width="100" label="大小" />
+          <el-table-column prop="statusTxt" align="center" min-width="100" label="状态" />
+          <el-table-column align="center" min-width="80" fixed="right" label="操作">
             <template slot-scope="scope">
               <el-button
                 v-show="scope.row.status === 'fail'"
@@ -350,11 +371,143 @@
         </el-table>
       </div>
     </el-dialog>
+
+    <el-dialog title="详情" :visible.sync="detailFormVisible" width="60%">
+      <el-form
+        ref="detailForm"
+        :model="temp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="140px"
+      >
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="供应商名称:">{{ temp.supplierName }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="入仓落货纸号:">{{ temp.so }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="客户采购订单号:">{{ temp.po }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="货物款号:">{{ temp.sku }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="入仓号:">{{ temp.inboundNo }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="海关系统物料号:">{{ temp.customsMeterialNo }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="收货日期:">{{ temp.rcvdDate }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实收箱数:">{{ temp.rcvdCtns }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实收件数:">{{ temp.rcvdPcs }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="一箱几件:">{{ temp.itemsPerBox }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="单箱毛重:">{{ temp.gwPerBoxActul }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实收总毛重:">{{ temp.gwAllActul }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="实测外箱长:">{{ temp.boxLengthActul }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实测外箱宽:">{{ temp.boxWidthActul }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实测外箱高:">{{ temp.boxHighActul }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="实测单箱体积:">{{ temp.boxPerVolumeActul }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实收总体积:">{{ temp.boxAllVolumeActul }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="入仓报关单件净重:">{{ temp.custsDeclaPieceWeigh }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="入仓报关总净重:">{{ temp.custsDeclaAllWeigh }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="仓库位置:">{{ temp.warehousePosition }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总出仓箱数:">{{ temp.shippedCtns }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="总出仓件数:">{{ temp.shippedPcs }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总出仓毛重:">{{ temp.shippedGw }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总出仓净重:">{{ temp.shippedWeigh }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="总出仓体积:">{{ temp.shippedVolume }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总库存箱数:">{{ temp.stockCtns }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总库存件数:">{{ temp.stockPcs }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="总库存毛重:">{{ temp.stockGw }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总库存净重:">{{ temp.stockWeigh }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总库存体积:">{{ temp.stockVolume }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="备注:">{{ temp.remark }}</el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchInboundList, addStock, updateStock, outBoundStock, uploadFile } from '@/api/article'
+import {
+  fetchInboundList,
+  addStock,
+  updateStock,
+  outBoundStock,
+  uploadFile
+} from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -363,8 +516,7 @@ export default {
   name: 'ComplexTable',
   components: { Pagination },
   directives: { waves },
-  filters: {
-  },
+  filters: {},
   data() {
     return {
       labelPosition: 'right',
@@ -420,8 +572,7 @@ export default {
         create: '新增',
         outbound: '出库'
       },
-      rules: {
-      },
+      rules: {},
       tempRules: {
         po: [{ required: true, message: 'po is required', trigger: 'blur' }],
         sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
@@ -442,7 +593,9 @@ export default {
       // 出库弹窗
       outBoundFormVisible: false,
       // 下载
-      downloadLoading: false
+      downloadLoading: false,
+      // 详情
+      detailFormVisible: false
     }
   },
   watch: {
@@ -529,7 +682,7 @@ export default {
       })
     },
     createData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.temp.author = 'vue-element-admin'
           addStock(this.temp).then(response => {
@@ -556,7 +709,7 @@ export default {
       })
     },
     updateData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.temp.author = 'vue-element-admin'
           updateStock(this.temp).then(response => {
@@ -583,7 +736,7 @@ export default {
       })
     },
     outBoundData() {
-      this.$refs['outBoundForm'].validate((valid) => {
+      this.$refs['outBoundForm'].validate(valid => {
         if (valid) {
           console.info(this.temp)
           outBoundStock(this.temp).then(response => {
@@ -615,6 +768,13 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleDetail(row) {
+      this.temp = Object.assign({}, row)
+      this.detailFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['detailForm'].clearValidate()
       })
     },
     handleOutBound(row) {
@@ -723,7 +883,7 @@ export default {
 </script>
 
 <style scoped>
-.excel-upload-input{
+.excel-upload-input {
   display: none;
   z-index: -9999;
 }

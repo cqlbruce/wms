@@ -129,88 +129,88 @@ const inboundList = [
 
 const InboundFees = [
   {
-    inboudDate: '2019/7/4',
+    stockDate: '2019/7/4',
     so: 'APGHKG18070011',
     car: '粤BG558U',
-    inboundBox: 591,
-    inboundVolume: 15.36,
+    stockCtns: 591,
+    stockVolume: 15.36
   },
   {
-    inboudDate: '2019/7/6',
+    stockDate: '2019/7/6',
     so: 'S10SZX1917015',
     car: '粤BM09U5',
-    inboundBox: 201,
-    inboundVolume: 2.56,
+    stockCtns: 201,
+    stockVolume: 2.56
   },
   {
-    inboudDate: '2019/7/4',
+    stockDate: '2019/7/4',
     so: 'APGHKG18070011',
     car: '粤BG558U',
-    inboundBox: 591,
-    inboundVolume: 15.36,
+    stockCtns: 591,
+    stockVolume: 15.36
   },
   {
-    inboudDate: '2019/7/4',
+    stockDate: '2019/7/4',
     so: 'APGHKG18070011',
     car: '粤BG668U',
-    inboundBox: 501,
-    inboundVolume: 15.75,
+    stockCtns: 501,
+    stockVolume: 15.75
   },
   {
-    inboudDate: '2019/9/9',
+    stockDate: '2019/9/9',
     so: 'APGHKG18070055',
     car: '粤BG558A',
-    inboundBox: 441,
-    inboundVolume: 95.36,
+    stockCtns: 441,
+    stockVolume: 95.36
   }
 ]
 
 const OutboundFees = [
   {
-    outboudDate: '2019/7/4',
+    shippedDate: '2019/7/4',
     shptNo: 'CKAS19070401',
     clp: 'SPS190422',
-    carNo: '粤BG558U（客拖）',
+    car: '粤BG558U（客拖）',
     route: '中海仓-平湖外运仓',
     cabinetType: '3T',
     shippedCtns: 913,
     shippedVolume: 6.722
   },
   {
-    outboudDate: '2019/7/5',
+    shippedDate: '2019/7/5',
     shptNo: 'CKAS19070501',
     clp: 'SPS190423',
-    carNo: '粤BG558U（客拖）',
+    car: '粤BG558U（客拖）',
     route: '中海仓-金运达仓',
     cabinetType: '3T',
     shippedCtns: 120,
     shippedVolume: 1.04
   },
   {
-    outboudDate: '2019/7/4',
+    shippedDate: '2019/7/4',
     shptNo: 'CKAS19070502',
     clp: 'SPS190424',
-    carNo: 'KKFU7690170',
+    car: 'KKFU7690170',
     route: '盐田码头-盐田码头',
     cabinetType: '40HQ',
     shippedCtns: 1634,
     shippedVolume: 60.41
   },
   {
-    outboudDate: '2019/7/5',
+    shippedDate: '2019/7/5',
     shptNo: 'CKAS19070503',
     clp: 'SPS190425',
-    carNo: 'TCNU6421825',
+    car: 'TCNU6421825',
     route: '盐田码头-盐田码头',
     cabinetType: '40HQ',
     shippedCtns: 1734,
     shippedVolume: 57.40
   },
   {
-    outboudDate: '2019/7/4',
+    shippedDate: '2019/7/4',
     shptNo: 'CKAS19070401',
     clp: 'SPS190422',
-    carNo: '粤BG558U（客拖）',
+    car: '粤BG558U（客拖）',
     route: '中海仓-平湖外运仓',
     cabinetType: '3T',
     shippedCtns: 913,
@@ -220,9 +220,9 @@ const OutboundFees = [
 
 const outboundList = [
   {
-    orderDate: '2018/8/1',
+    shippedOrderDate: '2018/8/1',
     shippedDate: '2018/8/2',
-    clp: 'CAPG18080101',
+    shippedNo: 'CAPG18080101',
     so: 'APGHKG18070011 ',
     po: '154308',
     sku: '113963',
@@ -234,7 +234,7 @@ const outboundList = [
     inboundNo: 'APG18073001',
     customsMeterialNo: 'APG1807300101',
     customsMerchNo: '6104390000',
-    merchName : '女装针织V领长袖开襟外套',
+    merchName: '女装针织V领长袖开襟外套',
     declaCount: 3702,
     declaUnit: '件',
     declaUnitPrice: 17.00,
@@ -242,13 +242,13 @@ const outboundList = [
     declaCurrency: '美元',
     originCountry: '中国',
     destCountry: '澳大利亚',
-    pieceWeigh: '0.394',
-    shippedAllWeigh: '1458.588'
+    pieceWeigh: 0.394,
+    shippedAllWeigh: 1458.588
   },
   {
-    orderDate: '2018/8/1',
+    shippedOrderDate: '2018/8/1',
     shippedDate: '2018/8/2',
-    clp: 'CAPG18080101',
+    shippedNo: 'CAPG18080101',
     so: 'APGHKG18070011 ',
     po: '154308',
     sku: '113963',
@@ -260,7 +260,7 @@ const outboundList = [
     inboundNo: 'APG18073001',
     customsMeterialNo: 'APG1807300101',
     customsMerchNo: '6104390000',
-    merchName : '女装针织V领长袖开襟外套',
+    merchName: '女装针织V领长袖开襟外套',
     declaCount: 3702,
     declaUnit: '件',
     declaUnitPrice: 17.00,
@@ -268,13 +268,13 @@ const outboundList = [
     declaCurrency: '美元',
     originCountry: '中国',
     destCountry: '澳大利亚',
-    pieceWeigh: '0.394',
-    shippedAllWeigh: '1458.588'
+    pieceWeigh: 0.394,
+    shippedAllWeigh: 1458.588
   },
   {
-    orderDate: '2018/8/1',
+    shippedOrderDate: '2018/8/1',
     shippedDate: '2018/8/2',
-    clp: 'CAPG18080101',
+    shippedNo: 'CAPG18080101',
     so: 'APGHKG18070011 ',
     po: '154308',
     sku: '113963',
@@ -286,7 +286,7 @@ const outboundList = [
     inboundNo: 'APG18073001',
     customsMeterialNo: 'APG1807300101',
     customsMerchNo: '6104390000',
-    merchName : '女装针织V领长袖开襟外套',
+    merchName: '女装针织V领长袖开襟外套',
     declaCount: 3702,
     declaUnit: '件',
     declaUnitPrice: 17.00,
@@ -294,8 +294,8 @@ const outboundList = [
     declaCurrency: '美元',
     originCountry: '中国',
     destCountry: '澳大利亚',
-    pieceWeigh: '0.394',
-    shippedAllWeigh: '1458.588'
+    pieceWeigh: 0.394,
+    shippedAllWeigh: 1458.588
   }
 ]
 
@@ -306,7 +306,7 @@ export default [
     response: () => {
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         data: {
           total: inboundList.length,
@@ -316,12 +316,12 @@ export default [
     }
   },
   {
-    url: '/stock/loadOutBound',
+    url: '/shipped/load',
     type: 'post',
     response: config => {
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         data: {
           total: outboundList.length,
@@ -331,12 +331,12 @@ export default [
     }
   },
   {
-    url: '/statement/inboundFee',
+    url: '/statement/loadStockFee',
     type: 'post',
     response: config => {
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         data: {
           total: InboundFees.length,
@@ -347,73 +347,17 @@ export default [
   },
 
   {
-    url: '/statement/outboundFee',
+    url: '/statement/loadShippedFee',
     type: 'post',
     response: config => {
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         data: {
           total: OutboundFees.length,
           items: OutboundFees
         }
-      }
-    }
-  },
-
-  {
-    url: '/article/detail',
-    type: 'get',
-    response: config => {
-      const { id } = config.query
-      for (const article of List) {
-        if (article.id === +id) {
-          return {
-            code: 20000,
-            data: article
-          }
-        }
-      }
-    }
-  },
-
-  {
-    url: '/article/pv',
-    type: 'get',
-    response: _ => {
-      return {
-        code: 20000,
-        data: {
-          pvData: [
-            { key: 'PC', pv: 1024 },
-            { key: 'mobile', pv: 1024 },
-            { key: 'ios', pv: 1024 },
-            { key: 'android', pv: 1024 }
-          ]
-        }
-      }
-    }
-  },
-
-  {
-    url: '/article/create',
-    type: 'post',
-    response: _ => {
-      return {
-        code: "20000",
-        data: 'success'
-      }
-    }
-  },
-
-  {
-    url: '/article/update',
-    type: 'post',
-    response: _ => {
-      return {
-        code: "20000",
-        data: 'success'
       }
     }
   }
