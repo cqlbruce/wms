@@ -18,7 +18,7 @@
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
       <el-table-column label="进仓日期" style="width: 25%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.stockDate | parseTime('{y}/{m}/{d}') }}</span>
+          <span>{{ scope.row.stockDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="入仓落货纸号" style="width: 20%" align="center">
@@ -42,7 +42,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
   </div>
 </template>
 
@@ -65,7 +65,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        size: 20,
         beginDate: undefined,
         endDate: undefined,
         so: undefined

@@ -147,7 +147,7 @@
       v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
+      :limit.sync="listQuery.size"
       @pagination="getList"
     />
 
@@ -184,7 +184,7 @@
         </el-row>
         <el-row>
           <el-form-item label="收货日期:" prop="rcvdDate">
-            <el-input v-model="temp.rcvdDate" />
+            <el-date-picker v-model="temp.rcvdDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
           </el-form-item>
           <el-form-item label="实收箱数:" prop="rcvdCtns">
             <el-input v-model="temp.rcvdCtns" />
@@ -197,11 +197,11 @@
           <el-form-item label="单箱毛重:" prop="gwPerBoxActul">
             <el-input v-model="temp.gwPerBoxActul" />
           </el-form-item>
-          <el-form-item label="实测单箱体积:" prop="boxPerVolumeActul">
-            <el-input v-model="temp.boxPerVolumeActul" />
+          <el-form-item label="申报单价:" prop="declaUnitPrice">
+            <el-input v-model="temp.declaUnitPrice" />
           </el-form-item>
-          <el-form-item label="入仓报关单件净重:" prop="custsDeclaPieceWeigh">
-            <el-input v-model="temp.custsDeclaPieceWeigh" />
+          <el-form-item label="申报币种:" prop="declaCurrency">
+            <el-input v-model="temp.declaCurrency" />
           </el-form-item>
         </el-row>
         <el-row>
@@ -222,6 +222,11 @@
           <el-form-item label="仓库位置:" prop="warehousePosition">
             <el-input v-model="temp.warehousePosition" />
           </el-form-item>
+          <el-form-item label="入仓报关单件净重:" prop="custsDeclaPieceWeigh">
+            <el-input v-model="temp.custsDeclaPieceWeigh" />
+          </el-form-item>
+        </el-row>
+        <el-row>
           <el-form-item label="备注:" prop="remark">
             <el-input v-model="temp.remark" />
           </el-form-item>
@@ -233,18 +238,19 @@
       </div>
     </el-dialog>
 
+    <!-- 出库 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="outBoundFormVisible" width="60%">
       <div class="filter-container">
         <el-form
           ref="outBoundForm"
           :rules="rules"
-          :model="temp"
+          :model="shippedTemp"
           :label-position="labelPosition"
           label-width="120px"
         >
           <el-form-item label="出仓单号：" prop="clp">
             <el-input
-              v-model="temp.clp"
+              v-model="shippedTemp.clp"
               placeholder="clp"
               style="width: 200px;"
               class="filter-item"
@@ -253,14 +259,14 @@
           </el-form-item>
           <el-form-item label="出仓件数：" prop="pcs">
             <el-input
-              v-model="temp.pcs"
+              v-model="shippedTemp.pcs"
               placeholder="pcs"
               style="width: 200px;"
               class="filter-item"
               clearable
             />
           </el-form-item>
-          <el-form-item label="总库存件数:">{{ temp.stockPcs }}</el-form-item>
+          <el-form-item label="总库存件数:">{{ shippedTemp.stockPcs }}</el-form-item>
         </el-form>
       </div>
       <div slot="footer" align="center" class="dialog-footer">
@@ -269,6 +275,7 @@
       </div>
     </el-dialog>
 
+    <!-- 导入 -->
     <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" @close="closeImport">
       <el-form ref="form" class="pedetail_Summary" :rules="rules" :model="asyncValue" />
       <div class="pedetail-title clearfix">
@@ -475,12 +482,13 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        size: 20,
         po: undefined,
         so: undefined,
         sku: undefined
       },
       temp: {
+        id: '',
         supplierName: '',
         so: '',
         po: '',
@@ -512,8 +520,18 @@ export default {
         stockWeigh: '',
         stockVolume: '',
         stockCheck: '',
+        declaUnitPrice: undefined,
+        declaCurrency: undefined
+      },
+      // 出库请求参数
+      shippedTemp: {
+        id: '',
         clp: '',
-        pcs: ''
+        pcs: '',
+        po: '',
+        sku: '',
+        so: '',
+        stockPcs: ''
       },
       dialogStatus: '',
       textMap: {
@@ -587,6 +605,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
+        id: '',
         supplierName: '',
         so: '',
         po: '',
@@ -680,6 +699,8 @@ export default {
                 duration: 2000
               })
             }
+          }).catch(err => {
+            console.log(err)
           })
         }
       })
@@ -687,10 +708,9 @@ export default {
     outBoundData() {
       this.$refs['outBoundForm'].validate(valid => {
         if (valid) {
-          console.info(this.temp)
-          outBoundStock(this.temp).then(response => {
-            this.outBoundFormVisible = false
-
+          this.outBoundFormVisible = false
+          console.info(this.shippedTemp)
+          outBoundStock(this.shippedTemp).then(response => {
             if (response.respHeader.respCode !== '200') {
               this.$notify({
                 title: '失败',
@@ -706,6 +726,11 @@ export default {
                 duration: 2000
               })
             }
+
+            this.listQuery.page = 1
+            this.getList()
+          }).catch(err => {
+            console.log(err)
           })
         }
       })
@@ -727,7 +752,12 @@ export default {
       })
     },
     handleOutBound(row) {
-      this.temp = Object.assign({}, row) // copy obj
+      this.shippedTemp.id = row.id
+      this.shippedTemp.po = row.po
+      this.shippedTemp.sku = row.sku
+      this.shippedTemp.so = row.so
+      this.shippedTemp.stockPcs = row.stockPcs
+
       this.dialogStatus = 'outbound'
       this.outBoundFormVisible = true
       this.$nextTick(() => {

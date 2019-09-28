@@ -27,6 +27,7 @@ for (let i = 0; i < count; i++) {
 
 const inboundList = [
   {
+    id: '11',
     supplierName: '东莞市瑞源进出口有限公司',
     so: 'APGHKG18070011',
     po: '154308',
@@ -60,6 +61,7 @@ const inboundList = [
     remark: ''
   },
   {
+    id: '12',
     supplierName: '东莞市瑞源进出口有限公司1',
     so: 'APGHKG18070011',
     po: '154308',
@@ -93,6 +95,7 @@ const inboundList = [
     remark: ''
   },
   {
+    id: '13',
     supplierName: '东莞市瑞源进出口有限公司2',
     so: 'APGHKG18070011',
     po: '154308',
@@ -220,6 +223,34 @@ const OutboundFees = [
 
 const outboundList = [
   {
+    id: '11',
+    shippedOrderDate: null,
+    shippedDate: null,
+    shippedNo: 'CAPG18080101',
+    so: 'APGHKG18070011 ',
+    po: '154308',
+    sku: '113963',
+    shippedCtns: 155,
+    shippedpcs: 3702,
+    warehousePosition: 0,
+    shippedGw: 1661.60,
+    shippedVolume: 11.47,
+    inboundNo: 'APG18073001',
+    customsMeterialNo: 'APG1807300101',
+    customsMerchNo: '6104390000',
+    merchName: '女装针织V领长袖开襟外套',
+    declaCount: 3702,
+    declaUnit: '件',
+    declaUnitPrice: 17.00,
+    declaTotalPrice: 62934.00,
+    declaCurrency: '美元',
+    originCountry: '中国',
+    destCountry: '澳大利亚',
+    pieceWeigh: 0.394,
+    shippedAllWeigh: 1458.588
+  },
+  {
+    id: '12',
     shippedOrderDate: '2018/8/1',
     shippedDate: '2018/8/2',
     shippedNo: 'CAPG18080101',
@@ -246,32 +277,7 @@ const outboundList = [
     shippedAllWeigh: 1458.588
   },
   {
-    shippedOrderDate: '2018/8/1',
-    shippedDate: '2018/8/2',
-    shippedNo: 'CAPG18080101',
-    so: 'APGHKG18070011 ',
-    po: '154308',
-    sku: '113963',
-    shippedCtns: 155,
-    shippedpcs: 3702,
-    warehousePosition: 0,
-    shippedGw: 1661.60,
-    shippedVolume: 11.47,
-    inboundNo: 'APG18073001',
-    customsMeterialNo: 'APG1807300101',
-    customsMerchNo: '6104390000',
-    merchName: '女装针织V领长袖开襟外套',
-    declaCount: 3702,
-    declaUnit: '件',
-    declaUnitPrice: 17.00,
-    declaTotalPrice: 62934.00,
-    declaCurrency: '美元',
-    originCountry: '中国',
-    destCountry: '澳大利亚',
-    pieceWeigh: 0.394,
-    shippedAllWeigh: 1458.588
-  },
-  {
+    id: '13',
     shippedOrderDate: '2018/8/1',
     shippedDate: '2018/8/2',
     shippedNo: 'CAPG18080101',
@@ -311,6 +317,19 @@ export default [
         data: {
           total: inboundList.length,
           items: inboundList
+        }
+      }
+    }
+  },
+  {
+    url: '/stock/outbound',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200'
+        },
+        data: {
         }
       }
     }

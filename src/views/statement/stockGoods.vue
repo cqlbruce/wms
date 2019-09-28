@@ -21,7 +21,7 @@
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
       <el-table-column label="收货日期" style="width: 25%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.rcvdDate | parseTime('{y}/{m}/{d}') }}</span>
+          <span>{{ scope.row.rcvdDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="入仓编号" style="width: 20%" align="center">
@@ -55,7 +55,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <el-dialog title="导出" :visible.sync="exportStockGoodsVisible" width="60%">
       <div class="filter-container">
@@ -100,7 +100,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        size: 20,
         beginDate: undefined,
         endDate: undefined,
         billsBeginDate: undefined,

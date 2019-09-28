@@ -3,8 +3,8 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="form-inline">
         <el-form-item label="出仓日期：">
-          <el-date-picker v-model="listQuery.beginDate" align="right" type="date" style="width: 150px;" placeholder="开始日期" /> -
-          <el-date-picker v-model="listQuery.endDate" align="right" type="date" style="width: 150px;" placeholder="截止日期" />
+          <el-date-picker v-model="listQuery.beginDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="开始日期" /> -
+          <el-date-picker v-model="listQuery.endDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="截止日期" />
         </el-form-item>
         <el-form-item label="出仓单号：">
           <el-input v-model="listQuery.clp" placeholder="clp" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
@@ -40,12 +40,12 @@
     >
       <el-table-column label="出仓订单日期" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedOrderDate | parseTime('{y}/{m}/{d}') }}</span>
+          <span>{{ scope.row.shippedOrderDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="实际离仓日期" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedDate | parseTime('{y}/{m}/{d}') }}</span>
+          <span>{{ scope.row.shippedDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="出仓单号" width="210px" align="center">
@@ -105,7 +105,7 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <!-- 新增/修改 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
@@ -331,7 +331,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        size: 20,
         sku: undefined,
         clp: undefined,
         so: undefined,
@@ -401,7 +401,7 @@ export default {
     reset() {
       this.listQuery = {
         page: 1,
-        limit: 20,
+        size: 20,
         sku: '',
         clp: '',
         so: '',
