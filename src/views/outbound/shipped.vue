@@ -7,7 +7,7 @@
           <el-date-picker v-model="listQuery.endDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="截止日期" />
         </el-form-item>
         <el-form-item label="出仓单号：">
-          <el-input v-model="listQuery.clp" placeholder="clp" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.shippedNo" placeholder="shippedNo" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="入仓落货纸号：">
           <el-input v-model="listQuery.so" placeholder="so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
@@ -34,25 +34,11 @@
       :data="list"
       border
       fit
+      fixed
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="出仓订单日期" width="150px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.shippedOrderDate }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="实际离仓日期" width="150px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.shippedDate }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="出仓单号" width="210px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.shippedNo }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="入仓落货纸号" width="210px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.so }}</span>
@@ -68,6 +54,21 @@
           <span>{{ scope.row.sku }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="出仓单号" width="210px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shippedNo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="出仓订单日期" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shippedOrderDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="实际离仓日期" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shippedDate }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="出仓箱数" width="100px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.shippedCtns }}</span>
@@ -75,7 +76,7 @@
       </el-table-column>
       <el-table-column label="出仓件数" width="100px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedpcs }}</span>
+          <span>{{ scope.row.shippedPcs }}</span>
         </template>
       </el-table-column>
       <el-table-column label="出仓毛重" width="100px" align="center">
@@ -88,12 +89,27 @@
           <span>{{ scope.row.shippedVolume }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="入仓号" width="150px" align="center">
+      <el-table-column label="海关商品编码" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.inboundNo }}</span>
+          <span>{{ scope.row.customsMerchNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+      <el-table-column label="商品名称" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.merchName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="海关物料号" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.customsMeterialNo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="成交币种" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.declaCurrency }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" width="150px" align="center">
         <template slot-scope="{row}">
           <el-button size="mini" @click="handleDetail(row)">
             详情
@@ -333,7 +349,7 @@ export default {
         page: 1,
         size: 20,
         sku: undefined,
-        clp: undefined,
+        shippedNo: undefined,
         so: undefined,
         po: undefined,
         beginDate: undefined,

@@ -61,6 +61,7 @@
       :data="list"
       border
       fit
+      fixed
       highlight-current-row
       style="width: 100%;"
     >
@@ -130,10 +131,10 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Actions"
+        label="操作"
         align="center"
-        width="250"
-        class-name="small-padding fixed-width"
+        width="220"
+        fixed="right"
       >
         <template slot-scope="{row}">
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
@@ -248,10 +249,10 @@
           :label-position="labelPosition"
           label-width="120px"
         >
-          <el-form-item label="出仓单号：" prop="clp">
+          <el-form-item label="出仓单号：" prop="shippedNo">
             <el-input
-              v-model="shippedTemp.clp"
-              placeholder="clp"
+              v-model="shippedTemp.shippedNo"
+              placeholder="shippedNo"
               style="width: 200px;"
               class="filter-item"
               clearable
@@ -526,7 +527,7 @@ export default {
       // 出库请求参数
       shippedTemp: {
         id: '',
-        clp: '',
+        shippedNo: '',
         pcs: '',
         po: '',
         sku: '',
@@ -709,7 +710,6 @@ export default {
       this.$refs['outBoundForm'].validate(valid => {
         if (valid) {
           this.outBoundFormVisible = false
-          console.info(this.shippedTemp)
           outBoundStock(this.shippedTemp).then(response => {
             if (response.respHeader.respCode !== '200') {
               this.$notify({
