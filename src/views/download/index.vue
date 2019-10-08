@@ -4,7 +4,7 @@
       <el-form :inline="true" :model="listQuery" class="form-inline">
         <el-form-item label="文件类型：">
           <el-select v-model="listQuery.fileType" placeholder="请选择" clearable style="width: 190px" class="filter-item">
-            <el-option v-for="item in fileTypeOption" :key="item.display_name" :label="item.key" :value="item.key" />
+            <el-option v-for="item in fileTypeOption" :key="item.key" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item class="search">
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import waves from '@/directive/waves' // waves directive
 import { download } from '@/utils'
 
@@ -43,9 +44,24 @@ export default {
   methods: {
     handleDownload() {
       this.downloadLoading = true
-      download('/download/stockFile', this.listQuery, '入库模板.xlsx').then(response => {
-        this.downloadLoading = false
-      })
+      switch (this.listQuery.fileType) {
+        case '1':
+          download('/download/stockFile', this.listQuery, '入库模板.xlsx').then(response => {
+            this.downloadLoading = false
+          })
+          break
+        case '2':
+          download('/download/shippedFile', this.listQuery, '出库模板.xlsx').then(response => {
+            this.downloadLoading = false
+          })
+          break
+        default:
+          Message({
+            message: '请选择模板类型',
+            type: 'error',
+            duration: 5 * 1000
+          })
+      }
     }
   }
 }
