@@ -348,3 +348,42 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+import axios from 'axios'
+
+export function download(url, data, fileName) {
+  return new Promise((resolve, reject) => {
+    axios.defaults.headers['content-type'] = 'application/json;charset=UTF-8'
+    axios({
+      baseURL: process.env.VUE_APP_BASE_API,
+      method: 'post',
+      timeout: 20000,
+      url: url, // 请求地址
+      data: data, // 参数
+      responseType: 'blob' // 表明返回服务器返回的数据类型
+    }).then(
+      response => {
+        resolve(response.data)
+        console.info(response.data)
+        const blob = new Blob([response.data], {
+          type: 'application/download'
+        })
+        // IE下载
+        if (window.navigator.msSaveOrOpenBlob) {
+          navigator.msSaveBlob(blob, fileName)
+        } else {
+          // 非IE下载
+          var link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = fileName
+          link.click()
+          // 释放内存
+          window.URL.revokeObjectURL(link.href)
+        }
+      },
+      err => {
+        reject(err)
+      }
+    )
+  })
+}

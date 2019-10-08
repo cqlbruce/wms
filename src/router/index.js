@@ -116,6 +116,18 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/download',
+    component: Layout,
+    children: [
+      {
+        path: 'download',
+        component: () => import('@/views/download/index'),
+        name: 'download',
+        meta: { title: '其他下载', icon: 'clipboard' }
+      }
+    ]
+  },
+  {
     path: '/statement',
     component: Layout,
     redirect: '/statement/inboundFee',
