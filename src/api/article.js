@@ -54,6 +54,15 @@ export function fetchOutputboundList(data) {
   })
 }
 
+/** 上传入库文件 */
+export function uploadShippedFile(data) {
+  return request({
+    url: 'shipped/upload',
+    method: 'post',
+    data
+  })
+}
+
 /** 入库费用查询 */
 export function fetchStockFeeList(data) {
   return request({

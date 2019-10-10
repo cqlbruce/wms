@@ -18,12 +18,18 @@
         <el-form-item label="货物款号：">
           <el-input v-model="listQuery.sku" placeholder="sku" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
-        <el-button v-waves type="primary" @click="handleFilter">
+        <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">
           查询
         </el-button>
-        <el-button @click="reset">
+        <el-button
+          type="primary"
+          icon="el-icon-upload"
+          @click="handleImport"
+        >导入</el-button>
+        <el-button v-waves type="primary" icon="el-icon-download" @click="handleExport">导出</el-button>
+        <!-- <el-button @click="reset">
           重置
-        </el-button>
+        </el-button> -->
       </el-form>
     </div>
 
@@ -324,11 +330,65 @@
         </el-row>
       </el-form>
     </el-dialog>
+
+    <!-- 导入 -->
+    <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" @close="closeImport">
+      <el-form ref="form" class="pedetail_Summary" :rules="rules" :model="asyncValue" />
+      <div class="pedetail-title clearfix">
+        <div class="btnList">
+          <el-upload
+            ref="upload"
+            class="upload"
+            multiple
+            action="http://192.168.34.186:20020/"
+            :limit="5"
+            :show-file-list="false"
+            :on-change="handleChange"
+            :auto-upload="false"
+          >
+            <el-button slot="trigger" size="small" type="primary">选择多文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传excel文件，最多只能选5个</div>
+            <el-button type="success" size="small" @click="allUpload">开始上传</el-button>
+          </el-upload>
+        </div>
+        <div class="progress">
+          <el-progress
+            v-show="progress != 0"
+            :percentage="progress"
+            :stroke-width="18"
+            status="success"
+          />
+        </div>
+
+        <el-table v-loading="loading" :data="tableData.list" class="table">
+          <el-table-column prop="fileName" align="center" min-width="160" label="文件名" />
+          <el-table-column prop="size" align="center" min-width="100" label="大小" />
+          <el-table-column prop="statusTxt" align="center" min-width="100" label="状态" />
+          <el-table-column align="center" min-width="80" fixed="right" label="操作">
+            <template slot-scope="scope">
+              <el-button
+                v-show="scope.row.status === 'fail'"
+                size="mini"
+                :type="loadType(scope.row.status)"
+                @click="againUpload(scope.$index, scope.row)"
+              >重传</el-button>
+              <el-button
+                v-show="scope.row.status !== 'load'"
+                size="mini"
+                type="danger"
+                @click="beforeRemove(scope.$index, scope.row)"
+              >删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchOutputboundList, createArticle, updateArticle } from '@/api/article'
+import { fetchOutputboundList, createArticle, updateArticle, uploadShippedFile } from '@/api/article'
+import { download } from '@/utils'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -345,6 +405,7 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
+      downloadLoading: true,
       listQuery: {
         page: 1,
         size: 20,
@@ -383,6 +444,17 @@ export default {
       },
       dialogFormVisible: false,
       detailFormVisible: false,
+      // 导入文件弹窗
+      dialogVisible: false,
+      loading: false,
+      progress: 0,
+      progressIndex: 0,
+      tableData: {
+        list: []
+      },
+      asyncValue: {
+        file: null
+      },
       dialogStatus: '',
       textMap: {
         update: '编辑',
@@ -500,6 +572,114 @@ export default {
         this.$refs['detailForm'].clearValidate()
       })
     },
+    handleImport() {
+      this.dialogVisible = true
+    },
+    closeImport() {
+      this.tableData.list = []
+      this.asyncValue = {
+        file: null
+      }
+      this.$emit('input', '')
+      this.getList()
+    },
+    // 文件改变时触发
+    handleChange(file, fileList) {
+      const obj = {
+        fileName: file.name,
+        size: (file.size / 1024).toFixed(2) + 'kb',
+        statusTxt: '待上传',
+        status: file.status,
+        file: file.raw
+      }
+      if (this.tableData.list.length >= 5) {
+        this.$message.warning(`最多可选五个文件`)
+      } else {
+        this.tableData.list.push(obj)
+      }
+    },
+    // 全部上传
+    async allUpload() {
+      const res = await this.$refs['form'].validate()
+      if (!res) return
+
+      const postMessage = i => {
+        const fd = new FormData()
+        if (i >= this.tableData.list.length) {
+          setTimeout(() => {
+            this.progressIndex = 0
+          }, 1000)
+          return
+        }
+        for (const key in this.asyncValue) {
+          if (this.asyncValue.hasOwnProperty(key)) {
+            const item = this.asyncValue[key]
+            if (key === 'file') {
+              fd.append('excelFile', this.tableData.list[i].file)
+            } else {
+              fd.append(key, item)
+            }
+          }
+        }
+        uploadShippedFile(fd).then(res => {
+          if (res.respHeader.respCode === '200') {
+            this.tableData.list[i].status = 'load'
+            this.tableData.list[i].statusTxt = '成功'
+          } else {
+            this.tableData.list[i].status = 'fail'
+            this.tableData.list[i].statusTxt = '失败'
+          }
+          this.progressIndex = this.progressIndex * 1 + 1
+          postMessage(this.progressIndex)
+        })
+      }
+      postMessage(this.progressIndex)
+    },
+    // 重新上传
+    async againUpload(i, row) {
+      const res = await this.$refs['form'].validate()
+      if (!res) return
+
+      this.tableData.list[i].statusTxt = '重传中'
+      this.tableData.list[i].status = 'again'
+      const fd = new FormData()
+      for (const key in this.asyncValue) {
+        if (this.asyncValue.hasOwnProperty(key)) {
+          const item = this.asyncValue[key]
+          if (key === 'file') {
+            fd.append('excelFile', this.tableData.list[i].file)
+          } else {
+            fd.append(key, item)
+          }
+        }
+      }
+      uploadShippedFile(fd).then(res => {
+        if (res.respHeader.respCode === '200') {
+          this.tableData.list[i].status = 'load'
+          this.tableData.list[i].statusTxt = '成功'
+        } else {
+          this.tableData.list[i].status = 'fail'
+          this.tableData.list[i].statusTxt = '失败'
+        }
+      })
+    },
+    // 颜色显示
+    loadType(status) {
+      switch (status) {
+        case 'fail':
+          return 'primary'
+        case 'success':
+          return 'primary'
+        case 'existed':
+          return 'info'
+        default:
+          return 'primary'
+      }
+    },
+    // 删除未文件
+    beforeRemove(index, file) {
+      this.tableData.list.splice(index, 1)
+    },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -522,6 +702,12 @@ export default {
             })
           })
         }
+      })
+    },
+    handleExport() {
+      this.downloadLoading = true
+      download('/shipped/download', this.listQuery, '出库信息.xlsx').then(response => {
+        this.downloadLoading = false
       })
     }
   }

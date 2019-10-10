@@ -22,10 +22,10 @@
             @keyup.enter.native="handleFilter"
           />
         </el-form-item>
-        <el-form-item label="货物款号：">
+        <el-form-item label="入仓编号：">
           <el-input
-            v-model="listQuery.sku"
-            placeholder="sku"
+            v-model="listQuery.inboundNo"
+            placeholder="inboundNo"
             style="width: 200px;"
             class="filter-item"
             clearable
@@ -34,23 +34,18 @@
         </el-form-item>
         <el-button
           v-waves
-          class="filter-item"
           type="primary"
           icon="el-icon-search"
           @click="handleFilter"
         >查询</el-button>
         <el-button
-          class="filter-item"
-          style="margin-left: 10px;"
           type="primary"
           icon="el-icon-edit"
           @click="handleCreate"
         >新增</el-button>
         <el-button
-          class="filter-item"
-          style="margin-left: 10px;"
           type="primary"
-          icon="el-icon-edit"
+          icon="el-icon-upload"
           @click="handleImport"
         >导入</el-button>
       </el-form>
@@ -486,7 +481,7 @@ export default {
         size: 20,
         po: undefined,
         so: undefined,
-        sku: undefined
+        inboundNo: undefined
       },
       temp: {
         id: '',
