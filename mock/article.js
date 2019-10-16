@@ -305,6 +305,39 @@ const outboundList = [
   }
 ]
 
+const frontDeskCharges = [
+  {
+    inboundNo: 'MOL19090203',
+    so: 'STM-CN8238577-ACT2',
+    receiptNo: 'test001',
+    custName: '张三',
+    factory: 'A工厂',
+    tranDate: '2019/9/2',
+    projectName: 'A项目',
+    billOneCar: 2,
+    carNum: '粤BY973K8',
+    payType: '0',
+    recAmt: 740.20,
+    enterGateFee: 20.10,
+    customsDeclarationFee: 101.01
+  },
+  {
+    inboundNo: 'MOL19090209',
+    so: 'STM-CN8238561-ACT2',
+    receiptNo: 'test002',
+    custName: '李四',
+    factory: 'B工厂',
+    tranDate: '2019/9/2',
+    projectName: 'B项目',
+    billOneCar: 5,
+    carNum: '粤S2S2R3',
+    payType: '1',
+    recAmt: 1740.20,
+    enterGateFee: 220.10,
+    customsDeclarationFee: 1301.01
+  }
+]
+
 export default [
   {
     url: '/stock/load',
@@ -376,6 +409,33 @@ export default [
         data: {
           total: OutboundFees.length,
           items: OutboundFees
+        }
+      }
+    }
+  },
+  {
+    url: '/charge/query',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200'
+        },
+        data: {
+          total: frontDeskCharges.length,
+          items: frontDeskCharges
+        }
+      }
+    }
+  },
+  {
+    url: '/charge/add',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '新增成功'
         }
       }
     }

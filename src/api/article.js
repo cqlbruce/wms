@@ -134,3 +134,21 @@ export function exportShippedGoodsList(data) {
     data
   })
 }
+
+/** 前台收费查询*/
+export function fetchFrontDeskChargeList(data) {
+  return request({
+    url: '/charge/query',
+    method: 'post',
+    data
+  })
+}
+
+/** 前台收费查询*/
+export function addFrontDeskCharge(data) {
+  return request({
+    url: '/charge/add',
+    method: 'post',
+    data
+  })
+}

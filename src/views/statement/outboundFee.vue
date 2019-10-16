@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item label="柜型：">
           <el-select v-model="listQuery.cabinetType" placeholder="请选择" clearable style="width: 190px" class="filter-item">
-            <el-option v-for="item in cabinettypeOption" :key="item.display_name" :label="item.key" :value="item.key" />
+            <el-option v-for="item in cabinettypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item class="search">

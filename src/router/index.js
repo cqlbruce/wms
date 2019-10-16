@@ -128,6 +128,18 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/front-desk-charge',
+    component: Layout,
+    children: [
+      {
+        path: 'front-desk-charge',
+        component: () => import('@/views/front-desk-charge/index'),
+        name: 'frontDeskCharge',
+        meta: { title: '前台收费报表', icon: 'clipboard' }
+      }
+    ]
+  },
+  {
     path: '/statement',
     component: Layout,
     redirect: '/statement/inboundFee',
