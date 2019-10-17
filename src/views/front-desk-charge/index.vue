@@ -198,7 +198,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="支付方式:">{{ enumerMap(scope.row.payType,'bankTransStatus') }}</el-form-item>
+            <el-form-item label="支付方式:">{{ enumerMap(temp.payType,'bankTransStatus') }}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="代收款合计:">{{ temp.recAmt }}</el-form-item>
