@@ -129,10 +129,10 @@
       >
         <el-row>
           <el-form-item label="入仓编号:" prop="inboundNo">
-            <el-input v-model="temp.inboundNo" placeholder="inboundNo" />
+            <el-input v-model="temp.inboundNo" />
           </el-form-item>
           <el-form-item label="代收款合计:" prop="recAmt">
-            <el-input v-model="temp.recAmt" placeholder="recAmt" />
+            <el-input v-model="temp.recAmt" />
           </el-form-item>
           <el-form-item label="收款方式:" prop="po">
             <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 190px" class="filter-item">

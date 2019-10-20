@@ -705,6 +705,9 @@ export default {
       })
     },
     handleExport() {
+      if (this.listQuery.shippedNo == null) {
+        this.$message.warning('出仓单号不能为空')
+      }
       this.downloadLoading = true
       download('/shipped/download', this.listQuery, '出库信息.xlsx').then(response => {
         this.downloadLoading = false

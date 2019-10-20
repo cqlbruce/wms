@@ -357,7 +357,7 @@ export function download(url, data, fileName) {
     axios({
       baseURL: process.env.VUE_APP_BASE_API,
       method: 'post',
-      timeout: 20000,
+      timeout: 60000,
       url: url, // 请求地址
       data: data, // 参数
       responseType: 'blob' // 表明返回服务器返回的数据类型

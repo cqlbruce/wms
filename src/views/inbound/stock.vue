@@ -134,7 +134,7 @@
         <template slot-scope="{row}">
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(row)">修改</el-button>
-          <el-button type="danger" size="mini" align="center" @click="handleOutBound(row)">出库</el-button>
+          <!-- <el-button type="danger" size="mini" align="center" @click="handleOutBound(row)">出库</el-button> -->
         </template>
       </el-table-column>
     </el-table>
