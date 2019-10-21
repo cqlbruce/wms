@@ -648,7 +648,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          this.temp.author = 'vue-element-admin'
           addStock(this.temp).then(response => {
             this.dialogFormVisible = false
             this.listQuery.page = 1
