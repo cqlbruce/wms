@@ -2,34 +2,22 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="form-inline">
-        <el-form-item label="收费日期">
-          <el-date-picker v-model="listQuery.beginDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="开始日期" /> -
-          <el-date-picker v-model="listQuery.endDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="截止日期" />
-        </el-form-item>
-        <el-form-item label="入仓落货纸号：">
-          <el-input
-            v-model="listQuery.so"
-            placeholder="so"
-            style="width: 200px;"
-            class="filter-item"
-            clearable
-            @keyup.enter.native="handleFilter"
-          />
-        </el-form-item>
-        <el-form-item label="入仓编号：">
-          <el-input
-            v-model="listQuery.inboundNo"
-            placeholder="inboundNo"
-            style="width: 200px;"
-            class="filter-item"
-            clearable
-            @keyup.enter.native="handleFilter"
-          />
-        </el-form-item>
-        <el-form-item label="收款方式：">
-          <el-select v-model="listQuery.payType" placeholder="请选择" clearable style="width: 190px" class="filter-item">
-            <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
+        <el-form-item label="客户">
+          <el-select v-model="listQuery.custName" placeholder="请选择" clearable>
+            <el-option v-for="item in accountArr" :key="item.accountName" :label="item.accountName" :value="item.accountName" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="收费日期">
+          <el-date-picker v-model="listQuery.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="日期" />
+        </el-form-item>
+        <el-form-item label="车牌">
+          <el-input
+            v-model="listQuery.carNum"
+            style="width: 200px;"
+            class="filter-item"
+            clearable
+            @keyup.enter.native="handleFilter"
+          />
         </el-form-item>
         <el-button
           v-waves
@@ -52,9 +40,14 @@
           <span>{{ scope.row.tranDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工厂名称" min-width="180px" align="center">
+      <el-table-column label="客户名称" min-width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.factory }}</span>
+          <span>{{ scope.row.custName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="车牌" min-width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.carNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="入仓号" min-width="120px" align="center">
@@ -62,14 +55,19 @@
           <span>{{ scope.row.inboundNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户名称" min-width="80px" align="center">
+      <el-table-column label="SO" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.custName }}</span>
+          <span>{{ scope.row.so }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="代收款合计" min-width="100px" align="center">
+      <el-table-column label="报关费" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.recAmt }}</span>
+          <span>{{ scope.row.customsDeclarationFee }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="入闸费" min-width="100px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.enterGateFee }}</span>
         </template>
       </el-table-column>
       <el-table-column label="收款方式" min-width="80px" align="center">
@@ -87,14 +85,14 @@
           <span>{{ "一车" + scope.row.billOneCar + "单" }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="车牌" min-width="80px" align="center">
+      <el-table-column label="费用合计" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.carNum }}</span>
+          <span>{{ scope.row.recAmt }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="落货纸号码" min-width="180px" align="center">
+      <el-table-column label="备注" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.so }}</span>
+          <span>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -104,6 +102,7 @@
         fixed="right"
       >
         <template slot-scope="{row}">
+          <el-button size="mini" @click="handleUpdate(row)">修改</el-button>
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
         </template>
       </el-table-column>
@@ -220,7 +219,8 @@
 <script>
 import {
   fetchFrontDeskChargeList,
-  addFrontDeskCharge
+  addFrontDeskCharge,
+  loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
@@ -239,7 +239,7 @@ export default {
   filters: {},
   data() {
     return {
-      // 收款方式
+      accountArr: [],
       payTypeOption,
       labelPosition: 'right',
       tableKey: 0,
@@ -249,11 +249,9 @@ export default {
       listQuery: {
         page: 1,
         size: 20,
-        beginDate: undefined,
-        endDate: undefined,
-        inboundNo: undefined,
-        so: undefined,
-        payType: undefined
+        custName: undefined,
+        tranDate: undefined,
+        carNum: undefined
       },
       temp: {
         id: '',
@@ -304,6 +302,7 @@ export default {
     }
   },
   created() {
+    this.getALLData()
     this.getList()
   },
   methods: {
@@ -331,6 +330,19 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    // 获取客户信息
+    getALLData() {
+      const that = this
+      this.Axios.all([loanAccountInfo()])
+        .then(
+          this.Axios.spread(function(AccountInfo) {
+            that.accountArr = AccountInfo.data.items
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -386,6 +398,13 @@ export default {
             }
           })
         }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row)
+      this.detailFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['detailForm'].clearValidate()
       })
     },
     handleDetail(row) {

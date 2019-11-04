@@ -12,9 +12,11 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import Axios from 'axios'
 import enumerMap from './utils/mydata'
 
 Vue.prototype.enumerMap = enumerMap
+Vue.prototype.Axios = Axios
 
 import './icons' // icon
 import './permission' // permission control

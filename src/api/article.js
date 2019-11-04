@@ -135,6 +135,14 @@ export function exportShippedGoodsList(data) {
   })
 }
 
+/** 获取客户信息*/
+export function loanAccountInfo() {
+  return request({
+    url: '/charge/loadAccountInfo',
+    method: 'post'
+  })
+}
+
 /** 前台收费查询*/
 export function fetchFrontDeskChargeList(data) {
   return request({

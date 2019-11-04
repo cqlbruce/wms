@@ -305,6 +305,24 @@ const outboundList = [
   }
 ]
 
+const accountInfos = [
+  {
+    accountName: '客户一'
+  },
+  {
+    accountName: '客户二'
+  },
+  {
+    accountName: '客户三'
+  },
+  {
+    accountName: '客户四'
+  },
+  {
+    accountName: '客户五'
+  }
+]
+
 const frontDeskCharges = [
   {
     inboundNo: 'MOL19090203',
@@ -409,6 +427,20 @@ export default [
         data: {
           total: OutboundFees.length,
           items: OutboundFees
+        }
+      }
+    }
+  },
+  {
+    url: '/charge/loadAccountInfo',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200'
+        },
+        data: {
+          items: accountInfos
         }
       }
     }
