@@ -3,8 +3,8 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="form-inline">
         <el-form-item label="客户">
-          <el-select v-model="listQuery.custName" placeholder="请选择" clearable>
-            <el-option v-for="item in accountArr" :key="item.accountName" :label="item.accountName" :value="item.accountName" />
+          <el-select v-model="listQuery.custId" placeholder="请选择" clearable>
+            <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
           </el-select>
         </el-form-item>
         <el-form-item label="收费日期">
@@ -42,7 +42,7 @@
       </el-table-column>
       <el-table-column label="客户名称" min-width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.custName }}</span>
+          <span>{{ scope.row.custId }}</span>
         </template>
       </el-table-column>
       <el-table-column label="车牌" min-width="150px" align="center">
@@ -72,7 +72,7 @@
       </el-table-column>
       <el-table-column label="收款方式" min-width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ enumerMap(scope.row.payType,'bankTransStatus') }}</span>
+          <span>{{ enumerMap(scope.row.payType,'payType') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="收据编号" min-width="180px" align="center">
@@ -87,7 +87,7 @@
       </el-table-column>
       <el-table-column label="费用合计" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.recAmt }}</span>
+          <span>{{ scope.row.feeTotal }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" min-width="180px" align="center">
@@ -117,34 +117,69 @@
     />
 
     <!-- 新增/修改 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="60%">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="70%">
       <el-form
         ref="dataForm"
         :rules="tempRules"
         :model="temp"
         :label-position="labelPosition"
         :inline="true"
-        label-width="140px"
+        label-width="100px"
       >
         <el-row>
-          <el-form-item label="入仓编号:" prop="inboundNo">
-            <el-input v-model="temp.inboundNo" />
+          <el-form-item label="客户名称:" prop="custId">
+            <el-select v-model="temp.custId" placeholder="请选择" clearable>
+              <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custName" />
+            </el-select>
           </el-form-item>
-          <el-form-item label="代收款合计:" prop="recAmt">
-            <el-input v-model="temp.recAmt" />
+          <el-form-item label="车牌:" prop="carNum">
+            <el-input v-model="temp.carNum" />
+          </el-form-item>
+          <el-form-item label="报关费:" prop="customsDeclarationFee">
+            <el-input v-model="temp.customsDeclarationFee" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="入闸费:" prop="enterGateFee">
+            <el-input v-model="temp.enterGateFee" />
           </el-form-item>
           <el-form-item label="收款方式:" prop="po">
             <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 190px" class="filter-item">
               <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
-        </el-row>
-        <el-row>
           <el-form-item label="收据编号:" prop="receiptNo">
             <el-input v-model="temp.receiptNo" />
           </el-form-item>
+        </el-row>
+        <el-row>
           <el-form-item label="一车几单:" prop="billOneCar">
-            <el-input v-model="temp.billOneCar" />
+            <el-input v-model="temp.billOneCar" @change="changeBill(temp.billOneCar)" />
+          </el-form-item>
+          <el-form-item label="收费日期:" prop="tranDate">
+            <el-date-picker v-model="temp.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" />
+          </el-form-item>
+          <el-form-item label="备注:" prop="remark">
+            <el-input v-model="temp.remark" />
+          </el-form-item>
+        </el-row>
+      </el-form>
+      <el-form
+        ref="listForm"
+        :model="temp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="100px"
+      >
+        <el-row v-for="(its,index) in temp.items" :key="index">
+          <el-form-item label="入仓号:" prop="inboundNo">
+            <el-input v-model="its.inboundNo" />
+          </el-form-item>
+          <el-form-item label="so:" prop="so">
+            <el-input v-model="its.so" />
+          </el-form-item>
+          <el-form-item label="海关物料科号:" prop="customsMeterialNo">
+            <el-input v-model="its.customsMeterialNo" />
           </el-form-item>
         </el-row>
       </el-form>
@@ -228,8 +263,9 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 
 // 收款方式
 const payTypeOption = [
-  { key: '0', display_name: '现金支付' },
-  { key: '1', display_name: '微信支付' }
+  { key: '0', display_name: '微信' },
+  { key: '1', display_name: '现金' },
+  { key: '2', display_name: '月结' }
 ]
 
 export default {
@@ -249,26 +285,24 @@ export default {
       listQuery: {
         page: 1,
         size: 20,
-        custName: undefined,
-        tranDate: undefined,
+        custId: undefined,
+        tranDate: new Date(),
         carNum: undefined
       },
       temp: {
-        id: '',
-        inboundNo: '',
-        so: '',
-        receiptNo: '',
-        custName: '',
-        factory: '',
-        tranDate: '',
-        projectName: '',
         billOneCar: '',
         carNum: '',
-        payType: '',
-        recAmt: '',
+        custName: '',
+        customsDeclarationFee: '',
         enterGateFee: '',
-        customsDeclarationFee: ''
+        payType: '',
+        projectName: '',
+        recAmt: '',
+        receiptNo: '',
+        tranDate: new Date(),
+        items: []
       },
+
       dialogStatus: '',
       textMap: {
         update: '编辑',
@@ -350,21 +384,28 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: '',
-        inboundNo: '',
-        so: '',
-        receiptNo: '',
-        custName: '',
-        factory: '',
-        tranDate: '',
-        projectName: '',
         billOneCar: '',
         carNum: '',
-        payType: '',
-        recAmt: '',
+        custName: '',
+        customsDeclarationFee: '',
         enterGateFee: '',
-        customsDeclarationFee: ''
+        payType: '',
+        projectName: '',
+        recAmt: '',
+        receiptNo: '',
+        tranDate: new Date(),
+        items: []
       }
+    },
+    // 根据输入的单号触发事件
+    changeBill(billOneCar) {
+      console.log(billOneCar)
+      const num = {
+        inboundNo: '',
+        so: '',
+        customsMeterialNo: ''
+      }
+      this.temp.items.push(num)
     },
     handleCreate() {
       this.resetTemp()

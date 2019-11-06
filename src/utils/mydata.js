@@ -6,12 +6,13 @@ const enumerMap = (value, property) => {
   }
   // 对应数据
   const payTypeList = [
-    ['0', '现金支付'],
-    ['1', '微信支付']
+    ['0', '微信'],
+    ['1', '现金'],
+    ['2', '月结']
   ]
 
   const insideMapList = [
-    ['bankTransStatus', payTypeList]
+    ['payType', payTypeList]
   ]
 
   const firstResult = mapData(property, insideMapList)

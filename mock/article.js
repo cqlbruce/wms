@@ -307,52 +307,101 @@ const outboundList = [
 
 const accountInfos = [
   {
-    accountName: '客户一'
+    custFullName: '张三三',
+    custId: 'A01',
+    custShortName: '张三',
+    projectId: '01',
+    projectName: 'A项目'
   },
   {
-    accountName: '客户二'
+    custFullName: '张四四',
+    custId: 'B01',
+    custShortName: '张四',
+    projectId: '02',
+    projectName: 'B项目'
   },
   {
-    accountName: '客户三'
+    custFullName: '张五五',
+    custId: 'C01',
+    custShortName: '张五',
+    projectId: '03',
+    projectName: 'C项目'
   },
   {
-    accountName: '客户四'
-  },
-  {
-    accountName: '客户五'
+    custFullName: '李四',
+    custId: 'D01',
+    custShortName: '李四',
+    projectId: '04',
+    projectName: 'D项目'
   }
 ]
 
 const frontDeskCharges = [
   {
-    inboundNo: 'MOL19090203',
-    so: 'STM-CN8238577-ACT2',
-    receiptNo: 'test001',
-    custName: '张三',
-    factory: 'A工厂',
-    tranDate: '2019/9/2',
-    projectName: 'A项目',
     billOneCar: 2,
     carNum: '粤BY973K8',
+    commercialInspectionFlag: 0,
+    createTime: '2019-11-06 17:19:13',
+    custId: '客户A',
+    customsDeclarationFee: 101.01,
+    customsMeterialNo: 'A112233',
+    enterGateFee: 12.5,
+    factory: 'A工厂',
+    feeTotal: 520,
+    id: 1,
+    inboundNo: 'MOL19090203',
     payType: '0',
+    projectId: 'A项目',
     recAmt: 740.20,
-    enterGateFee: 20.10,
-    customsDeclarationFee: 101.01
+    receiptNo: 'test001',
+    settlementType: '0',
+    so: 'STM-CN8238577-ACT2',
+    tranDate: '2019/9/2',
+    updateTime: '2019-11-06 17:19:13'
   },
   {
-    inboundNo: 'MOL19090209',
-    so: 'STM-CN8238561-ACT2',
-    receiptNo: 'test002',
-    custName: '李四',
-    factory: 'B工厂',
+    billOneCar: 2,
+    carNum: '粤BY973K8',
+    commercialInspectionFlag: 0,
+    createTime: '2019-11-06 17:19:13',
+    custId: '客户A',
+    customsDeclarationFee: 101.01,
+    customsMeterialNo: 'A112233',
+    enterGateFee: 12.5,
+    factory: 'A工厂',
+    feeTotal: 520,
+    id: 1,
+    inboundNo: 'MOL19090203',
+    payType: '0',
+    projectId: 'A项目',
+    recAmt: 740.20,
+    receiptNo: 'test001',
+    settlementType: '0',
+    so: 'STM-CN8238577-ACT2',
     tranDate: '2019/9/2',
-    projectName: 'B项目',
-    billOneCar: 5,
-    carNum: '粤S2S2R3',
-    payType: '1',
-    recAmt: 1740.20,
-    enterGateFee: 220.10,
-    customsDeclarationFee: 1301.01
+    updateTime: '2019-11-06 17:19:13'
+  },
+  {
+    billOneCar: 2,
+    carNum: '粤BY973K8',
+    commercialInspectionFlag: 0,
+    createTime: '2019-11-06 17:19:13',
+    custId: '客户A',
+    customsDeclarationFee: 101.01,
+    customsMeterialNo: 'A112233',
+    enterGateFee: 12.5,
+    factory: 'A工厂',
+    feeTotal: 520,
+    id: 1,
+    inboundNo: 'MOL19090203',
+    payType: '0',
+    projectId: 'A项目',
+    recAmt: 740.20,
+    receiptNo: 'test001',
+    settlementType: '0',
+    so: 'STM-CN8238577-ACT2',
+    tranDate: '2019/9/2',
+    updateTime: '2019-11-06 17:19:13'
   }
 ]
 
