@@ -15,6 +15,7 @@ import router from './router'
 import Axios from 'axios'
 import enumerMap from './utils/mydata'
 
+Vue.use(Element)
 Vue.prototype.enumerMap = enumerMap
 Vue.prototype.Axios = Axios
 

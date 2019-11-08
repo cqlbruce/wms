@@ -128,8 +128,8 @@
       >
         <el-row>
           <el-form-item label="客户名称:" prop="custId">
-            <el-select v-model="temp.custId" placeholder="请选择" clearable>
-              <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custName" />
+            <el-select v-model="temp.custId" placeholder="请选择" style="width: 185px" clearable>
+              <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
             </el-select>
           </el-form-item>
           <el-form-item label="车牌:" prop="carNum">
@@ -144,7 +144,7 @@
             <el-input v-model="temp.enterGateFee" />
           </el-form-item>
           <el-form-item label="收款方式:" prop="po">
-            <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 190px" class="filter-item">
+            <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 185px" class="filter-item">
               <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
@@ -154,10 +154,10 @@
         </el-row>
         <el-row>
           <el-form-item label="一车几单:" prop="billOneCar">
-            <el-input v-model="temp.billOneCar" @change="changeBill(temp.billOneCar)" />
+            <el-input v-model="temp.billOneCar" @input="changeBill(temp.billOneCar)" />
           </el-form-item>
           <el-form-item label="收费日期:" prop="tranDate">
-            <el-date-picker v-model="temp.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" />
+            <el-date-picker v-model="temp.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
           </el-form-item>
           <el-form-item label="备注:" prop="remark">
             <el-input v-model="temp.remark" />
@@ -178,8 +178,11 @@
           <el-form-item label="so:" prop="so">
             <el-input v-model="its.so" />
           </el-form-item>
-          <el-form-item label="海关物料科号:" prop="customsMeterialNo">
+          <el-form-item label="海关物料号:" prop="customsMeterialNo">
             <el-input v-model="its.customsMeterialNo" />
+          </el-form-item>
+          <el-form-item prop="commercialInspectionFlag">
+            <el-checkbox v-model="its.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
           </el-form-item>
         </el-row>
       </el-form>
@@ -398,14 +401,16 @@ export default {
       }
     },
     // 根据输入的单号触发事件
-    changeBill(billOneCar) {
-      console.log(billOneCar)
-      const num = {
-        inboundNo: '',
-        so: '',
-        customsMeterialNo: ''
+    changeBill(size) {
+      this.temp.items = []
+      for (let i = 0; i < size; i++) {
+        const num = {
+          inboundNo: '',
+          so: '',
+          customsMeterialNo: ''
+        }
+        this.temp.items.push(num)
       }
-      this.temp.items.push(num)
     },
     handleCreate() {
       this.resetTemp()
