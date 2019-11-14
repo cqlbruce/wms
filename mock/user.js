@@ -43,7 +43,7 @@ export default [
 
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         data: {
           token: token
@@ -63,7 +63,7 @@ export default [
       if (!info) {
         return {
           respHeader: {
-            respCode: "100",
+            respCode: '100',
             respMessage: 'Login failed, unable to get user details.'
           }
         }
@@ -71,7 +71,7 @@ export default [
 
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         code: 20000,
         data: info
@@ -86,7 +86,7 @@ export default [
     response: _ => {
       return {
         respHeader: {
-          respCode: "200"
+          respCode: '200'
         },
         data: 'success'
       }

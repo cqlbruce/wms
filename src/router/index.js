@@ -140,6 +140,18 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/account-manage',
+    component: Layout,
+    children: [
+      {
+        path: 'account-manage',
+        component: () => import('@/views/account-manage/index'),
+        name: 'AccountManage',
+        meta: { title: '客户管理', icon: 'component' }
+      }
+    ]
+  },
+  {
     path: '/statement',
     component: Layout,
     redirect: '/statement/inboundFee',

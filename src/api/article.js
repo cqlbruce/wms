@@ -46,9 +46,18 @@ export function uploadFile(data) {
 }
 
 /**  出库查询  **/
-export function fetchOutputboundList(data) {
+export function loadShippedList(data) {
   return request({
     url: '/shipped/load',
+    method: 'post',
+    data
+  })
+}
+
+/**  出库批量查询  **/
+export function loadBatchShippedList(data) {
+  return request({
+    url: '/shipped/abstract/load',
     method: 'post',
     data
   })
@@ -135,14 +144,6 @@ export function exportShippedGoodsList(data) {
   })
 }
 
-/** 获取客户信息*/
-export function loanAccountInfo() {
-  return request({
-    url: '/charge/loadAccountInfo',
-    method: 'post'
-  })
-}
-
 /** 前台收费查询*/
 export function fetchFrontDeskChargeList(data) {
   return request({
@@ -152,7 +153,16 @@ export function fetchFrontDeskChargeList(data) {
   })
 }
 
-/** 前台收费查询*/
+/** 前台收费导出*/
+export function exportFrontDeskCharge(data) {
+  return request({
+    url: '/charge/export',
+    method: 'post',
+    data
+  })
+}
+
+/** 前台收费新增*/
 export function addFrontDeskCharge(data) {
   return request({
     url: '/charge/add',
@@ -160,3 +170,45 @@ export function addFrontDeskCharge(data) {
     data
   })
 }
+
+/** 前台收费修改*/
+export function modifyFrontDeskCharge(data) {
+  return request({
+    url: '/charge/update',
+    method: 'post',
+    data
+  })
+}
+
+/** 获取客户信息*/
+export function loanAccountInfo() {
+  return request({
+    url: '/cust/query',
+    method: 'post'
+  })
+}
+
+/** 客户新增*/
+export function addAccount() {
+  return request({
+    url: '/cust/add',
+    method: 'post'
+  })
+}
+
+/** 客户修改*/
+export function updateAccount() {
+  return request({
+    url: '/cust/update',
+    method: 'post'
+  })
+}
+
+/** 客户删除*/
+export function deleteAccount() {
+  return request({
+    url: '/cust/delete',
+    method: 'post'
+  })
+}
+

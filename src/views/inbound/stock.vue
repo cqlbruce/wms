@@ -2,6 +2,11 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="form-inline">
+        <el-form-item label="客户">
+          <el-select v-model="listQuery.custId" placeholder="请选择" clearable>
+            <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="入仓落货纸号：">
           <el-input
             v-model="listQuery.so"
@@ -51,7 +56,6 @@
       </el-form>
     </div>
     <el-table
-      :key="tableKey"
       v-loading="listLoading"
       :data="list"
       border
@@ -134,7 +138,6 @@
         <template slot-scope="{row}">
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(row)">修改</el-button>
-          <!-- <el-button type="danger" size="mini" align="center" @click="handleOutBound(row)">出库</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -457,8 +460,8 @@ import {
   fetchInboundList,
   addStock,
   updateStock,
-  outBoundStock,
-  uploadFile
+  uploadFile,
+  loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
@@ -472,7 +475,7 @@ export default {
   data() {
     return {
       labelPosition: 'right',
-      tableKey: 0,
+      accountArr: [],
       list: null,
       total: 0,
       listLoading: true,
@@ -535,10 +538,9 @@ export default {
         create: '新增',
         outbound: '出库'
       },
-      rules: {},
+      rules: {
+      },
       tempRules: {
-        // po: [{ required: true, message: 'po is required', trigger: 'blur' }],
-        // sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
       },
       loading: false,
       progress: 0,
@@ -567,9 +569,33 @@ export default {
     }
   },
   created() {
+    this.getALLData()
     this.getList()
   },
   methods: {
+    // 获取客户信息
+    getALLData() {
+      const that = this
+      this.Axios.all([loanAccountInfo()])
+        .then(
+          this.Axios.spread(function(AccountInfo) {
+            that.accountArr = AccountInfo.data.items
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    // 客户姓名匹配
+    matchAccount(value) {
+      let str = '--'
+      this.accountArr.forEach(item => {
+        if (item.custId === value) {
+          str = item.custShortName
+        }
+      })
+      return str
+    },
     // 文件改变时触发
     handleChange(file, fileList) {
       const obj = {
@@ -700,35 +726,6 @@ export default {
         }
       })
     },
-    outBoundData() {
-      this.$refs['outBoundForm'].validate(valid => {
-        if (valid) {
-          this.outBoundFormVisible = false
-          outBoundStock(this.shippedTemp).then(response => {
-            if (response.respHeader.respCode !== '200') {
-              this.$notify({
-                title: '失败',
-                message: response.respHeader.respMsg,
-                type: 'fail',
-                duration: 2000
-              })
-            } else {
-              this.$notify({
-                title: '成功',
-                message: response.respHeader.respMsg,
-                type: 'success',
-                duration: 2000
-              })
-            }
-
-            this.listQuery.page = 1
-            this.getList()
-          }).catch(err => {
-            console.log(err)
-          })
-        }
-      })
-    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -743,19 +740,6 @@ export default {
       this.detailFormVisible = true
       this.$nextTick(() => {
         this.$refs['detailForm'].clearValidate()
-      })
-    },
-    handleOutBound(row) {
-      this.shippedTemp.id = row.id
-      this.shippedTemp.po = row.po
-      this.shippedTemp.sku = row.sku
-      this.shippedTemp.so = row.so
-      this.shippedTemp.stockPcs = row.stockPcs
-
-      this.dialogStatus = 'outbound'
-      this.outBoundFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['outBoundForm'].clearValidate()
       })
     },
     handleImport() {

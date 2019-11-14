@@ -30,6 +30,7 @@
           icon="el-icon-edit"
           @click="handleCreate"
         >新增</el-button>
+        <el-button v-waves type="primary" icon="el-icon-download" @click="handleExport">导出</el-button>
       </el-form>
     </div>
 
@@ -42,7 +43,7 @@
       </el-table-column>
       <el-table-column label="客户名称" min-width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.custId }}</span>
+          <span>{{ scope.row.custShortName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="车牌" min-width="150px" align="center">
@@ -116,8 +117,8 @@
       @pagination="getList"
     />
 
-    <!-- 新增/修改 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="70%">
+    <!-- 新增 -->
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" width="70%">
       <el-form
         ref="dataForm"
         :rules="tempRules"
@@ -192,9 +193,85 @@
       </div>
     </el-dialog>
 
+    <el-dialog title="修改" :visible.sync="updateVisible" width="70%">
+      <el-form
+        ref="dataForm"
+        :rules="tempRules"
+        :model="temp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="100px"
+      >
+        <el-row>
+          <el-form-item label="客户名称:" prop="custShortName">
+            <el-input v-model="temp.custShortName" />
+          </el-form-item>
+          <el-form-item label="车牌号:" prop="carNum">
+            <el-input v-model="temp.carNum" />
+          </el-form-item>
+          <el-form-item label="报关费:" prop="customsDeclarationFee">
+            <el-input v-model="temp.customsDeclarationFee" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="入闸费:" prop="enterGateFee">
+            <el-input v-model="temp.enterGateFee" />
+          </el-form-item>
+          <el-form-item label="收款方式:" prop="payType">
+            <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 185px" class="filter-item">
+              <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="收据编号:" prop="receiptNo">
+            <el-input v-model="temp.receiptNo" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="一车几单:" prop="billOneCar">
+            <el-input v-model="temp.billOneCar" />
+          </el-form-item>
+          <el-form-item label="收费日期:" prop="carNum">
+            <el-date-picker v-model="temp.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
+          </el-form-item>
+          <el-form-item label="备注:" prop="remark">
+            <el-input v-model="temp.remark" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="入仓号:" prop="inboundNo">
+            <el-input v-model="temp.inboundNo" />
+          </el-form-item>
+          <el-form-item label="so:" prop="so">
+            <el-input v-model="temp.so" />
+          </el-form-item>
+          <el-form-item label="海关物料号:" prop="customsMeterialNo">
+            <el-input v-model="temp.customsMeterialNo" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="入仓号:" prop="inboundNo">
+            <el-input v-model="temp.inboundNo" />
+          </el-form-item>
+          <el-form-item label="so:" prop="so">
+            <el-input v-model="temp.so" />
+          </el-form-item>
+          <el-form-item label="海关物料号:" prop="customsMeterialNo">
+            <el-input v-model="temp.customsMeterialNo" />
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="10">
+          <el-checkbox v-model="temp.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
+        </el-row>
+      </el-form>
+      <div slot="footer" align="center" class="dialog-footer">
+        <el-button @click="updateVisible = false">取消</el-button>
+        <el-button type="primary" @click="updateData()">确认</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog title="详情" :visible.sync="detailFormVisible" width="60%">
       <el-form
-        ref="detailForm"
+        ref="updateForm"
         :model="temp"
         :label-position="labelPosition"
         :inline="true"
@@ -202,51 +279,51 @@
       >
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="入仓编号:">{{ temp.inboundNo }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="落货纸号码:">{{ temp.so }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="收据编码:">{{ temp.receiptNo }}</el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item label="客户名称:">{{ temp.custName }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="工厂名称:">{{ temp.factory }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="收费日期:">{{ temp.tranDate }}</el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item label="项目名称:">{{ temp.projectName }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="一车几单:">{{ '一车' + temp.billOneCar + '单' }}</el-form-item>
+            <el-form-item label="客户名称:">{{ temp.custShortName }}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="车牌号:">{{ temp.carNum }}</el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="报关费:">{{ temp.customsDeclarationFee }}</el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item label="支付方式:">{{ enumerMap(temp.payType,'bankTransStatus') }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="代收款合计:">{{ temp.recAmt }}</el-form-item>
-          </el-col>
           <el-col :span="8">
             <el-form-item label="入闸费:">{{ temp.enterGateFee }}</el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="收款方式:">{{ enumerMap(temp.payType,'payType') }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="收据编号:">{{ temp.receiptNo }}</el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="报关费:">{{ temp.customsDeclarationFee }}</el-form-item>
+            <el-form-item label="一车几单:">{{ '一车' + temp.billOneCar + '单' }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="收费日期:">{{ temp.tranDate }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="备注:">{{ temp.remark }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="入仓号:">{{ temp.inboundNo }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="so:">{{ temp.so }}</el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="海关物料号:">{{ temp.customsMeterialNo }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-checkbox v-model="temp.spectionFlag" disabled>商检标识</el-checkbox>
           </el-col>
         </el-row>
       </el-form>
@@ -257,11 +334,13 @@
 <script>
 import {
   fetchFrontDeskChargeList,
+  exportFrontDeskCharge,
+  modifyFrontDeskCharge,
   addFrontDeskCharge,
   loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-// import { parseTime } from '@/utils'
+import { parseTime, getNowFormatDate } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 // 收款方式
@@ -289,7 +368,7 @@ export default {
         page: 1,
         size: 20,
         custId: undefined,
-        tranDate: new Date(),
+        tranDate: getNowFormatDate(),
         carNum: undefined
       },
       temp: {
@@ -302,7 +381,7 @@ export default {
         projectName: '',
         recAmt: '',
         receiptNo: '',
-        tranDate: new Date(),
+        tranDate: getNowFormatDate(),
         items: []
       },
 
@@ -325,12 +404,14 @@ export default {
       asyncValue: {
         file: null
       },
-      // 新增修改弹窗
+      // 新增
       dialogFormVisible: false,
       // 下载
       downloadLoading: false,
       // 详情
-      detailFormVisible: false
+      detailFormVisible: false,
+      // 修改
+      updateVisible: false
     }
   },
   watch: {
@@ -361,12 +442,45 @@ export default {
     getList() {
       this.listLoading = true
       fetchFrontDeskChargeList(this.listQuery).then(response => {
-        this.list = response.data.items
         this.total = response.data.total
+        this.list = response.data.items
+        // 客户类型转换
+        this.list.forEach(item => {
+          item.custShortName = this.matchAccount(item.custId)
+          item.spectionFlag = this.matchFlag(item.commercialInspectionFlag)
+        })
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    // 客户姓名匹配
+    matchAccount(value) {
+      let str = '--'
+      this.accountArr.forEach(item => {
+        if (item.custId === value) {
+          str = item.custShortName
+        }
+      })
+      return str
+    },
+    // 支付类型匹配
+    matchPayType(value) {
+      let str = '--'
+      this.payTypeOption.forEach(item => {
+        if (item.key === value) {
+          str = item.display_name
+        }
+      })
+      return str
+    },
+    // 商检标识
+    matchFlag(value) {
+      let str = false
+      if (value === '1') {
+        str = true
+      }
+      return str
     },
     // 获取客户信息
     getALLData() {
@@ -423,6 +537,13 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.temp.items.forEach(item => {
+            if (item.commercialInspectionFlag) {
+              item.commercialInspectionFlag = '1'
+            } else {
+              item.commercialInspectionFlag = '0'
+            }
+          })
           addFrontDeskCharge(this.temp).then(response => {
             this.dialogFormVisible = false
             this.listQuery.page = 1
@@ -446,19 +567,80 @@ export default {
         }
       })
     },
+    updateData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          if (this.temp.commercialInspectionFlag) {
+            this.temp.commercialInspectionFlag = '1'
+          } else {
+            this.temp.commercialInspectionFlag = '0'
+          }
+          modifyFrontDeskCharge(this.temp).then(response => {
+            this.updateVisible = false
+            this.listQuery.page = 1
+            this.getList()
+            if (response.respHeader.respCode !== '200') {
+              this.$notify({
+                title: '失败',
+                message: response.respHeader.respMsg,
+                type: 'fail',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '成功',
+                message: response.respHeader.respMsg,
+                type: 'success',
+                duration: 2000
+              })
+            }
+          })
+        }
+      })
+    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row)
-      this.detailFormVisible = true
+      this.updateVisible = true
       this.$nextTick(() => {
-        this.$refs['detailForm'].clearValidate()
+        this.$refs['dataForm'].clearValidate()
       })
     },
     handleDetail(row) {
       this.temp = Object.assign({}, row)
       this.detailFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['detailForm'].clearValidate()
+    },
+    handleExport() {
+      this.downloadLoading = true
+
+      exportFrontDeskCharge(this.listQuery).then(response => {
+        this.exportList = response.data.items
+        // 客户姓名匹配
+        this.exportList.forEach(item => {
+          item.custShortName = this.matchAccount(item.custId)
+          item.payType = this.matchPayType(item.payType)
+        })
+
+        import('@/vendor/Export2Excel').then(excel => {
+          const tHeader = ['收费日期', '客户名称', '车牌', '入仓号', 'SO', '报关费', '入闸费', '收款方式', '收据编号', '一车几单', '费用合计', '备注']
+          const filterVal = ['tranDate', 'custShortName', 'carNum', 'inboundNo', 'so', 'customsDeclarationFee', 'enterGateFee', 'payType', 'receiptNo', 'billOneCar', 'feeTotal', 'remark']
+          const data = this.formatJson(filterVal, this.exportList)
+          excel.export_json_to_excel({
+            header: tHeader,
+            data,
+            filename: '前台收费信息表'
+          })
+          this.downloadLoading = false
+        })
       })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }

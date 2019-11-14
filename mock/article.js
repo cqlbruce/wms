@@ -223,9 +223,42 @@ const OutboundFees = [
 
 const outboundList = [
   {
+    custId: 'A01',
+    clp: 'AE86',
+    shippedDate: '2018/8/1',
+    cntrNo: 'CC001',
+    cntrWeigh: 13.5,
+    seal: 'CAPG18080101'
+  },
+  {
+    id: '12',
+    custId: 'B01',
+    clp: 'AE87',
+    shippedDate: '2018/8/2',
+    cntrNo: 'CC002',
+    cntrWeigh: 13.5,
+    seal: 'CAPG18080102'
+  },
+  {
+    id: '13',
+    custId: 'C01',
+    clp: 'AE88',
+    shippedDate: '2018/8/2',
+    cntrNo: 'CC003',
+    cntrWeigh: 13.5,
+    seal: 'CAPG18080103'
+  }
+]
+
+const shippedBatchList = [
+  {
     id: '11',
-    shippedOrderDate: null,
-    shippedDate: null,
+    custId: 'A01',
+    clp: 'AE86',
+    shippedDate: '2018/8/1',
+    cntrNo: 'CC001',
+    seal: 'CAPG18080101',
+    shippedOrderDate: '2018/8/1',
     shippedNo: 'CAPG18080101',
     so: 'APGHKG18070011 ',
     po: '154308',
@@ -251,8 +284,12 @@ const outboundList = [
   },
   {
     id: '12',
-    shippedOrderDate: '2018/8/1',
+    custId: 'B01',
+    clp: 'AE87',
     shippedDate: '2018/8/2',
+    cntrNo: 'CC002',
+    seal: 'CAPG18080102',
+    shippedOrderDate: '2018/8/1',
     shippedNo: 'CAPG18080101',
     so: 'APGHKG18070011 ',
     po: '154308',
@@ -278,8 +315,12 @@ const outboundList = [
   },
   {
     id: '13',
-    shippedOrderDate: '2018/8/1',
+    custId: 'C01',
+    clp: 'AE88',
     shippedDate: '2018/8/2',
+    cntrNo: 'CC003',
+    seal: 'CAPG18080103',
+    shippedOrderDate: '2018/8/1',
     shippedNo: 'CAPG18080101',
     so: 'APGHKG18070011 ',
     po: '154308',
@@ -307,6 +348,7 @@ const outboundList = [
 
 const accountInfos = [
   {
+    id: '1',
     custFullName: '张三三',
     custId: 'A01',
     custShortName: '张三',
@@ -314,6 +356,7 @@ const accountInfos = [
     projectName: 'A项目'
   },
   {
+    id: '2',
     custFullName: '张四四',
     custId: 'B01',
     custShortName: '张四',
@@ -321,6 +364,7 @@ const accountInfos = [
     projectName: 'B项目'
   },
   {
+    id: '3',
     custFullName: '张五五',
     custId: 'C01',
     custShortName: '张五',
@@ -328,6 +372,7 @@ const accountInfos = [
     projectName: 'C项目'
   },
   {
+    id: '4',
     custFullName: '李四',
     custId: 'D01',
     custShortName: '李四',
@@ -340,9 +385,9 @@ const frontDeskCharges = [
   {
     billOneCar: 2,
     carNum: '粤BY973K8',
-    commercialInspectionFlag: 0,
+    commercialInspectionFlag: '0',
     createTime: '2019-11-06 17:19:13',
-    custId: '客户A',
+    custId: 'A01',
     customsDeclarationFee: 101.01,
     customsMeterialNo: 'A112233',
     enterGateFee: 12.5,
@@ -357,14 +402,15 @@ const frontDeskCharges = [
     settlementType: '0',
     so: 'STM-CN8238577-ACT2',
     tranDate: '2019/9/2',
-    updateTime: '2019-11-06 17:19:13'
+    updateTime: '2019-11-06 17:19:13',
+    remark: 'test'
   },
   {
     billOneCar: 2,
     carNum: '粤BY973K8',
-    commercialInspectionFlag: 0,
+    commercialInspectionFlag: '1',
     createTime: '2019-11-06 17:19:13',
-    custId: '客户A',
+    custId: 'B01',
     customsDeclarationFee: 101.01,
     customsMeterialNo: 'A112233',
     enterGateFee: 12.5,
@@ -379,14 +425,15 @@ const frontDeskCharges = [
     settlementType: '0',
     so: 'STM-CN8238577-ACT2',
     tranDate: '2019/9/2',
-    updateTime: '2019-11-06 17:19:13'
+    updateTime: '2019-11-06 17:19:13',
+    remark: 'testA'
   },
   {
     billOneCar: 2,
     carNum: '粤BY973K8',
-    commercialInspectionFlag: 0,
+    commercialInspectionFlag: '0',
     createTime: '2019-11-06 17:19:13',
-    custId: '客户A',
+    custId: 'C01',
     customsDeclarationFee: 101.01,
     customsMeterialNo: 'A112233',
     enterGateFee: 12.5,
@@ -401,7 +448,8 @@ const frontDeskCharges = [
     settlementType: '0',
     so: 'STM-CN8238577-ACT2',
     tranDate: '2019/9/2',
-    updateTime: '2019-11-06 17:19:13'
+    updateTime: '2019-11-06 17:19:13',
+    remark: 'testB'
   }
 ]
 
@@ -435,7 +483,7 @@ export default [
     }
   },
   {
-    url: '/shipped/load',
+    url: '/shipped/abstract/load',
     type: 'post',
     response: config => {
       return {
@@ -445,6 +493,21 @@ export default [
         data: {
           total: outboundList.length,
           items: outboundList
+        }
+      }
+    }
+  },
+  {
+    url: '/shipped/load',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200'
+        },
+        data: {
+          total: shippedBatchList.length,
+          items: shippedBatchList
         }
       }
     }
@@ -480,8 +543,9 @@ export default [
       }
     }
   },
+  // 客戶信息查詢
   {
-    url: '/charge/loadAccountInfo',
+    url: '/cust/query',
     type: 'post',
     response: config => {
       return {
@@ -489,11 +553,52 @@ export default [
           respCode: '200'
         },
         data: {
+          total: accountInfos.length,
           items: accountInfos
         }
       }
     }
   },
+  // 客户新增
+  {
+    url: '/cust/add',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '新增成功'
+        }
+      }
+    }
+  },
+  // 客户修改
+  {
+    url: '/cust/update',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '成功'
+        }
+      }
+    }
+  },
+  // 客户删除
+  {
+    url: '/cust/delete',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '成功'
+        }
+      }
+    }
+  },
+  // 收费查询
   {
     url: '/charge/query',
     type: 'post',
@@ -509,6 +614,7 @@ export default [
       }
     }
   },
+  // 收费新增
   {
     url: '/charge/add',
     type: 'post',
@@ -517,6 +623,34 @@ export default [
         respHeader: {
           respCode: '200',
           respMsg: '新增成功'
+        }
+      }
+    }
+  },
+  // 收费导出
+  {
+    url: '/charge/export',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200'
+        },
+        data: {
+          items: frontDeskCharges
+        }
+      }
+    }
+  },
+  // 收费修改
+  {
+    url: '/charge/update',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '修改成功'
         }
       }
     }
