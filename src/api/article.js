@@ -181,34 +181,38 @@ export function modifyFrontDeskCharge(data) {
 }
 
 /** 获取客户信息*/
-export function loanAccountInfo() {
+export function loanAccountInfo(data) {
   return request({
     url: '/cust/query',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 
 /** 客户新增*/
-export function addAccount() {
+export function addAccount(data) {
   return request({
     url: '/cust/add',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 
 /** 客户修改*/
-export function updateAccount() {
+export function updateAccount(data) {
   return request({
     url: '/cust/update',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 
 /** 客户删除*/
-export function deleteAccount() {
+export function deleteAccount(data) {
   return request({
     url: '/cust/delete',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 
