@@ -576,7 +576,7 @@ export default {
     // 获取客户信息
     getALLData() {
       const that = this
-      this.Axios.all([loanAccountInfo()])
+      this.Axios.all([loanAccountInfo({})])
         .then(
           this.Axios.spread(function(AccountInfo) {
             that.accountArr = AccountInfo.data.items
