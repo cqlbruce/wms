@@ -331,16 +331,16 @@
       >
         <el-row>
           <el-form-item label="入仓号" prop="inboundNo">
-            <el-input v-model="updateTemp.inboundNo" :disabled="true" />
+            <el-input v-model="updateTemp.inboundNo" :disabled="true" style="width: 195px" />
           </el-form-item>
           <el-form-item label="SO" prop="so">
-            <el-input v-model="updateTemp.so" :disabled="true" />
+            <el-input v-model="updateTemp.so" :disabled="true" style="width: 195px" />
           </el-form-item>
           <el-form-item label="PO" prop="po">
-            <el-input v-model="updateTemp.po" :disabled="true" />
+            <el-input v-model="updateTemp.po" :disabled="true" style="width: 195px" />
           </el-form-item>
           <el-form-item label="ITEM" prop="item">
-            <el-input v-model="updateTemp.item" :disabled="true" />
+            <el-input v-model="updateTemp.item" :disabled="true" style="width: 195px" />
           </el-form-item>
         </el-row>
         <el-row>
@@ -586,7 +586,7 @@ import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
-  name: 'ComplexTable',
+  name: 'StockComplexTable',
   components: { Pagination },
   directives: { waves },
   filters: {},
