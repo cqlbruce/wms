@@ -11,8 +11,14 @@ const enumerMap = (value, property) => {
     ['2', '月结']
   ]
 
+  const stockStatusList = [
+    ['0', '登记'],
+    ['1', '入库']
+  ]
+
   const insideMapList = [
-    ['payType', payTypeList]
+    ['payType', payTypeList],
+    ['stockStatus', stockStatusList]
   ]
 
   const firstResult = mapData(property, insideMapList)

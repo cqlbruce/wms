@@ -25,9 +25,35 @@ for (let i = 0; i < count; i++) {
   }))
 }
 
+const batchStockList = [
+  {
+    carNum: '粤B888888',
+    rcvdDate: '2019-11-16',
+    custId: 'A01',
+    inboundNo: 'APG18075501',
+    status: '0'
+  },
+  {
+    carNum: '粤B888866',
+    rcvdDate: '2019-11-15',
+    custId: 'B01',
+    inboundNo: 'APG18073001',
+    status: '1'
+  },
+  {
+    carNum: '粤B668888',
+    rcvdDate: '2019-11-14',
+    custId: 'C01',
+    inboundNo: 'APG18076601',
+    status: '0'
+  }
+]
+
 const inboundList = [
   {
     id: '11',
+    custId: 'A01',
+    status: '0',
     supplierName: '东莞市瑞源进出口有限公司',
     so: 'APGHKG18070011',
     po: '154308',
@@ -62,6 +88,8 @@ const inboundList = [
   },
   {
     id: '12',
+    custId: 'B01',
+    status: '1',
     supplierName: '东莞市瑞源进出口有限公司1',
     so: 'APGHKG18070011',
     po: '154308',
@@ -96,6 +124,8 @@ const inboundList = [
   },
   {
     id: '13',
+    custId: 'C01',
+    status: '1',
     supplierName: '东莞市瑞源进出口有限公司2',
     so: 'APGHKG18070011',
     po: '154308',
@@ -455,6 +485,21 @@ const frontDeskCharges = [
 
 export default [
   {
+    url: '/stock/abstract/load',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200'
+        },
+        data: {
+          total: batchStockList.length,
+          items: batchStockList
+        }
+      }
+    }
+  },
+  {
     url: '/stock/load',
     type: 'post',
     response: () => {
@@ -465,6 +510,42 @@ export default [
         data: {
           total: inboundList.length,
           items: inboundList
+        }
+      }
+    }
+  },
+  {
+    url: '/stock/modify',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '修改成功'
+        }
+      }
+    }
+  },
+  {
+    url: '/stock/add',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '新增成功'
+        }
+      }
+    }
+  },
+  {
+    url: 'stock/upload',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '导入成功'
         }
       }
     }

@@ -1,7 +1,16 @@
 import request from '@/utils/request'
 
+/**  入库概要查询  **/
+export function batchLoadStock(data) {
+  return request({
+    url: '/stock/abstract/load',
+    method: 'post',
+    data
+  })
+}
+
 /**  入库查询  **/
-export function fetchInboundList(data) {
+export function fetchStock(data) {
   return request({
     url: '/stock/load',
     method: 'post',
