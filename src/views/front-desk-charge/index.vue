@@ -118,78 +118,84 @@
     />
 
     <!-- 新增 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" width="70%">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible">
       <el-form
-        ref="dataForm"
-        :rules="tempRules"
-        :model="temp"
+        ref="addDataForm"
+        :rules="addDataRules"
+        :model="addDataModel"
         :label-position="labelPosition"
         :inline="true"
         label-width="100px"
+        style="min-width:71%"
       >
         <el-row>
           <el-form-item label="客户名称:" prop="custId">
-            <el-select v-model="temp.custId" placeholder="请选择" style="width: 185px" clearable>
+            <el-select v-model="addDataModel.custId" placeholder="请选择" style="width: 185px" clearable>
               <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
             </el-select>
           </el-form-item>
           <el-form-item label="车牌:" prop="carNum">
-            <el-input v-model="temp.carNum" />
+            <el-input v-model="addDataModel.carNum" />
           </el-form-item>
           <el-form-item label="报关费:" prop="customsDeclarationFee">
-            <el-input v-model="temp.customsDeclarationFee" />
+            <el-input v-model="addDataModel.customsDeclarationFee" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="入闸费:" prop="enterGateFee">
-            <el-input v-model="temp.enterGateFee" />
+            <el-input v-model="addDataModel.enterGateFee" />
           </el-form-item>
           <el-form-item label="收款方式:" prop="po">
-            <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 185px" class="filter-item">
+            <el-select v-model="addDataModel.po" placeholder="请选择" style="width: 185px" class="filter-item">
               <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
           <el-form-item label="收据编号:" prop="receiptNo">
-            <el-input v-model="temp.receiptNo" />
+            <el-input v-model="addDataModel.receiptNo" />
           </el-form-item>
         </el-row>
         <el-row>
           <el-form-item label="一车几单:" prop="billOneCar">
-            <el-input v-model="temp.billOneCar" @input="changeBill(temp.billOneCar)" />
+            <!-- <el-input v-model.number="addDataModel.billOneCar" @input="changeBill(addDataModel.billOneCar)" /> -->
+            <el-input-number v-model="addDataModel.billOneCar" :min="0" :max="10" controls-position="right" @change="changeBill(addDataModel.billOneCar)" />
           </el-form-item>
           <el-form-item label="收费日期:" prop="tranDate">
-            <el-date-picker v-model="temp.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
+            <el-date-picker v-model="addDataModel.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
           </el-form-item>
           <el-form-item label="备注:" prop="remark">
-            <el-input v-model="temp.remark" />
+            <el-input v-model="addDataModel.remark" />
           </el-form-item>
         </el-row>
       </el-form>
-      <el-form
-        ref="listForm"
-        :model="temp"
-        :label-position="labelPosition"
-        :inline="true"
-        label-width="100px"
-      >
-        <el-row v-for="(its,index) in temp.items" :key="index">
-          <el-form-item label="入仓号:" prop="inboundNo">
-            <el-input v-model="its.inboundNo" />
-          </el-form-item>
-          <el-form-item label="so:" prop="so">
-            <el-input v-model="its.so" />
-          </el-form-item>
-          <el-form-item label="海关物料号:" prop="customsMeterialNo">
-            <el-input v-model="its.customsMeterialNo" />
-          </el-form-item>
-          <el-form-item prop="commercialInspectionFlag">
-            <el-checkbox v-model="its.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
-          </el-form-item>
-        </el-row>
-      </el-form>
+      <div v-for="(its,index) in addDataModel.items" :key="index">
+        <el-form
+          :ref="`addListForm${index}`"
+          :rules="`addListFormRulesArr[${index}]`"
+          :model="addListFormRules"
+          :label-position="labelPosition"
+          :inline="true"
+          label-width="100px"
+        >
+          <el-row>
+            <el-form-item label="入仓号:" :prop="`addDataModel.items[${index}].inboundNo`">
+              <el-input v-model="its.inboundNo" />
+            </el-form-item>
+            <el-form-item label="so:" :prop="`addDataModel.items[${index}].so`">
+              <el-input v-model="its.so" />
+            </el-form-item>
+            <el-form-item label="海关物料号:" :prop="`addDataModel.items[${index}].customsMeterialNo`">
+              <el-input v-model="its.customsMeterialNo" />
+            </el-form-item>
+            <el-form-item :prop="`addDataModel.items[${index}].commercialInspectionFlag`">
+              <el-checkbox v-model="its.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
+            </el-form-item>
+
+          </el-row>
+        </el-form>
+      </div>
       <div slot="footer" align="center" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="createData()">确认</el-button>
+        <el-button type="primary" @click="createData">确认</el-button>
       </div>
     </el-dialog>
 
@@ -336,7 +342,7 @@ import {
   fetchFrontDeskChargeList,
   exportFrontDeskCharge,
   modifyFrontDeskCharge,
-  addFrontDeskCharge,
+  // addFrontDeskCharge,
   loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
@@ -356,6 +362,13 @@ export default {
   directives: { waves },
   filters: {},
   data() {
+    var checkNum = (rule, value, callback) => {
+      if (value <= 0) {
+        callback(new Error('数量不能少于0'))
+      } else {
+        callback()
+      }
+    }
     return {
       accountArr: [],
       payTypeOption,
@@ -384,7 +397,24 @@ export default {
         tranDate: getNowFormatDate(),
         items: []
       },
-
+      addDataModel: {
+        billOneCar: '',
+        carNum: '',
+        custName: '',
+        customsDeclarationFee: '',
+        enterGateFee: '',
+        po: '',
+        projectName: '',
+        recAmt: '',
+        receiptNo: '',
+        tranDate: getNowFormatDate(),
+        items: []
+      },
+      addListFormModel: {
+        inboundNo: '',
+        so: '',
+        customsMeterialNo: ''
+      },
       dialogStatus: '',
       textMap: {
         update: '编辑',
@@ -395,6 +425,47 @@ export default {
         // po: [{ required: true, message: 'po is required', trigger: 'blur' }],
         // sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
       },
+      addDataRules: { // 新增校验规则
+        // customsDeclarationFee:[
+        //   { required: true, message: '请填写报关费', trigger: 'blur' }
+        // ],
+        // carNum:[
+        //   { required: true, message: '请填写车牌号', trigger: 'blur' }
+        // ],
+        // enterGateFee:[
+        //   { required: true, message: '请填写入闸费', trigger: 'blur' }
+        // ],
+        // po:[
+        //   { required: true, message: '请选择收款方式', trigger: 'change' }
+        // ],
+        // receiptNo:[
+        //   { required: true, message: '请填写收据编号', trigger: 'blur' }
+        // ],
+        billOneCar: [
+          { validator: checkNum, type: 'number', required: true, trigger: 'blur' }
+
+        ]
+        // items:[
+        //   {
+        //     inboundNo:[
+        //       { required: true, message: '请填写入仓号', trigger: 'blur' }
+        //     ],
+        //     so:[
+        //       { required: true, message: '请填写入仓so', trigger: 'blur' }
+        //     ]
+        //   }
+        // ]
+      },
+      addListFormRules:
+        { // 一车几单列表规则
+          inboundNo: [
+            { required: true, message: '请填写入仓号', trigger: 'blur' }
+          ],
+          so: [
+            { required: true, message: '请填写入仓so', trigger: 'blur' }
+          ]
+        },
+      addListFormRulesArr: [],
       loading: false,
       progress: 0,
       progressIndex: 0,
@@ -418,6 +489,7 @@ export default {
     progressIndex: function(n) {
       this.progress = n * (100 / this.tableData.list.length)
     }
+
   },
   created() {
     this.getALLData()
@@ -516,14 +588,17 @@ export default {
     },
     // 根据输入的单号触发事件
     changeBill(size) {
-      this.temp.items = []
+      this.addDataModel.billOneCar = size
+      this.addDataModel.items = []
+      console.log(size)
       for (let i = 0; i < size; i++) {
-        const num = {
+        var num = {
           inboundNo: '',
           so: '',
           customsMeterialNo: ''
         }
-        this.temp.items.push(num)
+        this.addDataModel.items.push(num)
+        this.addListFormRulesArr.push(this.addListFormRules)
       }
     },
     handleCreate() {
@@ -531,41 +606,59 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+        this.$refs['addDataForm'].clearValidate()
       })
     },
     createData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['addDataForm'].validate(valid => {
         if (valid) {
-          this.temp.items.forEach(item => {
-            if (item.commercialInspectionFlag) {
-              item.commercialInspectionFlag = '1'
-            } else {
-              item.commercialInspectionFlag = '0'
-            }
+          console.log('陈宫')
+          this.addDataModel.items.forEach((v, i) => {
+            this.$refs[`addListForm${i}`].validate(valid => {
+              if (valid) {
+                alert('submit!')
+              } else {
+                console.log('error submit!!')
+                return false
+              }
+            })
           })
-          addFrontDeskCharge(this.temp).then(response => {
-            this.dialogFormVisible = false
-            this.listQuery.page = 1
-            this.getList()
-            if (response.respHeader.respCode !== '200') {
-              this.$notify({
-                title: '失败',
-                message: response.respHeader.respMsg,
-                type: 'fail',
-                duration: 2000
-              })
-            } else {
-              this.$notify({
-                title: '成功',
-                message: response.respHeader.respMsg,
-                type: 'success',
-                duration: 2000
-              })
-            }
-          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
       })
+      // this.$refs['dataForm'].validate(valid => {
+      //   if (valid) {
+      //     this.temp.items.forEach(item => {
+      //       if (item.commercialInspectionFlag) {
+      //         item.commercialInspectionFlag = '1'
+      //       } else {
+      //         item.commercialInspectionFlag = '0'
+      //       }
+      //     })
+      //     addFrontDeskCharge(this.temp).then(response => {
+      //       this.dialogFormVisible = false
+      //       this.listQuery.page = 1
+      //       this.getList()
+      //       if (response.respHeader.respCode !== '200') {
+      //         this.$notify({
+      //           title: '失败',
+      //           message: response.respHeader.respMsg,
+      //           type: 'fail',
+      //           duration: 2000
+      //         })
+      //       } else {
+      //         this.$notify({
+      //           title: '成功',
+      //           message: response.respHeader.respMsg,
+      //           type: 'success',
+      //           duration: 2000
+      //         })
+      //       }
+      //     })
+      //   }
+      // })
     },
     updateData() {
       this.$refs['dataForm'].validate(valid => {

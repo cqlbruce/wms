@@ -137,7 +137,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="150px" align="center">
             <template slot-scope="{row}">
-              <el-button size="mini" @click="handleBatchDetail(row)">
+              <el-button size="mini" @click="handleFixedDetail(row)">
                 修改
               </el-button>
               <el-button size="mini" @click="handleBatchDetail(row)">
@@ -148,6 +148,143 @@
         </el-table>
       </el-form>
       <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" />
+    </el-dialog>
+
+    <!-- 详情修改 -->
+    <!--    <el-dialog title="详情修改" :visible.sync="fixedFormVisible" width="60%">
+      <div class="filter-container">
+        <el-form
+          ref="exportForm"
+          :rules="exportRules"
+          :model="exportQuery"
+          :inline="true"
+          class="form-inline"
+        >
+          <el-form-item label="CLP" prop="clp">
+            <el-input
+              v-model="exportQuery.clp"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="柜号" prop="cntrNo">
+            <el-input
+              v-model="exportQuery.cntrNo"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="封条" prop="seal">
+            <el-input
+              v-model="exportQuery.seal"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="柜重" prop="cntrWeigh">
+            <el-input
+              v-model="exportQuery.cntrWeigh"
+              style="width: 200px;"
+              class="filter-item"
+              clearable
+            />
+          </el-form-item>
+        </el-form>
+      </div>
+      <div slot="footer" align="center" class="dialog-footer">
+        <el-button @click="exportVisible = false">取消</el-button>
+        <el-button type="primary" @click="exportFile()">导出</el-button>
+      </div>
+    </el-dialog> -->
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="fixedFormVisible" width="60%">
+      <el-form
+        ref="dataForm"
+        :rules="tempRules"
+        :model="temp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="140px"
+      >
+        <el-row>
+          <el-form-item label="货物款号:" prop="sku">
+            <el-input v-model="temp.sku" placeholder="sku" />
+          </el-form-item>
+          <el-form-item label="入仓落货纸号:" prop="so">
+            <el-input v-model="temp.so" placeholder="so" />
+          </el-form-item>
+          <el-form-item label="客户采购订单号:" prop="po">
+            <el-input v-model="temp.po" placeholder="po" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="供应商名称:" prop="supplierName">
+            <el-input v-model="temp.supplierName" />
+          </el-form-item>
+          <el-form-item label="入仓号:" prop="inboundNo">
+            <el-input v-model="temp.inboundNo" />
+          </el-form-item>
+          <el-form-item label="海关系统物料号:" prop="customsMeterialNo">
+            <el-input v-model="temp.customsMeterialNo" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="收货日期:" prop="rcvdDate">
+            <el-date-picker v-model="temp.rcvdDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
+          </el-form-item>
+          <el-form-item label="实收箱数:" prop="rcvdCtns">
+            <el-input v-model="temp.rcvdCtns" />
+          </el-form-item>
+          <el-form-item label="实收件数:" prop="rcvdPcs">
+            <el-input v-model="temp.rcvdPcs" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="单箱毛重:" prop="gwPerBoxActul">
+            <el-input v-model="temp.gwPerBoxActul" />
+          </el-form-item>
+          <el-form-item label="申报单价:" prop="declaUnitPrice">
+            <el-input v-model="temp.declaUnitPrice" />
+          </el-form-item>
+          <el-form-item label="申报币种:" prop="declaCurrency">
+            <el-input v-model="temp.declaCurrency" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="实测外箱长:" prop="boxLengthActul">
+            <el-input v-model="temp.boxLengthActul" />
+          </el-form-item>
+          <el-form-item label="实测外箱宽:" prop="boxWidthActul">
+            <el-input v-model="temp.boxWidthActul" />
+          </el-form-item>
+          <el-form-item label="实测外箱高:" prop="boxHighActul">
+            <el-input v-model="temp.boxHighActul" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="入仓报关总净重:" prop="custsDeclaAllWeigh">
+            <el-input v-model="temp.custsDeclaAllWeigh" />
+          </el-form-item>
+          <el-form-item label="仓库位置:" prop="warehousePosition">
+            <el-input v-model="temp.warehousePosition" />
+          </el-form-item>
+          <el-form-item label="入仓报关单件净重:" prop="custsDeclaPieceWeigh">
+            <el-input v-model="temp.custsDeclaPieceWeigh" />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="备注:" prop="remark">
+            <el-input v-model="temp.remark" />
+          </el-form-item>
+        </el-row>
+      </el-form>
+      <div slot="footer" align="center" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogStatus==='create'? createData() : updateData()">确认</el-button>
+      </div>
     </el-dialog>
 
     <!-- 批次详情 -->
@@ -467,6 +604,8 @@ export default {
       dialogVisible: false,
       // 导出文件
       exportVisible: false,
+      // 详情修改
+      fixedFormVisible: false,
       loading: false,
       progress: 0,
       progressIndex: 0,
@@ -548,6 +687,9 @@ export default {
         }, 1.5 * 1000)
         this.detailFormVisible = true
       })
+    },
+    handleFixedDetail(row) {
+      this.fixedFormVisible = true
     },
     handleBatchDetail(row) {
       this.batchTemp = Object.assign({}, row)
