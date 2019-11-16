@@ -200,7 +200,7 @@
       </div>
     </el-dialog> -->
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="fixedFormVisible" width="60%">
+    <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="fixedFormVisible" width="60%">
       <el-form
         ref="dataForm"
         :rules="tempRules"
@@ -285,7 +285,7 @@
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogStatus==='create'? createData() : updateData()">确认</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
 
     <!-- 批次详情 -->
     <el-dialog title="详情" :visible.sync="batchFormVisible" width="80%" destroy-on-close>
@@ -689,7 +689,12 @@ export default {
       })
     },
     handleFixedDetail(row) {
-      this.fixedFormVisible = true
+      // this.fixedFormVisible = true
+      this.batchTemp = Object.assign({}, row)
+      this.batchFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['batchForm'].clearValidate()
+      })
     },
     handleBatchDetail(row) {
       this.batchTemp = Object.assign({}, row)
