@@ -248,17 +248,6 @@
             <el-input v-model="temp.customsMeterialNo" />
           </el-form-item>
         </el-row>
-        <el-row>
-          <el-form-item label="入仓号:" prop="inboundNo">
-            <el-input v-model="temp.inboundNo" />
-          </el-form-item>
-          <el-form-item label="so:" prop="so">
-            <el-input v-model="temp.so" />
-          </el-form-item>
-          <el-form-item label="海关物料号:" prop="customsMeterialNo">
-            <el-input v-model="temp.customsMeterialNo" />
-          </el-form-item>
-        </el-row>
         <el-row :gutter="10">
           <el-checkbox v-model="temp.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
         </el-row>

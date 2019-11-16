@@ -272,7 +272,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-        deleteAccount(row.id).then(response => {
+        console.log(row)
+        deleteAccount({ id: row.id }).then(response => {
           this.dataVisible = false
           this.listQuery.page = 1
           this.getList()
