@@ -84,7 +84,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <!-- 详情页 -->
-    <el-dialog title="详情" :visible.sync="detailFormVisible" width="80%" top destroy-on-close>
+    <el-dialog title="详情" :visible.sync="detailFormVisible" width="80%" destroy-on-close>
       <el-form
         ref="detailForm"
         :model="temp"
@@ -138,6 +138,9 @@
           <el-table-column fixed="right" label="操作" width="150px" align="center">
             <template slot-scope="{row}">
               <el-button size="mini" @click="handleBatchDetail(row)">
+                修改
+              </el-button>
+              <el-button size="mini" @click="handleBatchDetail(row)">
                 详情
               </el-button>
             </template>
@@ -148,7 +151,7 @@
     </el-dialog>
 
     <!-- 批次详情 -->
-    <el-dialog title="详情" :visible.sync="batchFormVisible" width="80%" top destroy-on-close>
+    <el-dialog title="详情" :visible.sync="batchFormVisible" width="80%" destroy-on-close>
       <el-form
         ref="batchForm"
         :model="batchTemp"
@@ -476,7 +479,15 @@ export default {
       rules: {
       },
       exportRules: {
-
+        cntrNo: [
+          { required: true, message: '请输入柜号', trigger: 'blur' }
+        ],
+        seal: [
+          { required: true, message: '请输入封条', trigger: 'blur' }
+        ],
+        cntrWeigh: [
+          { required: true, message: '请输入柜重', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -656,16 +667,25 @@ export default {
     },
     handleExport() {
       this.exportVisible = true
+
       this.$nextTick(() => {
         this.$refs['exportForm'].clearValidate()
       })
     },
     /** 导出文件 */
     exportFile() {
-      this.downloadLoading = true
-      download('/shipped/download', this.exportQuery, '出库信息.xlsx').then(response => {
-        this.exportVisible = false
-        this.downloadLoading = false
+      this.$refs['exportForm'].validate((valid) => {
+        if (valid) {
+          console.log('验证成功')
+          this.downloadLoading = true
+          download('/shipped/download', this.exportQuery, '出库信息.xlsx').then(response => {
+            this.exportVisible = false
+            this.downloadLoading = false
+          })
+        } else {
+          console.log('验证失败')
+          return false
+        }
       })
     }
   }
