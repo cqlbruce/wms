@@ -613,6 +613,14 @@ export default {
                 if (i === this.addDataModel.items.length - 1) {
                   if (newArr.every(valid => valid)) {
                     if (this.checkCustomsMeterialNo(this.addDataModel.items)) {
+                      // 商检标识转换
+                      this.addDataModel.items.forEach(item => {
+                        if (item.commercialInspectionFlag) {
+                          item.commercialInspectionFlag = '1'
+                        } else {
+                          item.commercialInspectionFlag = '0'
+                        }
+                      })
                       console.log('success submit!!')
                       console.log(this.addDataModel)
                       // 保存数据并关闭弹窗
