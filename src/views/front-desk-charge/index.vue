@@ -137,8 +137,8 @@
         </el-row>
         <el-row>
           <el-form-item label="一车几单:" prop="billOneCar">
-            <!-- <el-input v-model.number="addDataModel.billOneCar" @input="changeBill(addDataModel.billOneCar)" /> -->
-            <el-input-number v-model="addDataModel.billOneCar" :min="0" :max="10" controls-position="right" @change="changeBill(addDataModel.billOneCar)" />
+            <el-input v-model.number="addDataModel.billOneCar" @input="changeBill(addDataModel.billOneCar)" />
+            <!-- <el-input-number v-model="addDataModel.billOneCar" :min="0" :max="10" controls-position="right" @change="changeBill(addDataModel.billOneCar)" /> -->
           </el-form-item>
           <el-form-item label="收费日期:" prop="tranDate">
             <el-date-picker v-model="addDataModel.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
@@ -150,26 +150,26 @@
       </el-form>
       <div v-for="(its,index) in addDataModel.items" :key="index">
         <el-form
-          ref="addListForm"
-          :model="addListFormRules"
+          :ref="'addListForm' + index"
+          :rules="addListFormRules"
+          :model="its"
           :label-position="labelPosition"
           :inline="true"
           label-width="100px"
         >
           <el-row>
-            <el-form-item label="入仓号:">
+            <el-form-item label="入仓号:" prop="inboundNo">
               <el-input v-model="its.inboundNo" />
             </el-form-item>
-            <el-form-item label="so:">
+            <el-form-item label="so:" prop="so">
               <el-input v-model="its.so" />
             </el-form-item>
-            <el-form-item label="海关物料号:">
-              <el-input v-model="its.customsMeterialNo" />
+            <el-form-item style="width:120px;">
+              <el-checkbox v-model="its.commercialInspectionFlag" border size="medium">是否商检</el-checkbox>
             </el-form-item>
-            <el-form-item>
-              <el-checkbox v-model="its.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
+            <el-form-item label="海关物料号:" :prop="its.commercialInspectionFlag?'customsMeterialNo':''">
+              <el-input v-model="its.customsMeterialNo" :disabled="!its.commercialInspectionFlag" />
             </el-form-item>
-
           </el-row>
         </el-form>
       </div>
@@ -341,10 +341,17 @@ export default {
   filters: {},
   data() {
     var checkNum = (rule, value, callback) => {
-      if (value <= 0) {
-        callback(new Error('数量不能为0'))
+      if (!value) {
+        return callback(new Error('单数不能不填或0'))
+      }
+      if (!Number.isInteger(value)) {
+        callback(new Error('请输入数字值'))
       } else {
-        callback()
+        if (value <= 0) {
+          callback(new Error('必须单数大于0'))
+        } else {
+          callback()
+        }
       }
     }
     return {
@@ -388,6 +395,17 @@ export default {
         tranDate: getNowFormatDate(),
         items: []
       },
+      addListFormRules: {
+        inboundNo: [
+          { required: true, message: '请填写入仓号', trigger: 'blur' }
+        ],
+        so: [
+          { required: true, message: '请填写so', trigger: 'blur' }
+        ],
+        customsMeterialNo: [
+          { required: true, message: '请填写物料号', trigger: 'blur' }
+        ]
+      },
       addListFormModel: {
         inboundNo: '',
         so: '',
@@ -404,53 +422,25 @@ export default {
         // sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
       },
       addDataRules: { // 新增校验规则
-        // customsDeclarationFee:[
-        //   { required: true, message: '请填写报关费', trigger: 'blur' }
-        // ],
-        // carNum:[
-        //   { required: true, message: '请填写车牌号', trigger: 'blur' }
-        // ],
-        // enterGateFee:[
-        //   { required: true, message: '请填写入闸费', trigger: 'blur' }
-        // ],
-        // po:[
-        //   { required: true, message: '请选择收款方式', trigger: 'change' }
-        // ],
-        // receiptNo:[
-        //   { required: true, message: '请填写收据编号', trigger: 'blur' }
-        // ],
-        billOneCar: [{
-          validator: checkNum,
-          type: 'number',
-          required: true,
-          trigger: 'blur'
-        }
-
+        customsDeclarationFee: [
+          { required: true, message: '请填写报关费', trigger: 'blur' }
+        ],
+        carNum: [
+          { required: true, message: '请填写车牌号', trigger: 'blur' }
+        ],
+        enterGateFee: [
+          { required: true, message: '请填写入闸费', trigger: 'blur' }
+        ],
+        po: [
+          { required: true, message: '请选择收款方式', trigger: 'change' }
+        ],
+        receiptNo: [
+          { required: true, message: '请填写收据编号', trigger: 'blur' }
+        ],
+        billOneCar: [
+          { validator: checkNum, type: 'number', required: true, trigger: 'blur' }
         ]
-        // items:[
-        //   {
-        //     inboundNo:[
-        //       { required: true, message: '请填写入仓号', trigger: 'blur' }
-        //     ],
-        //     so:[
-        //       { required: true, message: '请填写入仓so', trigger: 'blur' }
-        //     ]
-        //   }
-        // ]
       },
-      addListFormRules: { // 一车几单列表规则
-        inboundNo: [{
-          required: true,
-          message: '请填写入仓号',
-          trigger: 'blur'
-        }],
-        so: [{
-          required: true,
-          message: '请填写入仓so',
-          trigger: 'blur'
-        }]
-      },
-      addListFormRulesArr: [],
       loading: false,
       progress: 0,
       progressIndex: 0,
@@ -575,7 +565,6 @@ export default {
     changeBill(size) {
       this.addDataModel.billOneCar = size
       this.addDataModel.items = []
-      console.log(size)
       for (let i = 0; i < size; i++) {
         var num = {
           inboundNo: '',
@@ -583,7 +572,6 @@ export default {
           customsMeterialNo: ''
         }
         this.addDataModel.items.push(num)
-        this.addListFormRulesArr.push(this.addListFormRules)
       }
     },
     handleCreate() {
@@ -595,18 +583,26 @@ export default {
       })
     },
     createData() {
+      var newArr = []
       this.$refs['addDataForm'].validate(valid => {
         if (valid) {
-          console.log('成功')
-          this.addDataModel.items.forEach((v, i) => {
-            this.$refs[`addListForm${i}`].validate(valid => {
-              if (valid) {
-                alert('submit!')
-              } else {
-                console.log('error submit!!')
-                return false
-              }
-            })
+          this.$nextTick(() => {
+            for (var i = 0; i < this.addDataModel.items.length; i++) {
+              this.$refs['addListForm' + i][0].validate((valid) => {
+                if (valid) {
+                  newArr.push(valid)
+                } else {
+                  console.log('error submit!!')
+                  return
+                }
+                if (i == this.addDataModel.items.length - 1) {
+                  if (newArr.every(valid => valid)) {
+                    console.log('success submit!!')
+                    console.log(this.addDataModel)
+                  }
+                }
+              })
+            }
           })
         } else {
           console.log('error submit!!')
