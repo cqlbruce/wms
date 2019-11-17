@@ -305,7 +305,7 @@ import {
   fetchFrontDeskChargeList,
   exportFrontDeskCharge,
   modifyFrontDeskCharge,
-  // addFrontDeskCharge,
+  addFrontDeskCharge,
   loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
@@ -616,6 +616,28 @@ export default {
                       console.log('success submit!!')
                       console.log(this.addDataModel)
                       // 保存数据并关闭弹窗
+                      addFrontDeskCharge(this.addDataModel).then(response => {
+                        this.dialogFormVisible = false
+                        this.listQuery.page = 1
+                        this.getList()
+                        if (response.respHeader.respCode !== '200') {
+                          this.$notify({
+                            title: '失败',
+                            message: response.respHeader.respMsg,
+                            type: 'fail',
+                            duration: 2000
+                          })
+                        } else {
+                          this.$notify({
+                            title: '成功',
+                            message: response.respHeader.respMsg,
+                            type: 'success',
+                            duration: 2000
+                          })
+                        }
+                      }).catch(err => {
+                        console.log(err)
+                      })
                     }
                   }
                 }
