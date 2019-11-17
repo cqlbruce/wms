@@ -189,53 +189,53 @@
         label-width="100px"
       >
         <el-row>
-          <el-form-item label="客户名称:" prop="custShortName">
+          <el-form-item label="客户名称" prop="custShortName">
             <el-input v-model="temp.custShortName" />
           </el-form-item>
-          <el-form-item label="车牌号:" prop="carNum">
+          <el-form-item label="车牌号" prop="carNum">
             <el-input v-model="temp.carNum" />
           </el-form-item>
-          <el-form-item label="报关费:" prop="customsDeclarationFee">
+          <el-form-item label="报关费" prop="customsDeclarationFee">
             <el-input v-model="temp.customsDeclarationFee" />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="入闸费:" prop="enterGateFee">
+          <el-form-item label="入闸费" prop="enterGateFee">
             <el-input v-model="temp.enterGateFee" />
           </el-form-item>
-          <el-form-item label="收款方式:" prop="payType">
+          <el-form-item label="收款方式" prop="payType">
             <el-select v-model="temp.payType" placeholder="请选择" clearable style="width: 185px" class="filter-item">
               <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
-          <el-form-item label="收据编号:" prop="receiptNo">
+          <el-form-item label="收据编号" prop="receiptNo">
             <el-input v-model="temp.receiptNo" />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="一车几单:" prop="billOneCar">
+          <el-form-item label="一车几单" prop="billOneCar">
             <el-input v-model="temp.billOneCar" />
           </el-form-item>
-          <el-form-item label="收费日期:" prop="carNum">
+          <el-form-item label="收费日期" prop="carNum">
             <el-date-picker v-model="temp.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
           </el-form-item>
-          <el-form-item label="备注:" prop="remark">
+          <el-form-item label="备注" prop="remark">
             <el-input v-model="temp.remark" />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="入仓号:" prop="inboundNo">
+          <el-form-item label="入仓号" prop="inboundNo">
             <el-input v-model="temp.inboundNo" />
           </el-form-item>
-          <el-form-item label="so:" prop="so">
+          <el-form-item label="SO" prop="so">
             <el-input v-model="temp.so" />
           </el-form-item>
-          <el-form-item label="海关物料号:" prop="customsMeterialNo">
-            <el-input v-model="temp.customsMeterialNo" />
+          <el-form-item style="width:120px;">
+            <el-checkbox v-model="temp.commercialInspectionFlag" border size="medium">是否商检</el-checkbox>
           </el-form-item>
-        </el-row>
-        <el-row :gutter="10">
-          <el-checkbox v-model="temp.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
+          <el-form-item label="海关物料号:" :prop="temp.commercialInspectionFlag?'customsMeterialNo':''">
+            <el-input v-model="temp.customsMeterialNo" :disabled="!temp.commercialInspectionFlag" />
+          </el-form-item>
         </el-row>
       </el-form>
       <div slot="footer" align="center" class="dialog-footer">
@@ -292,7 +292,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-checkbox v-model="temp.spectionFlag" disabled>商检标识</el-checkbox>
+            <el-checkbox v-model="temp.commercialInspectionFlag" disabled>商检标识</el-checkbox>
           </el-col>
         </el-row>
       </el-form>
@@ -495,7 +495,7 @@ export default {
         // 客户类型转换
         this.list.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
-          item.spectionFlag = this.matchFlag(item.commercialInspectionFlag)
+          item.commercialInspectionFlag = this.matchFlag(item.commercialInspectionFlag)
         })
         setTimeout(() => {
           this.listLoading = false
