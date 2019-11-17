@@ -582,6 +582,21 @@ export default {
         this.$refs['addDataForm'].clearValidate()
       })
     },
+    checkCustomsMeterialNo(items) {
+      if (!items.length) return true
+      for (let i = 0, len = items.length; i < len; i++) {
+        const { commercialInspectionFlag, customsMeterialNo } = items[i]
+        if (commercialInspectionFlag && !customsMeterialNo) {
+          this.$message({
+            showClose: true,
+            message: `第${i + 1}海关物料号不能为空`,
+            type: 'error'
+          })
+          return false
+        }
+      }
+      return true
+    },
     createData() {
       var newArr = []
       this.$refs['addDataForm'].validate(valid => {
@@ -595,10 +610,13 @@ export default {
                   console.log('error submit!!')
                   return
                 }
-                if (i == this.addDataModel.items.length - 1) {
+                if (i === this.addDataModel.items.length - 1) {
                   if (newArr.every(valid => valid)) {
-                    console.log('success submit!!')
-                    console.log(this.addDataModel)
+                    if (this.checkCustomsMeterialNo(this.addDataModel.items)) {
+                      console.log('success submit!!')
+                      console.log(this.addDataModel)
+                      // 保存数据并关闭弹窗
+                    }
                   }
                 }
               })
