@@ -8,28 +8,20 @@
           </el-select>
         </el-form-item>
         <el-form-item label="收费日期">
-          <el-date-picker v-model="listQuery.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="日期" />
-        </el-form-item>
-        <el-form-item label="车牌">
-          <el-input
-            v-model="listQuery.carNum"
-            style="width: 200px;"
-            class="filter-item"
-            clearable
-            @keyup.enter.native="handleFilter"
+          <el-date-picker
+            v-model="listQuery.tranDate"
+            align="right"
+            type="date"
+            value-format="yyyy-MM-dd"
+            style="width: 150px;"
+            placeholder="日期"
           />
         </el-form-item>
-        <el-button
-          v-waves
-          type="primary"
-          icon="el-icon-search"
-          @click="handleFilter"
-        >查询</el-button>
-        <el-button
-          type="primary"
-          icon="el-icon-edit"
-          @click="handleCreate"
-        >新增</el-button>
+        <el-form-item label="车牌">
+          <el-input v-model="listQuery.carNum" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
         <el-button v-waves type="primary" icon="el-icon-download" @click="handleExport">导出</el-button>
       </el-form>
     </div>
@@ -96,12 +88,7 @@
           <span>{{ scope.row.remark }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        align="center"
-        width="220"
-        fixed="right"
-      >
+      <el-table-column label="操作" align="center" width="220" fixed="right">
         <template slot-scope="{row}">
           <el-button size="mini" @click="handleUpdate(row)">修改</el-button>
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
@@ -109,16 +96,10 @@
       </el-table-column>
     </el-table>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.size"
-      @pagination="getList"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <!-- 新增 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" width="1100px">
       <el-form
         ref="addDataForm"
         :rules="addDataRules"
@@ -126,7 +107,7 @@
         :label-position="labelPosition"
         :inline="true"
         label-width="100px"
-        style="min-width:71%"
+        style="width:1100px;min-width:1100px"
       >
         <el-row>
           <el-form-item label="客户名称:" prop="custId">
@@ -169,24 +150,23 @@
       </el-form>
       <div v-for="(its,index) in addDataModel.items" :key="index">
         <el-form
-          :ref="`addListForm${index}`"
-          :rules="`addListFormRulesArr[${index}]`"
+          ref="addListForm"
           :model="addListFormRules"
           :label-position="labelPosition"
           :inline="true"
           label-width="100px"
         >
           <el-row>
-            <el-form-item label="入仓号:" :prop="`addDataModel.items[${index}].inboundNo`">
+            <el-form-item label="入仓号:">
               <el-input v-model="its.inboundNo" />
             </el-form-item>
-            <el-form-item label="so:" :prop="`addDataModel.items[${index}].so`">
+            <el-form-item label="so:">
               <el-input v-model="its.so" />
             </el-form-item>
-            <el-form-item label="海关物料号:" :prop="`addDataModel.items[${index}].customsMeterialNo`">
+            <el-form-item label="海关物料号:">
               <el-input v-model="its.customsMeterialNo" />
             </el-form-item>
-            <el-form-item :prop="`addDataModel.items[${index}].commercialInspectionFlag`">
+            <el-form-item>
               <el-checkbox v-model="its.commercialInspectionFlag" size="medium">是否商检</el-checkbox>
             </el-form-item>
 
@@ -265,13 +245,7 @@
     </el-dialog>
 
     <el-dialog title="详情" :visible.sync="detailFormVisible" width="60%">
-      <el-form
-        ref="updateForm"
-        :model="temp"
-        :label-position="labelPosition"
-        :inline="true"
-        label-width="140px"
-      >
+      <el-form ref="updateForm" :model="temp" :label-position="labelPosition" :inline="true" label-width="140px">
         <el-row :gutter="10">
           <el-col :span="8">
             <el-form-item label="客户名称:">{{ temp.custShortName }}</el-form-item>
@@ -335,25 +309,40 @@ import {
   loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
-import { parseTime, getNowFormatDate } from '@/utils'
+import {
+  parseTime,
+  getNowFormatDate
+} from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 // 收款方式
-const payTypeOption = [
-  { key: '0', display_name: '微信' },
-  { key: '1', display_name: '现金' },
-  { key: '2', display_name: '月结' }
+const payTypeOption = [{
+  key: '0',
+  display_name: '微信'
+},
+{
+  key: '1',
+  display_name: '现金'
+},
+{
+  key: '2',
+  display_name: '月结'
+}
 ]
 
 export default {
   name: 'FrontDeskCharge',
-  components: { Pagination },
-  directives: { waves },
+  components: {
+    Pagination
+  },
+  directives: {
+    waves
+  },
   filters: {},
   data() {
     var checkNum = (rule, value, callback) => {
       if (value <= 0) {
-        callback(new Error('数量不能少于0'))
+        callback(new Error('数量不能为0'))
       } else {
         callback()
       }
@@ -430,8 +419,12 @@ export default {
         // receiptNo:[
         //   { required: true, message: '请填写收据编号', trigger: 'blur' }
         // ],
-        billOneCar: [
-          { validator: checkNum, type: 'number', required: true, trigger: 'blur' }
+        billOneCar: [{
+          validator: checkNum,
+          type: 'number',
+          required: true,
+          trigger: 'blur'
+        }
 
         ]
         // items:[
@@ -445,15 +438,18 @@ export default {
         //   }
         // ]
       },
-      addListFormRules:
-        { // 一车几单列表规则
-          inboundNo: [
-            { required: true, message: '请填写入仓号', trigger: 'blur' }
-          ],
-          so: [
-            { required: true, message: '请填写入仓so', trigger: 'blur' }
-          ]
-        },
+      addListFormRules: { // 一车几单列表规则
+        inboundNo: [{
+          required: true,
+          message: '请填写入仓号',
+          trigger: 'blur'
+        }],
+        so: [{
+          required: true,
+          message: '请填写入仓so',
+          trigger: 'blur'
+        }]
+      },
       addListFormRulesArr: [],
       loading: false,
       progress: 0,
@@ -601,7 +597,7 @@ export default {
     createData() {
       this.$refs['addDataForm'].validate(valid => {
         if (valid) {
-          console.log('陈宫')
+          console.log('成功')
           this.addDataModel.items.forEach((v, i) => {
             this.$refs[`addListForm${i}`].validate(valid => {
               if (valid) {
@@ -702,17 +698,22 @@ export default {
           item.payType = this.matchPayType(item.payType)
         })
 
-        import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['收费日期', '客户名称', '车牌', '入仓号', 'SO', '报关费', '入闸费', '收款方式', '收据编号', '一车几单', '费用合计', '备注']
-          const filterVal = ['tranDate', 'custShortName', 'carNum', 'inboundNo', 'so', 'customsDeclarationFee', 'enterGateFee', 'payType', 'receiptNo', 'billOneCar', 'feeTotal', 'remark']
-          const data = this.formatJson(filterVal, this.exportList)
-          excel.export_json_to_excel({
-            header: tHeader,
-            data,
-            filename: '前台收费信息表'
+          import('@/vendor/Export2Excel').then(excel => {
+            const tHeader = ['收费日期', '客户名称', '车牌', '入仓号', 'SO', '报关费', '入闸费', '收款方式', '收据编号', '一车几单', '费用合计',
+              '备注'
+            ]
+            const filterVal = ['tranDate', 'custShortName', 'carNum', 'inboundNo', 'so',
+              'customsDeclarationFee', 'enterGateFee', 'payType', 'receiptNo', 'billOneCar', 'feeTotal',
+              'remark'
+            ]
+            const data = this.formatJson(filterVal, this.exportList)
+            excel.export_json_to_excel({
+              header: tHeader,
+              data,
+              filename: '前台收费信息表'
+            })
+            this.downloadLoading = false
           })
-          this.downloadLoading = false
-        })
       })
     },
     formatJson(filterVal, jsonData) {
@@ -729,8 +730,8 @@ export default {
 </script>
 
 <style scoped>
-.excel-upload-input {
-  display: none;
-  z-index: -9999;
-}
+  .excel-upload-input {
+    display: none;
+    z-index: -9999;
+  }
 </style>
