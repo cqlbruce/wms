@@ -528,6 +528,9 @@ export default {
       loadBatchShippedList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
+        if (this.list === null) {
+          this.list = []
+        }
         // 客户类型转换
         this.list.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
@@ -547,6 +550,9 @@ export default {
       loadShippedList(this.batchQuery).then(response => {
         this.batchList = response.data.items
         this.batchTotal = response.data.total
+        if (this.batchList === null) {
+          this.batchList = []
+        }
         setTimeout(() => {
           this.batchLoading = false
         }, 1.5 * 1000)

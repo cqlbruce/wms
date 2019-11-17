@@ -167,6 +167,9 @@ export default {
       loanAccountInfo(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
+        if (this.list === null) {
+          this.list = []
+        }
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)

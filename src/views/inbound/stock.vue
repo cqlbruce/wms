@@ -473,8 +473,8 @@
           <el-form-item label="最终目的国" prop="destCountry">
             <el-input v-model="addTemp.destCountry" />
           </el-form-item>
-          <el-form-item label="总净重" prop="stockWeigh">
-            <el-input v-model="addTemp.stockWeigh" />
+          <el-form-item label="总净重" prop="custsDeclaAllWeigh">
+            <el-input v-model="addTemp.custsDeclaAllWeigh" />
           </el-form-item>
           <el-form-item label="海关物料号" prop="customsMeterialNo">
             <el-input v-model="addTemp.customsMeterialNo" />
@@ -786,6 +786,9 @@ export default {
       batchLoadStock(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
+        if (this.list === null) {
+          this.list = []
+        }
         // 客户类型转换
         this.list.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
@@ -815,6 +818,9 @@ export default {
       fetchStock(this.batchQuery).then(response => {
         this.batchList = response.data.items
         this.batchTotal = response.data.total
+        if (this.batchList === null) {
+          this.batchList = []
+        }
         // 客户类型转换
         this.batchList.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
