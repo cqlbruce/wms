@@ -93,7 +93,7 @@
       >
         <el-row>
           <el-form-item label="客户:" prop="custShortName">
-            <el-select v-model="temp.custShortName" placeholder="请选择" filterable allow-create clearable>
+            <el-select v-model="temp.custShortName" placeholder="请选择" filterable allow-create clearable default-first-option>
               <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custShortName" />
             </el-select>
           </el-form-item>
