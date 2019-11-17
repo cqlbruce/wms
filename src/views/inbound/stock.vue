@@ -619,6 +619,7 @@ export default {
       },
       // 修改请求参数
       updateTemp: {
+        id: '',
         inboundNo: '',
         so: '',
         po: '',
@@ -912,6 +913,7 @@ export default {
       })
     },
     copoUpdateObject(row) {
+      this.updateTemp.id = row.id
       this.updateTemp.inboundNo = row.inboundNo
       this.updateTemp.so = row.so
       this.updateTemp.po = row.po
