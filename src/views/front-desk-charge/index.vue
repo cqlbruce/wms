@@ -126,8 +126,8 @@
           <el-form-item label="入闸费:" prop="enterGateFee">
             <el-input v-model="addDataModel.enterGateFee" />
           </el-form-item>
-          <el-form-item label="收款方式:" prop="po">
-            <el-select v-model="addDataModel.po" placeholder="请选择" style="width: 185px" class="filter-item">
+          <el-form-item label="收款方式:" prop="payType">
+            <el-select v-model="addDataModel.payType" placeholder="请选择" style="width: 185px" class="filter-item">
               <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
@@ -389,6 +389,7 @@ export default {
         customsDeclarationFee: '',
         enterGateFee: '',
         po: '',
+        payType: '',
         projectName: '',
         recAmt: '',
         receiptNo: '',
@@ -722,6 +723,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row)
+
       this.updateVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
