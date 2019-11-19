@@ -110,40 +110,40 @@
         style="width:1100px;min-width:1100px"
       >
         <el-row>
-          <el-form-item label="客户名称:" prop="custId">
+          <el-form-item label="客户名称" prop="custId">
             <el-select v-model="addDataModel.custId" placeholder="请选择" style="width: 185px" clearable>
               <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
             </el-select>
           </el-form-item>
-          <el-form-item label="车牌:" prop="carNum">
+          <el-form-item label="车牌" prop="carNum">
             <el-input v-model="addDataModel.carNum" />
           </el-form-item>
-          <el-form-item label="报关费:" prop="customsDeclarationFee">
+          <el-form-item label="报关费" prop="customsDeclarationFee">
             <el-input v-model="addDataModel.customsDeclarationFee" />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="入闸费:" prop="enterGateFee">
+          <el-form-item label="入闸费" prop="enterGateFee">
             <el-input v-model="addDataModel.enterGateFee" />
           </el-form-item>
-          <el-form-item label="收款方式:" prop="payType">
+          <el-form-item label="收款方式" prop="payType">
             <el-select v-model="addDataModel.payType" placeholder="请选择" style="width: 185px" class="filter-item">
               <el-option v-for="item in payTypeOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
-          <el-form-item label="收据编号:" prop="receiptNo">
+          <el-form-item label="收据编号" prop="receiptNo">
             <el-input v-model="addDataModel.receiptNo" />
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="一车几单:" prop="billOneCar">
+          <el-form-item label="一车几单" prop="billOneCar">
             <el-input v-model.number="addDataModel.billOneCar" @input="changeBill(addDataModel.billOneCar)" />
             <!-- <el-input-number v-model="addDataModel.billOneCar" :min="0" :max="10" controls-position="right" @change="changeBill(addDataModel.billOneCar)" /> -->
           </el-form-item>
-          <el-form-item label="收费日期:" prop="tranDate">
+          <el-form-item label="收费日期" prop="tranDate">
             <el-date-picker v-model="addDataModel.tranDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 185px;" />
           </el-form-item>
-          <el-form-item label="备注:" prop="remark">
+          <el-form-item label="备注" prop="remark">
             <el-input v-model="addDataModel.remark" />
           </el-form-item>
         </el-row>
@@ -423,15 +423,15 @@ export default {
         // sku: [{ required: true, message: 'sku is required', trigger: 'blur' }]
       },
       addDataRules: { // 新增校验规则
-        customsDeclarationFee: [
-          { required: true, message: '请填写报关费', trigger: 'blur' }
-        ],
+        // customsDeclarationFee: [
+        //   { required: true, message: '请填写报关费', trigger: 'blur' }
+        // ],
         carNum: [
           { required: true, message: '请填写车牌号', trigger: 'blur' }
         ],
-        enterGateFee: [
-          { required: true, message: '请填写入闸费', trigger: 'blur' }
-        ],
+        // enterGateFee: [
+        //   { required: true, message: '请填写入闸费', trigger: 'blur' }
+        // ],
         po: [
           { required: true, message: '请选择收款方式', trigger: 'change' }
         ],
