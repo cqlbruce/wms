@@ -395,7 +395,7 @@ export default {
       // 批量查询请求参数
       batchQuery: {
         page: 1,
-        size: 20,
+        size: 10,
         clp: undefined,
         cntrNo: undefined,
         custId: undefined,
@@ -545,7 +545,11 @@ export default {
       this.getList()
     },
     handleDetail(row) {
-      this.batchQuery = Object.assign({}, row)
+      this.batchQuery.clp = row.clp
+      this.batchQuery.cntrNo = row.cntrNo
+      this.batchQuery.custId = row.custId
+      this.batchQuery.shippedDate = row.shippedDate
+
       this.batchLoading = true
       loadShippedList(this.batchQuery).then(response => {
         this.batchList = response.data.items
