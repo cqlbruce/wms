@@ -112,12 +112,12 @@
           </el-table-column>
           <el-table-column label="货物款号" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.sku }}</span>
+              <span>{{ scope.row.item }}</span>
             </template>
           </el-table-column>
           <el-table-column label="出仓单号" align="center">
             <template slot-scope="scope">
-              <span>{{ scope.row.shippedNo }}</span>
+              <span>{{ scope.row.clp }}</span>
             </template>
           </el-table-column>
           <el-table-column label="出仓订单日期" align="center">
