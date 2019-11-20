@@ -179,7 +179,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="修改" :visible.sync="updateVisible" width="70%">
+    <el-dialog title="修改" :visible.sync="updateVisible" width="1100px">
       <el-form
         ref="dataForm"
         :rules="tempRules"
@@ -187,6 +187,7 @@
         :label-position="labelPosition"
         :inline="true"
         label-width="100px"
+        style="width:1100px;min-width:1100px"
       >
         <el-row>
           <el-form-item label="客户名称" prop="custShortName">
@@ -244,57 +245,56 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="详情" :visible.sync="detailFormVisible" width="60%">
-      <el-form ref="updateForm" :model="temp" :label-position="labelPosition" :inline="true" label-width="140px">
-        <el-row :gutter="10">
-          <el-col :span="8">
+    <el-dialog title="详情" :visible.sync="detailFormVisible" width="1100px">
+      <el-form ref="updateForm" :model="temp" :label-position="labelPosition" :inline="true" label-width="100px" style="width:1100px;min-width:1100px">
+        <el-row type="flex" class="row-bg">
+          <el-col :span="6">
             <el-form-item label="客户名称:">{{ temp.custShortName }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="车牌号:">{{ temp.carNum }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="报关费:">{{ temp.customsDeclarationFee }}</el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+        <el-row type="flex" class="row-bg">
+          <el-col :span="6">
             <el-form-item label="入闸费:">{{ temp.enterGateFee }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="收款方式:">{{ enumerMap(temp.payType,'payType') }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="收据编号:">{{ temp.receiptNo }}</el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+        <el-row type="flex" class="row-bg">
+          <el-col :span="6">
             <el-form-item label="一车几单:">{{ '一车' + temp.billOneCar + '单' }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="收费日期:">{{ temp.tranDate }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="备注:">{{ temp.remark }}</el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+        <el-row type="flex" class="row-bg">
+          <el-col :span="6">
             <el-form-item label="入仓号:">{{ temp.inboundNo }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="so:">{{ temp.so }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="海关物料号:">{{ temp.customsMeterialNo }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6" class="last">
             <el-checkbox v-model="temp.commercialInspectionFlag" disabled>商检标识</el-checkbox>
           </el-col>
         </el-row>
+
       </el-form>
     </el-dialog>
   </div>
@@ -779,5 +779,9 @@ export default {
   .excel-upload-input {
     display: none;
     z-index: -9999;
+  }
+  .last{
+    box-sizing: border-box;
+    padding-top:11px;
   }
 </style>

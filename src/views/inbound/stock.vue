@@ -193,7 +193,7 @@
       <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" />
     </el-dialog>
 
-    <el-dialog title="详情" :visible.sync="detailFormVisible" width="80%" top destroy-on-close>
+    <el-dialog title="详情" :visible.sync="detailFormVisible" width="80%" destroy-on-close>
       <el-form
         ref="batchForm"
         :model="batchTemp"
@@ -375,7 +375,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="新增" :visible.sync="addFormVisible" width="80%">
+    <el-dialog title="新增" :visible.sync="addFormVisible" width="1100px">
       <el-form
         ref="addForm"
         :rules="tempRules"
@@ -383,6 +383,7 @@
         :label-position="labelPosition"
         :inline="true"
         label-width="140px"
+        style="width:1100px;min-width:1100px"
       >
         <el-row>
           <el-form-item label="客户简称" prop="custId">
