@@ -17,8 +17,11 @@
             placeholder="日期"
           />
         </el-form-item>
-        <el-form-item label="车牌">
-          <el-input v-model="listQuery.carNum" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="入仓号">
+          <el-input v-model="listQuery.inboundNo" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="SO">
+          <el-input v-model="listQuery.so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
@@ -90,7 +93,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="220" fixed="right">
         <template slot-scope="{row}">
-          <el-button size="mini" @click="handleUpdate(row)">修改</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
+          <el-button size="mini" type="primary" @click="handleUpdate(row)">修改</el-button>
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
         </template>
       </el-table-column>
@@ -306,6 +310,7 @@ import {
   exportFrontDeskCharge,
   modifyFrontDeskCharge,
   addFrontDeskCharge,
+  deleteFrontDeskCharge,
   loanAccountInfo
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
@@ -367,7 +372,8 @@ export default {
         size: 20,
         custId: undefined,
         tranDate: getNowFormatDate(),
-        carNum: undefined
+        so: undefined,
+        inboundNo: undefined
       },
       temp: {
         billOneCar: '',
@@ -732,6 +738,38 @@ export default {
     handleDetail(row) {
       this.temp = Object.assign({}, row)
       this.detailFormVisible = true
+    },
+    handleDelete(row) {
+      this.$confirm('是否删除收费信息?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        deleteFrontDeskCharge({ id: row.id }).then(response => {
+          this.dataVisible = false
+          this.listQuery.page = 1
+          this.getList()
+          if (response.respHeader.respCode !== '200') {
+            this.$notify({
+              title: '失败',
+              message: response.respHeader.respMsg,
+              type: 'fail',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              title: '成功',
+              message: response.respHeader.respMsg,
+              type: 'success',
+              duration: 2000
+            })
+          }
+        })
+      }).catch(
+        () => {
+          this.listQuery.page = 1
+          this.getList()
+        })
     },
     handleExport() {
       this.downloadLoading = true

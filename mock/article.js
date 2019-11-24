@@ -735,6 +735,19 @@ export default [
         }
       }
     }
+  },
+  // 收费删除
+  {
+    url: '/charge/delete',
+    type: 'post',
+    response: config => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '删除成功'
+        }
+      }
+    }
   }
 ]
 

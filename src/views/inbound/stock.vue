@@ -16,6 +16,15 @@
             @keyup.enter.native="handleFilter"
           />
         </el-form-item>
+        <el-form-item label="SO">
+          <el-input
+            v-model="listQuery.so"
+            style="width: 200px;"
+            class="filter-item"
+            clearable
+            @keyup.enter.native="handleFilter"
+          />
+        </el-form-item>
         <el-button
           v-waves
           type="primary"
@@ -607,7 +616,8 @@ export default {
         page: 1,
         size: 20,
         custId: undefined,
-        inboundNo: undefined
+        inboundNo: undefined,
+        so: undefined
       },
       // 入库批次查询
       batchQuery: {

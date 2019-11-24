@@ -189,6 +189,15 @@ export function modifyFrontDeskCharge(data) {
   })
 }
 
+/** 前台收费删除*/
+export function deleteFrontDeskCharge(data) {
+  return request({
+    url: '/charge/delete',
+    method: 'post',
+    data
+  })
+}
+
 /** 获取客户信息*/
 export function loanAccountInfo(data) {
   return request({
