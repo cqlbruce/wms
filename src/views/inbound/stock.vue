@@ -84,6 +84,8 @@
         fixed="right"
       >
         <template slot-scope="{row}">
+          <el-button size="mini" type="primary" @click="handleAbstractUpdate(row)">修改</el-button>
+          <el-button size="mini" type="danger" @click="handleAbstractImport(row)">导入</el-button>
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
         </template>
       </el-table-column>
@@ -96,6 +98,93 @@
       :limit.sync="listQuery.size"
       @pagination="getList"
     />
+
+    <!-- 概要导入 -->
+    <el-dialog title="导入" width="60%" :visible.sync="abstractImportVisible" @close="closeAbstractImport">
+      <el-form ref="abstractForm" :inline="true" :model="asyncAbstractValue" class="form-inline">
+        <div class="pedetail-title clearfix">
+          <div class="btnList">
+            <el-upload
+              ref="upload"
+              class="upload"
+              multiple
+              action="http://192.168.34.186:20020/"
+              :limit="5"
+              :show-file-list="false"
+              :on-change="handleAbstractChange"
+              :auto-upload="false"
+            >
+              <el-button slot="trigger" size="small" type="primary">选择多文件</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传excel文件，最多只能选5个</div>
+              <el-button type="success" size="small" @click="allAbstractUpload">开始上传</el-button>
+            </el-upload>
+          </div>
+          <div class="progress">
+            <el-progress
+              v-show="progress != 0"
+              :percentage="progress"
+              :stroke-width="18"
+              status="success"
+            />
+          </div>
+
+          <el-table v-loading="loading" :data="abstractTableData.list" class="table">
+            <el-table-column prop="fileName" align="center" min-width="160" label="文件名" />
+            <el-table-column prop="size" align="center" min-width="100" label="大小" />
+            <el-table-column prop="statusTxt" align="center" min-width="100" label="状态" />
+            <el-table-column align="center" min-width="80" fixed="right" label="操作">
+              <template slot-scope="scope">
+                <el-button
+                  v-show="scope.row.status === 'fail'"
+                  size="mini"
+                  :type="loadType(scope.row.status)"
+                  @click="againAbstractUpload(scope.$index, scope.row)"
+                >重传</el-button>
+                <el-button
+                  v-show="scope.row.status !== 'load'"
+                  size="mini"
+                  type="danger"
+                  @click="beforeAbstractRemove(scope.$index, scope.row)"
+                >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-form>
+    </el-dialog>
+
+    <!-- 概要修改 -->
+    <el-dialog title="修改" :visible.sync="abstractUpdateVisible" width="80%">
+      <el-form
+        ref="abstractUpdateForm"
+        :rules="tempRules"
+        :model="abstractUpdateTemp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="140px"
+      >
+        <el-row>
+          <el-form-item label="车牌" prop="carNum">
+            <el-input v-model="abstractUpdateTemp.carNum" clearable style="width: 195px" />
+          </el-form-item>
+          <el-form-item label="收货日期" prop="rcvdDate">
+            <el-date-picker v-model="abstractUpdateTemp.rcvdDate" clearable align="right" type="date" value-format="yyyy-MM-dd" style="width: 195px;" />
+          </el-form-item>
+          <el-form-item label="入仓号" prop="inboundNo">
+            <el-input v-model="abstractUpdateTemp.inboundNo" clearable style="width: 195px" />
+          </el-form-item>
+          <el-form-item label="入库状态" prop="status">
+            <el-select v-model="abstractUpdateTemp.status" placeholder="请选择" clearable style="width: 195px" class="filter-item">
+              <el-option v-for="item in statusOption" :key="item.display_name" :label="item.display_name" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-row>
+      </el-form>
+      <div slot="footer" align="center" class="dialog-footer">
+        <el-button @click="abstractUpdateVisible = false">取消</el-button>
+        <el-button type="primary" @click="abstractUpdateData()">确认</el-button>
+      </div>
+    </el-dialog>
 
     <!-- 列表详情 -->
     <el-dialog title="详情" :visible.sync="batchFormVisible" width="80%" destroy-on-close>
@@ -589,11 +678,24 @@ import {
   addStock,
   updateStock,
   uploadFile,
-  loanAccountInfo
+  loanAccountInfo,
+  abstractUpdateStock,
+  abstractUploadFile
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+
+// 状态
+const statusOption = [{
+  key: '0',
+  display_name: '登记'
+},
+{
+  key: '1',
+  display_name: '入库'
+}
+]
 
 export default {
   name: 'StockComplexTable',
@@ -603,6 +705,7 @@ export default {
   data() {
     return {
       labelPosition: 'right',
+      statusOption,
       accountArr: [],
       list: null,
       batchList: null,
@@ -628,7 +731,7 @@ export default {
         so: undefined,
         po: undefined
       },
-      // 修改请求参数
+      // 批次修改请求参数
       updateTemp: {
         id: '',
         inboundNo: '',
@@ -642,6 +745,14 @@ export default {
         rcvdCtns: '',
         warehousePosition: '',
         remark: ''
+      },
+      // 修改请求参数
+      abstractUpdateTemp: {
+        carNum: '',
+        rcvdDate: '',
+        custId: '',
+        inboundNo: '',
+        status: ''
       },
       addTemp: {
         custId: '',
@@ -724,23 +835,29 @@ export default {
       tableData: {
         list: []
       },
+      abstractTableData: {
+        list: []
+      },
       asyncValue: {
+        file: null
+      },
+      asyncAbstractValue: {
         file: null
       },
       // 导入文件弹窗
       dialogVisible: false,
+      // 概要导入弹窗
+      abstractImportVisible: false,
       // 新增修改弹窗
       dialogFormVisible: false,
-      // 出库弹窗
-      outBoundFormVisible: false,
-      // 下载
-      downloadLoading: false,
       // 列表详情
       detailFormVisible: false,
       // 批次详情
       batchFormVisible: false,
       // 批次详情修改
       updateFormVisible: false,
+      // 详情修改
+      abstractUpdateVisible: false,
       // 新增
       addFormVisible: false
     }
@@ -805,7 +922,6 @@ export default {
         this.list.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
         })
-
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -815,6 +931,7 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
+    // 打开详情
     handleDetail(row) {
       this.batchQuery.inbundNo = row.inboundNo
       this.batchFormVisible = true
@@ -917,13 +1034,13 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.copoUpdateObject(row)
+      this.copyUpdateObject(row)
       this.updateFormVisible = true
       this.$nextTick(() => {
         this.$refs['updateForm'].clearValidate()
       })
     },
-    copoUpdateObject(row) {
+    copyUpdateObject(row) {
       this.updateTemp.id = row.id
       this.updateTemp.inboundNo = row.inboundNo
       this.updateTemp.so = row.so
@@ -944,6 +1061,49 @@ export default {
             this.updateFormVisible = false
             this.batchQuery.page = 1
             this.loadStockList()
+            if (response.respHeader.respCode !== '200') {
+              this.$notify({
+                title: '失败',
+                message: response.respHeader.respMsg,
+                type: 'fail',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '成功',
+                message: response.respHeader.respMsg,
+                type: 'success',
+                duration: 2000
+              })
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        }
+      })
+    },
+    // 概要修改
+    handleAbstractUpdate(row) {
+      this.copyAbstractUpdateObject(row)
+      this.abstractUpdateVisible = true
+      this.$nextTick(() => {
+        this.$refs['abstractUpdateForm'].clearValidate()
+      })
+    },
+    copyAbstractUpdateObject(row) {
+      this.abstractUpdateTemp.carNum = row.carNum
+      this.abstractUpdateTemp.rcvdDate = row.rcvdDate
+      this.abstractUpdateTemp.custId = row.custId
+      this.abstractUpdateTemp.inboundNo = row.inboundNo
+      this.abstractUpdateTemp.status = row.status
+    },
+    abstractUpdateData() {
+      this.$refs['abstractUpdateForm'].validate(valid => {
+        if (valid) {
+          abstractUpdateStock(this.abstractUpdateTemp).then(response => {
+            this.abstractUpdateVisible = false
+            this.listQuery.page = 1
+            this.getList()
             if (response.respHeader.respCode !== '200') {
               this.$notify({
                 title: '失败',
@@ -1057,6 +1217,108 @@ export default {
     // 删除未文件
     beforeRemove(index, file) {
       this.tableData.list.splice(index, 1)
+    },
+    // 概要导入
+    handleAbstractImport(row) {
+      this.asyncAbstractValue.carNum = row.carNum
+      this.asyncAbstractValue.rcvdDate = row.rcvdDate
+      this.asyncAbstractValue.custId = row.custId
+      this.asyncAbstractValue.inboundNo = row.inboundNo
+      this.asyncAbstractValue.status = row.status
+      this.abstractImportVisible = true
+    },
+    // 全部上传
+    async allAbstractUpload() {
+      const res = await this.$refs['abstractForm'].validate()
+      if (!res) return
+
+      const postMessage = i => {
+        const fd = new FormData()
+        if (i >= this.abstractTableData.list.length) {
+          setTimeout(() => {
+            this.progressIndex = 0
+          }, 1000)
+          return
+        }
+        for (const key in this.asyncAbstractValue) {
+          if (this.asyncAbstractValue.hasOwnProperty(key)) {
+            const item = this.asyncAbstractValue[key]
+            if (key === 'file') {
+              fd.append('excelFile', this.abstractTableData.list[i].file)
+            } else {
+              fd.append(key, item)
+            }
+          }
+        }
+        abstractUploadFile(fd).then(res => {
+          if (res.respHeader.respCode === '200') {
+            this.abstractTableData.list[i].status = 'load'
+            this.abstractTableData.list[i].statusTxt = '成功'
+          } else {
+            this.abstractTableData.list[i].status = 'fail'
+            this.abstractTableData.list[i].statusTxt = '失败'
+          }
+          this.progressIndex = this.progressIndex * 1 + 1
+          postMessage(this.progressIndex)
+        })
+      }
+      postMessage(this.progressIndex)
+    },
+    // 重新上传
+    async againAbstractUpload(i, row) {
+      const res = await this.$refs['abstractForm'].validate()
+      if (!res) return
+
+      this.abstractTableData.list[i].statusTxt = '重传中'
+      this.abstractTableData.list[i].status = 'again'
+      const fd = new FormData()
+      for (const key in this.asyncAbstractValue) {
+        if (this.asyncAbstractValue.hasOwnProperty(key)) {
+          const item = this.asyncAbstractValue[key]
+          if (key === 'file') {
+            fd.append('excelFile', this.abstractTableData.list[i].file)
+          } else {
+            fd.append(key, item)
+          }
+        }
+      }
+      abstractUploadFile(fd).then(res => {
+        if (res.respHeader.respCode === '200') {
+          this.abstractTableData.list[i].status = 'load'
+          this.abstractTableData.list[i].statusTxt = '成功'
+        } else {
+          this.abstractTableData.list[i].status = 'fail'
+          this.abstractTableData.list[i].statusTxt = '失败'
+        }
+      })
+    },
+    closeAbstractImport() {
+      this.abstractTableData.list = []
+      this.asyncAbstractValue = {
+        file: null
+      }
+      this.$emit('input', '')
+      this.listQuery.page = 1
+      this.getList()
+    },
+    // 删除未文件
+    beforeAbstractRemove(index, file) {
+      this.abstractTableData.list.splice(index, 1)
+    },
+    // 文件改变时触发
+    handleAbstractChange(file, fileList) {
+      const obj = {
+        fileName: file.name,
+        size: (file.size / 1024).toFixed(2) + 'kb',
+        statusTxt: '待上传',
+        status: file.status,
+        file: file.raw
+      }
+      if (this.abstractTableData.list.length >= 5) {
+        this.$message.warning(`最多可选五个文件`)
+      } else {
+        this.abstractTableData.list.push(obj)
+      }
     }
   }
 }

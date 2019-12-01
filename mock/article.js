@@ -500,6 +500,30 @@ export default [
     }
   },
   {
+    url: '/stock/abstract/modify',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '修改成功'
+        }
+      }
+    }
+  },
+  {
+    url: 'stock/abstract/upload',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '导入成功'
+        }
+      }
+    }
+  },
+  {
     url: '/stock/load',
     type: 'post',
     response: () => {

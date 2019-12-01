@@ -9,6 +9,15 @@ export function batchLoadStock(data) {
   })
 }
 
+/**  入库概要查询  **/
+export function abstractUpdateStock(data) {
+  return request({
+    url: '/stock/abstract/modify',
+    method: 'post',
+    data
+  })
+}
+
 /**  入库查询  **/
 export function fetchStock(data) {
   return request({
@@ -49,6 +58,15 @@ export function outBoundStock(data) {
 export function uploadFile(data) {
   return request({
     url: 'stock/upload',
+    method: 'post',
+    data
+  })
+}
+
+/** 导入概要入库文件 */
+export function abstractUploadFile(data) {
+  return request({
+    url: 'stock/abstract/upload',
     method: 'post',
     data
   })
