@@ -119,6 +119,11 @@
               <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
             </el-select>
           </el-form-item>
+          <el-form-item label="项目" prop="projectName">
+            <el-select v-model="addDataModel.projectName" placeholder="请选择" style="width: 185px" clearable>
+              <el-option v-for="item in accountArr" :key="item.projectId" :label="item.projectName" :value="item.custId" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="车牌" prop="carNum">
             <el-input v-model="addDataModel.carNum" />
           </el-form-item>
@@ -360,6 +365,7 @@ export default {
       }
     }
     return {
+      projectArr: [],
       accountArr: [],
       payTypeOption,
       labelPosition: 'right',
