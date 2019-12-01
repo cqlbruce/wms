@@ -120,8 +120,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="项目" prop="projectName">
-            <el-select v-model="addDataModel.projectName" placeholder="请选择" style="width: 185px" clearable>
-              <el-option v-for="item in accountArr" :key="item.projectId" :label="item.projectName" :value="item.custId" />
+            <el-select v-model="addDataModel.projectName" :disabled="isNotSelectCust" placeholder="请选择" style="width: 185px" clearable>
+              <el-option v-for="item in projectArr" :key="item.projectId" :label="item.projectName" :value="item.projectId" />
             </el-select>
           </el-form-item>
           <el-form-item label="车牌" prop="carNum">
@@ -365,6 +365,7 @@ export default {
       }
     }
     return {
+      isNotSelectCust: true,
       projectArr: [],
       accountArr: [],
       payTypeOption,
@@ -476,6 +477,17 @@ export default {
   watch: {
     progressIndex: function(n) {
       this.progress = n * (100 / this.tableData.list.length)
+    },
+    'addDataModel.custId': function(custId) {
+      // 当客户发生变化时，项目也要变化
+      this.addDataModel.projectName = ''
+      if (!custId) {
+        this.isNotSelectCust = true
+        this.projectArr = []
+      } else {
+        this.isNotSelectCust = false
+        this.projectArr = this.accountArr.filter(v => v.custId === custId)
+      }
     }
 
   },
@@ -484,6 +496,7 @@ export default {
     this.getList()
   },
   methods: {
+
     // 文件改变时触发
     handleChange(file, fileList) {
       const obj = {
