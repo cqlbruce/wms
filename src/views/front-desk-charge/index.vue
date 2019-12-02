@@ -103,7 +103,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <!-- 新增 -->
-    <el-dialog title="新增" :visible.sync="dialogFormVisible" width="1100px">
+    <el-dialog title="新增" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="1100px">
       <el-form
         ref="addDataForm"
         :rules="addDataRules"
@@ -188,7 +188,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="修改" :visible.sync="updateVisible" width="1100px">
+    <el-dialog title="修改" :visible.sync="updateVisible" :close-on-click-modal="false" width="1100px">
       <el-form
         ref="dataForm"
         :rules="tempRules"
@@ -254,7 +254,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="详情" :visible.sync="detailFormVisible" width="1100px">
+    <el-dialog title="详情" :visible.sync="detailFormVisible" :close-on-click-modal="false" width="1100px">
       <el-form ref="updateForm" :model="temp" :label-position="labelPosition" :inline="true" label-width="100px" style="width:1100px;min-width:1100px">
         <el-row type="flex" class="row-bg">
           <el-col :span="6">
