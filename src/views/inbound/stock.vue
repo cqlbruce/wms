@@ -84,7 +84,7 @@
         fixed="right"
       >
         <template slot-scope="{row}">
-          <el-button size="mini" type="primary" @click="handleAbstractUpdate(row)">修改</el-button>
+          <!-- <el-button size="mini" type="primary" @click="handleAbstractUpdate(row)">修改</el-button> -->
           <el-button size="mini" type="danger" @click="handleAbstractImport(row)">导入</el-button>
           <el-button size="mini" @click="handleDetail(row)">详情</el-button>
         </template>
@@ -679,8 +679,7 @@ import {
   updateStock,
   uploadFile,
   loanAccountInfo,
-  abstractUpdateStock,
-  abstractUploadFile
+  abstractUpdateStock
 } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 // import { parseTime } from '@/utils'
@@ -1250,7 +1249,7 @@ export default {
             }
           }
         }
-        abstractUploadFile(fd).then(res => {
+        uploadFile(fd).then(res => {
           if (res.respHeader.respCode === '200') {
             this.abstractTableData.list[i].status = 'load'
             this.abstractTableData.list[i].statusTxt = '成功'
@@ -1282,7 +1281,7 @@ export default {
           }
         }
       }
-      abstractUploadFile(fd).then(res => {
+      uploadFile(fd).then(res => {
         if (res.respHeader.respCode === '200') {
           this.abstractTableData.list[i].status = 'load'
           this.abstractTableData.list[i].statusTxt = '成功'

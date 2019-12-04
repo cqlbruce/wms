@@ -203,6 +203,7 @@ export default {
     createData() {
       this.$refs['addForm'].validate(valid => {
         if (valid) {
+          this.temp.custId = this.matchAccount(this.temp.custShortName)
           addAccount(this.temp).then(response => {
             this.addVisible = false
             this.listQuery.page = 1
@@ -225,6 +226,15 @@ export default {
           })
         }
       })
+    },
+    matchAccount(value) {
+      let str = ''
+      this.accountArr.forEach(item => {
+        if (item.custShortName === value) {
+          str = item.custId
+        }
+      })
+      return str
     },
     resetTemp() {
       this.temp = {
