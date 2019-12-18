@@ -551,6 +551,18 @@ export default [
     }
   },
   {
+    url: '/stock/delete',
+    type: 'post',
+    response: () => {
+      return {
+        respHeader: {
+          respCode: '200',
+          respMsg: '删除成功'
+        }
+      }
+    }
+  },
+  {
     url: '/stock/add',
     type: 'post',
     response: () => {

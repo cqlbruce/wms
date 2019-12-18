@@ -45,6 +45,15 @@ export function updateStock(data) {
   })
 }
 
+/** 删除入库信息 */
+export function deleteStock(data) {
+  return request({
+    url: '/stock/delete',
+    method: 'post',
+    data
+  })
+}
+
 /** 出库 */
 export function outBoundStock(data) {
   return request({

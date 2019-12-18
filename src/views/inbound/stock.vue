@@ -276,8 +276,11 @@
               <span>{{ enumerMap(scope.row.status,'stockStatus') }}</span>
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="150px" align="center">
+          <el-table-column fixed="right" label="操作" width="250px" align="center">
             <template slot-scope="{row}">
+              <el-button size="mini" type="danger" @click="handleDelete(row)">
+                删除
+              </el-button>
               <el-button size="mini" @click="handleUpdate(row)">
                 修改
               </el-button>
@@ -312,7 +315,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="货物款号:">{{ batchTemp.sku }}</el-form-item>
+            <el-form-item label="货物款号:">{{ batchTemp.item }}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="入仓号:">{{ batchTemp.inboundNo }}</el-form-item>
@@ -677,6 +680,7 @@ import {
   fetchStock,
   addStock,
   updateStock,
+  deleteStock,
   uploadFile,
   loanAccountInfo,
   abstractUpdateStock
@@ -1080,6 +1084,37 @@ export default {
           })
         }
       })
+    },
+    // 删除
+    handleDelete(row) {
+      this.$confirm('是否删除入库信息?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        deleteStock({ id: row.id }).then(response => {
+          this.dataVisible = false
+          this.handleLoadStockList()
+          if (response.respHeader.respCode !== '200') {
+            this.$notify({
+              title: '失败',
+              message: response.respHeader.respMsg,
+              type: 'fail',
+              duration: 2000
+            })
+          } else {
+            this.$notify({
+              title: '成功',
+              message: response.respHeader.respMsg,
+              type: 'success',
+              duration: 2000
+            })
+          }
+        })
+      }).catch(
+        () => {
+          this.handleLoadStockList()
+        })
     },
     // 概要修改
     handleAbstractUpdate(row) {
