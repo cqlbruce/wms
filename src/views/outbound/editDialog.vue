@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="编辑详情" :visible.sync="updateFormVisible" width="80%" @close="closeDialog">
+    <el-dialog title="编辑详情" :visible.sync="updateFormVisible" :close-on-click-modal="false" width="80%" @close="closeDialog">
       <el-form v-if="stockUpdateModel" ref="stockUpdateForm" :model="stockUpdateModel" :label-position="labelPosition" :inline="true" label-width="140px">
         <el-row :gutter="10">
           <el-col :span="8">

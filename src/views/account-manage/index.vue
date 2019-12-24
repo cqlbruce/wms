@@ -51,7 +51,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <!-- 修改 -->
-    <el-dialog title="修改" :visible.sync="updateVisible" width="70%">
+    <el-dialog title="修改" :visible.sync="updateVisible" :close-on-click-modal="false" width="70%">
       <el-form
         ref="updateForm"
         :rules="updateRules"
@@ -82,7 +82,7 @@
     </el-dialog>
 
     <!-- 新增 -->
-    <el-dialog title="新增" :visible.sync="addVisible" width="70%">
+    <el-dialog title="新增" :visible.sync="addVisible" :close-on-click-modal="false" width="70%">
       <el-form
         ref="addForm"
         :rules="addRules"

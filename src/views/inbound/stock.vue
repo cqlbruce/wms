@@ -100,7 +100,7 @@
     />
 
     <!-- 概要导入 -->
-    <el-dialog title="导入" width="60%" :visible.sync="abstractImportVisible" @close="closeAbstractImport">
+    <el-dialog title="导入" width="60%" :visible.sync="abstractImportVisible" :close-on-click-modal="false" @close="closeAbstractImport">
       <el-form ref="abstractForm" :inline="true" :model="asyncAbstractValue" class="form-inline">
         <div class="pedetail-title clearfix">
           <div class="btnList">
@@ -154,7 +154,7 @@
     </el-dialog>
 
     <!-- 概要修改 -->
-    <el-dialog title="修改" :visible.sync="abstractUpdateVisible" width="80%">
+    <el-dialog title="修改" :visible.sync="abstractUpdateVisible" :close-on-click-modal="false" width="80%">
       <el-form
         ref="abstractUpdateForm"
         :rules="tempRules"
@@ -187,7 +187,7 @@
     </el-dialog>
 
     <!-- 列表详情 -->
-    <el-dialog title="详情" :visible.sync="batchFormVisible" width="80%" destroy-on-close>
+    <el-dialog title="详情" :visible.sync="batchFormVisible" :close-on-click-modal="false" width="80%" destroy-on-close>
       <el-form
         ref="detailForm"
         :model="batchQuery"
@@ -294,7 +294,7 @@
       <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" />
     </el-dialog>
 
-    <el-dialog title="详情" :visible.sync="detailFormVisible" width="80%" destroy-on-close>
+    <el-dialog title="详情" :visible.sync="detailFormVisible" :close-on-click-modal="false" width="80%" destroy-on-close>
       <el-form
         ref="batchForm"
         :model="batchTemp"
@@ -421,7 +421,7 @@
     </el-dialog>
 
     <!-- 修改 -->
-    <el-dialog title="修改" :visible.sync="updateFormVisible" width="80%">
+    <el-dialog title="修改" :visible.sync="updateFormVisible" :close-on-click-modal="false" width="80%">
       <el-form
         ref="updateForm"
         :rules="tempRules"
@@ -476,7 +476,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="新增" :visible.sync="addFormVisible" width="1100px">
+    <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false" width="1100px">
       <el-form
         ref="addForm"
         :rules="tempRules"
@@ -604,7 +604,7 @@
     </el-dialog>
 
     <!-- 导入 -->
-    <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" @close="closeImport">
+    <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="closeImport">
       <el-form ref="form" :inline="true" :model="asyncValue" class="form-inline">
         <el-form-item label="客户">
           <el-select v-model="asyncValue.custId" placeholder="请选择" clearable>

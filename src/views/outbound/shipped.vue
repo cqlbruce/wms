@@ -84,7 +84,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
 
     <!-- 详情页 -->
-    <el-dialog title="详情" :visible.sync="detailFormVisible" width="80%" destroy-on-close>
+    <el-dialog title="详情" :visible.sync="detailFormVisible" :close-on-click-modal="false" width="80%" destroy-on-close>
       <el-form
         ref="detailForm"
         :model="temp"
@@ -151,7 +151,7 @@
     </el-dialog>
 
     <!-- 批次详情 -->
-    <el-dialog title="详情" :visible.sync="batchFormVisible" width="80%" destroy-on-close>
+    <el-dialog title="详情" :visible.sync="batchFormVisible" :close-on-click-modal="false" width="80%" destroy-on-close>
       <el-form
         ref="batchForm"
         :model="batchTemp"
@@ -251,7 +251,7 @@
     </el-dialog>
 
     <!-- 导出 -->
-    <el-dialog title="导出" :visible.sync="exportVisible" width="60%">
+    <el-dialog title="导出" :visible.sync="exportVisible" :close-on-click-modal="false" width="60%">
       <div class="filter-container">
         <el-form
           ref="exportForm"
@@ -301,7 +301,7 @@
     </el-dialog>
 
     <!-- 导入 -->
-    <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" @close="closeImport">
+    <el-dialog title="导入" width="60%" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="closeImport">
       <el-form ref="form" class="pedetail_Summary" :rules="rules" :model="asyncValue" />
       <div class="pedetail-title clearfix">
         <div class="btnList">
