@@ -167,7 +167,7 @@
             <el-form-item label="实际离仓日期:">{{ batchTemp.shippedDate }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="出仓单号:">{{ batchTemp.shippedNo }}</el-form-item>
+            <el-form-item label="出仓单号:">{{ batchTemp.clp }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -178,7 +178,7 @@
             <el-form-item label="客户采购订单号:">{{ batchTemp.po }}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="货物款号:">{{ batchTemp.sku }}</el-form-item>
+            <el-form-item label="货物款号:">{{ batchTemp.item }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
