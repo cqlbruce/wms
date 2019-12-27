@@ -303,117 +303,147 @@
         label-width="140px"
       >
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="供应商名称:">{{ batchTemp.supplierName }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="入仓落货纸号:">{{ batchTemp.so }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="客户采购订单号:">{{ batchTemp.po }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="货物款号:">{{ batchTemp.item }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
             <el-form-item label="入仓号:">{{ batchTemp.inboundNo }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="海关系统物料号:">{{ batchTemp.customsMeterialNo }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="收货日期:">{{ batchTemp.rcvdDate }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="实收箱数:">{{ batchTemp.rcvdCtns }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="实收件数:">{{ batchTemp.rcvdPcs }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
+            <el-form-item label="实收件数:">{{ batchTemp.rcvdPcs }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="一箱几件:">{{ batchTemp.itemsPerBox }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="单箱毛重:">{{ batchTemp.gwPerBoxActul }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="实收总毛重:">{{ batchTemp.gwAllActul }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="实测外箱长:">{{ batchTemp.boxLengthActul }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="实测外箱宽:">{{ batchTemp.boxWidthActul }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="实测外箱高:">{{ batchTemp.boxHighActul }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="实测单箱体积:">{{ batchTemp.boxPerVolumeActul }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
             <el-form-item label="实收总体积:">{{ batchTemp.boxAllVolumeActul }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="入仓报关单件净重:">{{ batchTemp.custsDeclaPieceWeigh }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="入仓报关总净重:">{{ batchTemp.custsDeclaAllWeigh }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="仓库位置:">{{ batchTemp.warehousePosition }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="总出仓箱数:">{{ batchTemp.shippedCtns }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
+            <el-form-item label="总出仓箱数:">{{ batchTemp.shippedCtns }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="总出仓件数:">{{ batchTemp.shippedPcs }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总出仓毛重:">{{ batchTemp.shippedGw }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总出仓净重:">{{ batchTemp.shippedWeigh }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总出仓体积:">{{ batchTemp.shippedVolume }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总库存箱数:">{{ batchTemp.stockCtns }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总库存件数:">{{ batchTemp.stockPcs }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总库存毛重:">{{ batchTemp.stockGw }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
             <el-form-item label="总库存净重:">{{ batchTemp.stockWeigh }}</el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="总库存体积:">{{ batchTemp.stockVolume }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="商品名称:">{{ batchTemp.productName }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="海关编码:">{{ batchTemp.customsNo }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="8">
+          <el-col :span="6">
+            <el-form-item label="成交单位:">{{ batchTemp.transactionUnit }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="成交币制:">{{ batchTemp.transactionCurrency }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="成交总价:">{{ batchTemp.declaTotalPrice }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="申报要素:">{{ batchTemp.declaFator }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="第一法定单位:">{{ batchTemp.firstUnitMeasurement }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="第一法定数量:">{{ batchTemp.firstLegalCount }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="第二法定单位:">{{ batchTemp.secondUnitMeasurement }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="第二法定数量:">{{ batchTemp.secondLegalCount }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
             <el-form-item label="备注:">{{ batchTemp.remark }}</el-form-item>
           </el-col>
         </el-row>
