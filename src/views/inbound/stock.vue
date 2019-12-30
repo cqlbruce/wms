@@ -422,10 +422,10 @@
             <el-form-item label="成交币制:">{{ batchTemp.transactionCurrency }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="成交总价:">{{ batchTemp.transactionTotalPrice }}</el-form-item>
+            <el-form-item label="成交总价:">{{ batchTemp.transTotalPrice }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="申报要素:">{{ batchTemp.declaFator }}</el-form-item>
+            <el-form-item label="申报要素:">{{ batchTemp.declaElement }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -445,6 +445,9 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="备注:">{{ batchTemp.remark }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="成交单价:">{{ batchTemp.transUnitPrice }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
