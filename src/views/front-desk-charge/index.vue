@@ -517,6 +517,9 @@ export default {
       fetchFrontDeskChargeList(this.listQuery).then(response => {
         this.total = response.data.total
         this.list = response.data.items
+        if (this.list === null) {
+          this.list = []
+        }
         // 客户类型转换
         this.list.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)

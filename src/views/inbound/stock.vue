@@ -955,9 +955,11 @@ export default {
           this.list = []
         }
         // 客户类型转换
-        this.list.forEach(item => {
-          item.custShortName = this.matchAccount(item.custId)
-        })
+        if (this.list != null) {
+          this.list.forEach(item => {
+            item.custShortName = this.matchAccount(item.custId)
+          })
+        }
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
