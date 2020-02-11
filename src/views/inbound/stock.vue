@@ -291,7 +291,7 @@
           </el-table-column>
         </el-table>
       </el-form>
-      <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" />
+      <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" @pagination="getDetailList"/>
     </el-dialog>
 
     <el-dialog title="详情" :visible.sync="detailFormVisible" :close-on-click-modal="false" width="80%" destroy-on-close>
@@ -964,6 +964,9 @@ export default {
           this.listLoading = false
         }, 1.5 * 1000)
       })
+    },
+    getDetailList() {
+      this.loadStockList()
     },
     handleFilter() {
       this.listQuery.page = 1
