@@ -147,7 +147,7 @@
           </el-table-column>
         </el-table>
       </el-form>
-      <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" />
+      <pagination v-show="batchTotal>0" :total="batchTotal" :page.sync="batchQuery.page" :limit.sync="batchQuery.size" @pagination="getDetailList"/>
     </el-dialog>
 
     <!-- 批次详情 -->
@@ -540,6 +540,9 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    getDetailList() {
+      this.loadShipList()
+    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
@@ -549,7 +552,9 @@ export default {
       this.batchQuery.cntrNo = row.cntrNo
       this.batchQuery.custId = row.custId
       this.batchQuery.shippedDate = row.shippedDate
-
+      this.loadShipList()
+    },
+    loadShipList() {
       this.batchLoading = true
       loadShippedList(this.batchQuery).then(response => {
         this.batchList = response.data.items
