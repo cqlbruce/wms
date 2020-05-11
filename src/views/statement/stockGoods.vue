@@ -38,7 +38,7 @@
     </div>
 
     <!-- 查询列表 -->
-    <div style="width: 60%;">
+    <div style="width: 80%;">
       <el-form ref="analysisForm" :model="stockStatistics" :label-position="labelPosition" :inline="true">
         <el-row :gutter="10">
           <el-col :span="6">
