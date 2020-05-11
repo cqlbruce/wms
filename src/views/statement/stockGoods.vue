@@ -1,16 +1,34 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form :inline="true" :model="listQuery" class="form-inline">
-        <el-form-item label="收货日期：">
+      <el-form ref="queryForm" :inline="true" :model="listQuery" :rules="rules" class="form-inline">
+        <el-form-item label="客户">
+          <el-select v-model="listQuery.custId" placeholder="请选择" clearable>
+            <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="收货日期">
           <el-date-picker v-model="listQuery.beginDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="开始日期" /> -
           <el-date-picker v-model="listQuery.endDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="截止日期" />
         </el-form-item>
-        <el-form-item label="入仓落货纸号：">
-          <el-input v-model="listQuery.so" placeholder="so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="入仓落货纸号">
+          <el-input v-model="listQuery.so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
-        <el-form-item label="客户采购订单号：">
-          <el-input v-model="listQuery.po" placeholder="po" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="客户采购订单号">
+          <el-input v-model="listQuery.po" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="入仓编号">
+          <el-input v-model="listQuery.inbundNo" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="总库存体积大于零">
+          <el-select v-model="listQuery.volumeMoreThanZero" placeholder="请选择" style="width: 100px;">
+            <el-option v-for="item in isMoreThanZero" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="总库存件数大于零">
+          <el-select v-model="listQuery.pcsMoreThanZero" placeholder="请选择" style="width: 100px;">
+            <el-option v-for="item in isMoreThanZero" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
         <el-form-item class="search">
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
@@ -82,7 +100,7 @@
 </template>
 
 <script>
-import { fetchStockGoodsList, exportStockGoodsList } from '@/api/article'
+import { fetchStockGoodsList, exportStockGoodsList, loanAccountInfo } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -92,12 +110,22 @@ export default {
   components: { Pagination },
   directives: { waves },
   data() {
+    // const validateNumber = (rule, value, callback) => {
+    //   // const flag = new RegExp('^([1-9][0-9]*(\.\d{1,2})?)|(0\.\d{1,2})?$').test(value)
+    //   if (value !== '' && value !== null) {
+    //     if (value <= 0) {
+    //       callback(new Error('请输入正数'))
+    //     }
+    //   }
+    //   callback()
+    // }
     return {
       tableKey: 0,
       list: null,
       exportList: null,
       total: 0,
       listLoading: true,
+      accountArr: [],
       listQuery: {
         page: 1,
         size: 20,
@@ -107,32 +135,64 @@ export default {
         billsEndDate: undefined,
         overStockUnitPrice: undefined,
         so: undefined,
-        po: undefined
+        po: undefined,
+        inbundNo: undefined,
+        volumeMoreThanZero: undefined,
+        pcsMoreThanZero: undefined,
+        custId: undefined
       },
       downloadLoading: false,
       exportStockGoodsVisible: false,
       rules: {
-
-      }
+        // volumeMoreThanZero: [{ validator: validateNumber, trigger: 'blur' }],
+        // pcsMoreThanZero: [{ validator: validateNumber, trigger: 'blur' }]
+      },
+      isMoreThanZero: [{ value: 'true', label: '是' }, { value: 'false', label: '否' }]
     }
   },
   created() {
+    this.getALLData()
     this.getList()
   },
   methods: {
+    // 获取客户信息
+    getALLData() {
+      const that = this
+      this.Axios.all([loanAccountInfo({})])
+        .then(
+          this.Axios.spread(function(AccountInfo) {
+            that.accountArr = AccountInfo.data.items
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    // 客户姓名匹配
+    matchAccount(value) {
+      let str = '--'
+      this.accountArr.forEach(item => {
+        if (item.custId === value) {
+          str = item.custShortName
+        }
+      })
+      return str
+    },
     getList() {
       this.listLoading = true
       fetchStockGoodsList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        this.listLoading = false
       })
     },
     handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
+      this.$refs['queryForm'].validate(validate => {
+        if (validate) {
+          this.listQuery.page = 1
+          this.getList()
+        }
+      })
     },
     handleExport() {
       this.exportStockGoodsVisible = true

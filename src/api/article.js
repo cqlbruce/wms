@@ -90,6 +90,15 @@ export function loadShippedList(data) {
   })
 }
 
+// 出库实时统计
+export function fetchShippedtatistics(data) {
+  return request({
+    url: '/statement/shippedStatistics',
+    method: 'post',
+    data
+  })
+}
+
 /**  出库批量查询  **/
 export function loadBatchShippedList(data) {
   return request({
@@ -108,10 +117,28 @@ export function uploadShippedFile(data) {
   })
 }
 
+// 入库实时统计
+export function fetchStockStatistics(data) {
+  return request({
+    url: '/statement/stockStatistics',
+    method: 'post',
+    data
+  })
+}
+
 /** 入库费用查询 */
 export function fetchStockFeeList(data) {
   return request({
     url: '/statement/loadStockFee',
+    method: 'post',
+    data
+  })
+}
+
+// 入仓费用修改
+export function stockFeeUpdate(data) {
+  return request({
+    url: '/statement/stockFeeUpdate',
     method: 'post',
     data
   })
@@ -139,6 +166,15 @@ export function fetchShippedFeeList(data) {
 export function exportShippedFeeList(data) {
   return request({
     url: '/statement/exportShippedFee',
+    method: 'post',
+    data
+  })
+}
+
+// 出仓费用修改
+export function shippedFeeUpdate(data) {
+  return request({
+    url: '/statement/shippedFeeUpdate',
     method: 'post',
     data
   })

@@ -2,15 +2,23 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" class="form-inline">
-        <el-form-item label="出仓日期：">
+        <el-form-item label="客户">
+          <el-select v-model="listQuery.custId" placeholder="请选择" clearable>
+            <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="出仓日期">
           <el-date-picker v-model="listQuery.beginDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="开始日期" /> -
           <el-date-picker v-model="listQuery.endDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="截止日期" />
         </el-form-item>
-        <el-form-item label="入仓落货纸号：">
-          <el-input v-model="listQuery.so" placeholder="so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="入仓落货纸号">
+          <el-input v-model="listQuery.so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
-        <el-form-item label="客户采购订单号：">
-          <el-input v-model="listQuery.po" placeholder="po" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="客户采购订单号">
+          <el-input v-model="listQuery.po" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="入仓编号">
+          <el-input v-model="listQuery.inbundNo" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item class="search">
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
@@ -92,7 +100,7 @@
 </template>
 
 <script>
-import { fetchShippedGoodsList, exportShippedGoodsList } from '@/api/article'
+import { fetchShippedGoodsList, exportShippedGoodsList, loanAccountInfo } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -103,6 +111,7 @@ export default {
   directives: { waves },
   data() {
     return {
+      accountArr: [],
       tableKey: 0,
       list: null,
       exportList: null,
@@ -117,7 +126,9 @@ export default {
         po: undefined,
         billsBeginDate: undefined,
         billsEndDate: undefined,
-        overStockUnitPrice: undefined
+        overStockUnitPrice: undefined,
+        inbundNo: undefined,
+        custId: undefined
       },
       rules: {
 
@@ -127,9 +138,33 @@ export default {
     }
   },
   created() {
+    this.getALLData()
     this.getList()
   },
   methods: {
+    // 获取客户信息
+    getALLData() {
+      const that = this
+      this.Axios.all([loanAccountInfo({})])
+        .then(
+          this.Axios.spread(function(AccountInfo) {
+            that.accountArr = AccountInfo.data.items
+          })
+        )
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    // 客户姓名匹配
+    matchAccount(value) {
+      let str = '--'
+      this.accountArr.forEach(item => {
+        if (item.custId === value) {
+          str = item.custShortName
+        }
+      })
+      return str
+    },
     getList() {
       this.listLoading = true
       fetchShippedGoodsList(this.listQuery).then(response => {
