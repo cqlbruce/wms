@@ -82,19 +82,19 @@
           <span>{{ scope.row.inboundNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="订单号" style="width: 20%" align="center">
+      <el-table-column label="库存箱数" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.po }}</span>
+          <span>{{ scope.row.stockCtns }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="货物款号" style="width: 20%" align="center">
+      <el-table-column label="库存件数" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.item }}</span>
+          <span>{{ scope.row.stockPcs }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品名称" style="width: 20%" align="center">
+      <el-table-column label="库存体积" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.productName }}</span>
+          <span>{{ scope.row.stockVolume }}</span>
         </template>
       </el-table-column>
       <el-table-column
