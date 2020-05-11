@@ -7,15 +7,12 @@
             <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="出仓日期">
+        <el-form-item label="进仓日期">
           <el-date-picker v-model="listQuery.beginDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="开始日期" /> -
           <el-date-picker v-model="listQuery.endDate" align="right" type="date" value-format="yyyy-MM-dd" style="width: 150px;" placeholder="截止日期" />
         </el-form-item>
-        <el-form-item label="ShptNo">
-          <el-input v-model="listQuery.shptNo" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
-        </el-form-item>
-        <el-form-item label="出库单号">
-          <el-input v-model="listQuery.clp" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="入仓落货纸号">
+          <el-input v-model="listQuery.so" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="项目">
           <el-input v-model="listQuery.projectId" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
@@ -24,19 +21,6 @@
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
           <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
         </el-form-item>
-      </el-form>
-    </div>
-
-    <div style="width: 50%;">
-      <el-form ref="analysisForm" :model="shippedStatistics" :label-position="labelPosition" :inline="true">
-        <el-row :gutter="5">
-          <el-col :span="6">
-            <el-form-item label="当日出仓总车数">{{ shippedStatistics.veryDayCarCount }}</el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="当日出仓总体积">{{ shippedStatistics.veryDayShippedVolume }}</el-form-item>
-          </el-col>
-        </el-row>
       </el-form>
     </div>
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
@@ -52,17 +36,17 @@
       </el-table-column>
       <el-table-column label="进仓日期" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedDate }}</span>
+          <span>{{ scope.row.rcvdDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="shptNo" style="width: 20%" align="center">
+      <el-table-column label="入仓落货纸号" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shptNo }}</span>
+          <span>{{ scope.row.so }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="出仓单号" style="width: 20%" align="center">
+      <el-table-column label="入仓号" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.clp }}</span>
+          <span>{{ scope.row.inboundNo }}</span>
         </template>
       </el-table-column>
       <el-table-column label="车牌" style="width: 20%" align="center">
@@ -70,14 +54,14 @@
           <span>{{ scope.row.carNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总出仓箱数" style="width: 20%" align="center">
+      <el-table-column label="入仓总箱数" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedCtns }}</span>
+          <span>{{ scope.row.rcvdCtns }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总出仓体积" style="width: 20%" align="center">
+      <el-table-column label="入仓总体积" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedVolume }}</span>
+          <span>{{ scope.row.boxAllVolumeActul }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -110,69 +94,75 @@
             <el-form-item label="项目:">{{ detailTemp.projectId }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="出仓日期:">{{ detailTemp.shippedDate }}</el-form-item>
+            <el-form-item label="进仓日期:">{{ detailTemp.rcvdDate }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="shptNo:">{{ detailTemp.shptNo }}</el-form-item>
+            <el-form-item label="入仓落货纸号:">{{ detailTemp.so }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="6">
-            <el-form-item label="出仓单号:">{{ detailTemp.clp }}</el-form-item>
+            <el-form-item label="入仓号:">{{ detailTemp.inboundNo }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="车牌号:">{{ detailTemp.carNum }}</el-form-item>
+            <el-form-item label="车牌:">{{ detailTemp.carNum }}</el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="柜号:">{{ detailTemp.cntrNo }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="运输路线:">{{ detailTemp.trafficLine }}</el-form-item>
+            <el-form-item label="入仓总箱数:">{{ detailTemp.rcvdCtns }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="6">
-            <el-form-item label="总出仓箱数:">{{ detailTemp.shippedCtns }}</el-form-item>
+            <el-form-item label="入仓总体积:">{{ detailTemp.boxAllVolumeActul }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="总出仓体积:">{{ detailTemp.shippedVolume }}</el-form-item>
+            <el-form-item label="入仓报关费:">{{ detailTemp.customsDeclarationFee }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="分拣费:">{{ detailTemp.sortingFee }}</el-form-item>
+            <el-form-item label="续页费:">{{ detailTemp.continuationSheetFee }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="报关费:">{{ detailTemp.customsDeclarationFee }}</el-form-item>
+            <el-form-item label="入闸费:">{{ detailTemp.enterGateFee }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="6">
-            <el-form-item label="闸口费:">{{ detailTemp.enterGateFee }}</el-form-item>
-          </el-col>
           <el-col :span="6">
             <el-form-item label="装卸单价:">{{ detailTemp.unloadUnitPrice }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="装货费:">{{ detailTemp.loadFee }}</el-form-item>
+            <el-form-item label="卸货费:">{{ detailTemp.unloadFee }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="商检费:">{{ detailTemp.commercialInspectionFee }}</el-form-item>
+            <el-form-item label="混装费:">{{ detailTemp.assortedPackingFee }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="加班费:">{{ detailTemp.overtimeFee }}</el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="6">
+            <el-form-item label="删单费:">{{ detailTemp.delBillFee }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="商检费:">{{ detailTemp.commercialInspectionFee }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="运输费:">{{ detailTemp.trafficFee }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="压车费:">{{ detailTemp.pledgeCarFee }}</el-form-item>
+            <el-form-item label="押车费:">{{ detailTemp.pledgeCarFee }}</el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="代垫费:">{{ detailTemp.paymentInAdvanceFee }}</el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="代垫税费:">{{ detailTemp.paymentInAdvanceTaxFee }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="费用合计:">{{ detailTemp.total }}</el-form-item>
           </el-col>
@@ -190,36 +180,36 @@
         label-width="100px"
       >
         <el-row>
-          <el-row>
-            <el-form-item label="shptNo:" prop="shptNo">
-              <el-input v-model="updateTemp.shptNo" clearable />
-            </el-form-item>
-            <el-form-item label="运输路线:" prop="trafficLine">
-              <el-input v-model="updateTemp.trafficLine" clearable />
-            </el-form-item>
-            <el-form-item label="代垫费:" prop="paymentInAdvanceFee">
-              <el-input v-model="updateTemp.paymentInAdvanceFee" clearable />
-            </el-form-item>
-            <el-form-item label="代垫税费:" prop="paymentInAdvanceTaxFee">
-              <el-input v-model="updateTemp.paymentInAdvanceTaxFee" clearable />
-            </el-form-item>
-          </el-row>
-          <el-form-item label="分拣费:" prop="sortingFee">
-            <el-input v-model="updateTemp.sortingFee" clearable />
+          <el-form-item label="卸货费:" prop="unloadFee">
+            <el-input v-model="updateTemp.unloadFee" clearable />
           </el-form-item>
-          <el-form-item label="报关费:" prop="customsDeclarationFee">
+          <el-form-item label="入仓报关费:" prop="customsDeclarationFee">
             <el-input v-model="updateTemp.customsDeclarationFee" clearable />
           </el-form-item>
-          <el-form-item label="闸口费:" prop="enterGateFee">
+          <el-form-item label="入闸费:" prop="enterGateFee">
             <el-input v-model="updateTemp.enterGateFee" clearable />
+          </el-form-item>
+          <el-form-item label="代垫费:" prop="paymentInAdvanceFee">
+            <el-input v-model="updateTemp.paymentInAdvanceFee" clearable />
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="续页费:" prop="continuationSheetFee">
+            <el-input v-model="updateTemp.continuationSheetFee" clearable />
           </el-form-item>
           <el-form-item label="装卸单价:" prop="unloadUnitPrice">
             <el-input v-model="updateTemp.unloadUnitPrice" clearable />
           </el-form-item>
+          <el-form-item label="混装费:" prop="assortedPackingFee">
+            <el-input v-model="updateTemp.assortedPackingFee" clearable />
+          </el-form-item>
+          <el-form-item label="加班费:" prop="overtimeFee">
+            <el-input v-model="updateTemp.overtimeFee" clearable />
+          </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="装货费:" prop="loadFee">
-            <el-input v-model="updateTemp.loadFee" clearable />
+          <el-form-item label="删单费:" prop="delBillFee">
+            <el-input v-model="updateTemp.delBillFee" clearable />
           </el-form-item>
           <el-form-item label="商检费:" prop="commercialInspectionFee">
             <el-input v-model="updateTemp.commercialInspectionFee" clearable />
@@ -227,11 +217,14 @@
           <el-form-item label="运输费:" prop="trafficFee">
             <el-input v-model="updateTemp.trafficFee" clearable />
           </el-form-item>
-          <el-form-item label="压车费:" prop="pledgeCarFee">
+          <el-form-item label="押车费:" prop="pledgeCarFee">
             <el-input v-model="updateTemp.pledgeCarFee" clearable />
           </el-form-item>
         </el-row>
         <el-row>
+          <el-form-item label="代垫税费:" prop="paymentInAdvanceTaxFee">
+            <el-input v-model="updateTemp.paymentInAdvanceTaxFee" clearable />
+          </el-form-item>
           <el-form-item label="其他:" prop="remark">
             <el-input v-model="updateTemp.remark" clearable />
           </el-form-item>
@@ -246,7 +239,7 @@
 </template>
 
 <script>
-import { fetchShippedFeeList, exportShippedFeeList, loanAccountInfo, fetchShippedtatistics, shippedFeeUpdate } from '@/api/article'
+import { fetchStockFeeList, exportStockFeeList, loanAccountInfo, stockFeeUpdate } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -258,29 +251,33 @@ export default {
   data() {
     return {
       labelPosition: 'right',
-      accountArr: null,
+      accountArr: [],
       tableKey: 0,
       list: null,
-      shippedStatistics: null,
+      stockStatistics: null,
+      exportList: null,
       total: 0,
-      listLoading: false,
+      listLoading: true,
       listQuery: {
         page: 1,
         size: 20,
         beginDate: undefined,
         endDate: undefined,
-        shptNo: undefined,
-        clp: undefined,
+        so: undefined,
         projectId: undefined,
         custId: undefined
       },
-      downloadLoading: false,
       detailTemp: {
 
       },
       updateTemp: {
-
+        unloadFee: undefined,
+        customsDeclarationFee: undefined,
+        enterGateFee: undefined,
+        paymentInAdvanceFee: undefined,
+        remark: undefined
       },
+      downloadLoading: false,
       detailVisible: false,
       updateVisible: false,
       updateRules: {
@@ -296,11 +293,10 @@ export default {
     // 获取客户信息
     getALLData() {
       const that = this
-      this.Axios.all([loanAccountInfo({}), fetchShippedtatistics({})])
+      this.Axios.all([loanAccountInfo({})])
         .then(
-          this.Axios.spread(function(AccountInfo, ShippedStatistics) {
+          this.Axios.spread(function(AccountInfo) {
             that.accountArr = AccountInfo.data.items
-            that.shippedStatistics = ShippedStatistics.data
           })
         )
         .catch(err => {
@@ -319,7 +315,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchShippedFeeList(this.listQuery).then(response => {
+      fetchStockFeeList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         if (this.list === null) {
@@ -338,22 +334,24 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
+    // 列表导出
     handleDownload() {
       this.downloadLoading = true
-
-      exportShippedFeeList(this.listQuery).then(response => {
+      exportStockFeeList(this.listQuery).then(response => {
         this.exportList = response.data.items
+        // 客户类型转换
         this.exportList.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
         })
+        console.log(this.exportList)
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['客户', '项目', '出仓日期', 'shptNo', '出仓单号', '车牌', '柜号', '运输路线', '出仓箱数', '出仓体积', '分拣费', '报关费', '闸口费', '装卸单价', '装货费', '商检费', '运输费', '押车费', '代垫费', '代垫税费', '合计']
-          const filterVal = ['custShortName', 'projectId', 'shippedDate', 'shptNo', 'clp', 'carNum', 'cntrNo', 'trafficLine', 'shippedCtns', 'shippedVolume', 'sortingFee', 'customsDeclarationFee', 'enterGateFee', 'unloadUnitPrice', 'loadFee', 'commercialInspectionFee', 'trafficFee', 'pledgeCarFee', 'paymentInAdvanceFee', 'paymentInAdvanceTaxFee', 'total']
+          const tHeader = ['客户', '项目', '进仓日期', '入仓落货纸号', '入仓号', '车牌', '柜号', '入仓总箱数', '入仓总体积', '入仓报关费', '续页费', '闸口费', '装卸单价', '卸货费', '混装费', '加班费', '删单费', '商检费', '运输费', '压车费', '代垫费', '代垫税费', '合计']
+          const filterVal = ['custShortName', 'projectId', 'rcvdDate', 'so', 'inboundNo', 'carNum', 'cntrNo', 'rcvdCtns', 'boxAllVolumeActul', 'customsDeclarationFee', 'continuationSheetFee', 'enterGateFee', 'unloadUnitPrice', 'unloadFee', 'assortedPackingFee', 'overtimeFee', 'delBillFee', 'commercialInspectionFee', 'trafficFee', 'pledgeCarFee', 'paymentInAdvanceFee', 'paymentInAdvanceTaxFee', 'total']
           const data = this.formatJson(filterVal, this.exportList)
           excel.export_json_to_excel({
             header: tHeader,
             data,
-            filename: '出仓费用表'
+            filename: '入仓费用表'
           })
           this.downloadLoading = false
         })
@@ -384,7 +382,7 @@ export default {
     updateData() {
       this.$refs['updateForm'].validate(valid => {
         if (valid) {
-          shippedFeeUpdate(this.updateTemp).then(response => {
+          stockFeeUpdate(this.updateTemp).then(response => {
             this.updateVisible = false
             this.listQuery.page = 1
             this.getList()

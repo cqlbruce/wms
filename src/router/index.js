@@ -162,16 +162,16 @@ export const asyncRoutes = [
     },
     children: [
       {
-        path: 'inboundFee',
-        component: () => import('@/views/statement/inboundFee'),
-        name: 'InboundFee',
+        path: 'stockFee',
+        component: () => import('@/views/statement/stockFee'),
+        name: 'StockFee',
         meta: { title: '入仓费用表', icon: 'list' }
 
       },
       {
-        path: 'outboundFee',
-        component: () => import('@/views/statement/outboundFee'),
-        name: 'OutBoundFee',
+        path: 'shippedFee',
+        component: () => import('@/views/statement/shippedFee'),
+        name: 'ShippedFee',
         meta: { title: '出仓费用表', icon: 'list' }
 
       },
@@ -179,7 +179,7 @@ export const asyncRoutes = [
         path: 'stockGoods',
         component: () => import('@/views/statement/stockGoods'),
         name: 'StockGoods',
-        meta: { title: '进仓货物表', icon: 'list' }
+        meta: { title: '入仓货物表', icon: 'list' }
 
       },
       {

@@ -26,15 +26,37 @@
         </el-form-item>
       </el-form>
     </div>
+    <div style="width: 50%;">
+      <el-form ref="analysisForm" :model="shippedStatistics" :label-position="labelPosition" :inline="true">
+        <el-row :gutter="5">
+          <el-col :span="6">
+            <el-form-item label="当日出仓总车数">{{ shippedStatistics.veryDayCarCount }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="当日出仓总体积">{{ shippedStatistics.veryDayShippedVolume }}</el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
-      <el-table-column label="收货日期" style="width: 25%" align="center">
+      <el-table-column label="客户" style="width: 25%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.rcvdDate | parseTime('{y}/{m}/{d}') }}</span>
+          <span>{{ scope.row.custShortName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="入仓编号" style="width: 20%" align="center">
+      <el-table-column label="项目" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.inboundNo }}</span>
+          <span>{{ scope.row.projectId }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="出仓日期" style="width: 20%" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.shippedDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="出仓单号" style="width: 20%" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.clp }}</span>
         </template>
       </el-table-column>
       <el-table-column label="入仓落货纸号" style="width: 20%" align="center">
@@ -42,39 +64,97 @@
           <span>{{ scope.row.so }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户采购订单号" style="width: 20%" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.po }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="货物款号" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sku }}</span>
+          <span>{{ scope.row.item }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总库存件数" style="width: 20%" align="center">
+      <el-table-column label="入仓编号" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.stockPcs }}</span>
+          <span>{{ scope.row.inboundNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总库存体积" style="width: 20%" align="center">
+      <el-table-column label="商品编码" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.stockVolume }}</span>
+          <span>{{ scope.row.customsMerchNo }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="出仓编号" style="width: 20%" align="center">
+      <el-table-column label="商品名称" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.shippedNo }}</span>
+          <span>{{ scope.row.merchName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="出仓日期" style="width: 20%" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.shippedOrderDate }}</span>
+      <el-table-column
+        label="操作"
+        align="center"
+        width="120"
+        fixed="right"
+      >
+        <template slot-scope="{row}">
+          <el-button size="mini" @click="handleDetail(row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="getList" />
-
+    <!-- 详情展示 -->
+    <el-dialog title="详情" :visible.sync="detailVisible" :close-on-click-modal="false" width="80%" destroy-on-close>
+      <el-form
+        ref="detailForm"
+        :model="detailTemp"
+        :label-position="labelPosition"
+        :inline="true"
+        label-width="140px"
+      >
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="客户:">{{ detailTemp.custShortName }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="项目:">{{ detailTemp.projectId }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="出仓日期:">{{ detailTemp.shippedDate }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="出仓单号:">{{ detailTemp.clp }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="入仓落货纸号:">{{ detailTemp.so }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="货物款号:">{{ detailTemp.item }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="入仓编号:">{{ detailTemp.inboundNo }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="商品编码:">{{ detailTemp.customsMerchNo }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="商品名称:">{{ detailTemp.merchName }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="成交单位:">{{ detailTemp.declaUnit }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="出仓箱数:">{{ detailTemp.shippedCtns }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="出仓件数:">{{ detailTemp.shippedPcs }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="出仓体积:">{{ detailTemp.shippedVolume }}</el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-dialog>
+    <!-- 文件导出 -->
     <el-dialog title="导出" :visible.sync="exportShippedGoodsVisible" width="60%">
       <div class="filter-container">
         <el-form ref="exportShippedGoodsForm" :rules="rules" :model="listQuery" label-position="left" label-width="120px" style="width: 1200px; margin-left:30px;">
@@ -100,7 +180,7 @@
 </template>
 
 <script>
-import { fetchShippedGoodsList, exportShippedGoodsList, loanAccountInfo } from '@/api/article'
+import { fetchShippedGoodsList, exportShippedGoodsList, loanAccountInfo, fetchShippedtatistics } from '@/api/article'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -111,12 +191,13 @@ export default {
   directives: { waves },
   data() {
     return {
+      labelPosition: 'right',
       accountArr: [],
       tableKey: 0,
       list: null,
       exportList: null,
+      shippedStatistics: null,
       total: 0,
-      listLoading: true,
       listQuery: {
         page: 1,
         size: 20,
@@ -130,11 +211,14 @@ export default {
         inbundNo: undefined,
         custId: undefined
       },
+      detailTemp: {},
       rules: {
 
       },
       downloadLoading: false,
-      exportShippedGoodsVisible: false
+      exportShippedGoodsVisible: false,
+      detailVisible: false,
+      listLoading: true
     }
   },
   created() {
@@ -145,10 +229,11 @@ export default {
     // 获取客户信息
     getALLData() {
       const that = this
-      this.Axios.all([loanAccountInfo({})])
+      this.Axios.all([loanAccountInfo({}), fetchShippedtatistics({})])
         .then(
-          this.Axios.spread(function(AccountInfo) {
+          this.Axios.spread(function(AccountInfo, ShippedStatistics) {
             that.accountArr = AccountInfo.data.items
+            that.shippedStatistics = ShippedStatistics.data
           })
         )
         .catch(err => {
@@ -170,6 +255,13 @@ export default {
       fetchShippedGoodsList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
+        if (this.list === null) {
+          this.list = []
+        }
+        // 客户类型转换
+        this.list.forEach(item => {
+          item.custShortName = this.matchAccount(item.custId)
+        })
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -191,10 +283,13 @@ export default {
 
       exportShippedGoodsList(this.listQuery).then(response => {
         this.exportList = response.data.items
-
+        // 客户类型转换
+        this.exportList.forEach(item => {
+          item.custShortName = this.matchAccount(item.custId)
+        })
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['收货日期', '入仓编号', '入仓落货纸号', '客户采购订单号', '货物款号', '总库存件数', '总库存体积', '出仓编号', '出仓日期', '账单起算时间', '账单截止时间', '超仓租起算时间', '超仓租天数', '超仓租单价', '超仓租总费用']
-          const filterVal = ['rcvdDate', 'inboundNo', 'so', 'po', 'sku', 'stockPcs', 'stockVolume', 'shippedNo', 'shippedOrderDate', 'billsBeginDate', 'billsEndDate', 'overStockDate', 'overStockDays', 'overStockUnitPrice', 'overStockFee']
+          const tHeader = ['客户', '项目', '出仓日期', '出仓单号', '入仓落货纸号', '货物款号', '入仓编号', '商品编码', '商品名称', '成交单位', '出仓箱数', '出仓件数', '出仓体积', '备注']
+          const filterVal = ['custShortName', 'projectId', 'shippedDate', 'clp', 'so', 'item', 'inboundNo', 'customsMerchNo', 'merchName', 'declaUnit', 'shippedCtns', 'shippedPcs', 'shippedVolume', '']
           const data = this.formatJson(filterVal, this.exportList)
           excel.export_json_to_excel({
             header: tHeader,
@@ -213,6 +308,11 @@ export default {
           return v[j]
         }
       }))
+    },
+    // 详情页面
+    handleDetail(row) {
+      this.detailTemp = Object.assign({}, row)
+      this.detailVisible = true
     }
   }
 }
