@@ -28,11 +28,11 @@
     </div>
     <div style="width: 50%;">
       <el-form ref="analysisForm" :model="shippedStatistics" :label-position="labelPosition" :inline="true">
-        <el-row :gutter="5">
-          <el-col :span="6">
+        <el-row>
+          <el-col style="width: 300px">
             <el-form-item label="当日出仓总车数">{{ shippedStatistics.veryDayCarCount }}</el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col style="width: 300px">
             <el-form-item label="当日出仓总体积">{{ shippedStatistics.veryDayShippedVolume }}</el-form-item>
           </el-col>
         </el-row>

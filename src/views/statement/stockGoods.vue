@@ -41,16 +41,16 @@
     <div style="width: 100%;">
       <el-form ref="analysisForm" :model="stockStatistics" :label-position="labelPosition" :inline="true" size="medium">
         <el-row>
-          <el-col style="width: 250px">
+          <el-col style="width: 300px">
             <el-form-item label="实时总库存体积：">{{ stockStatistics.realTimeVolume }}</el-form-item>
           </el-col>
-          <el-col style="width: 250px">
+          <el-col style="width: 300px">
             <el-form-item label="实时总件数：">{{ stockStatistics.realTimePcs }}</el-form-item>
           </el-col>
-          <el-col style="width: 250px">
+          <el-col style="width: 300px">
             <el-form-item label="当天入库票数：">{{ stockStatistics.tickets }}</el-form-item>
           </el-col>
-          <el-col style="width: 250px">
+          <el-col style="width: 300px">
             <el-form-item label="当天入库总体积：">{{ stockStatistics.veryDayVolume }}</el-form-item>
           </el-col>
         </el-row>
