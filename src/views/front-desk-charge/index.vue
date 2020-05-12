@@ -31,7 +31,7 @@
 
     <!-- 列表 -->
     <el-table :key="tableKey" v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%;">
-      <el-table-column label="收费日期" min-width="80px" align="center">
+      <el-table-column label="收费日期" min-width="100px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.tranDate }}</span>
         </template>
@@ -119,8 +119,8 @@
               <el-option v-for="item in accountArr" :key="item.custId" :label="item.custShortName" :value="item.custId" />
             </el-select>
           </el-form-item>
-          <el-form-item label="项目" prop="projectName">
-            <el-select v-model="addDataModel.projectName" :disabled="isNotSelectCust" placeholder="请选择" style="width: 185px" clearable>
+          <el-form-item label="项目" prop="projectId">
+            <el-select v-model="addDataModel.projectId" :disabled="isNotSelectCust" placeholder="请选择" style="width: 185px" clearable>
               <el-option v-for="item in projectArr" :key="item.projectId" :label="item.projectName" :value="item.projectId" />
             </el-select>
           </el-form-item>
@@ -403,7 +403,7 @@ export default {
         enterGateFee: '',
         po: '',
         payType: '',
-        projectName: '',
+        projectId: '',
         recAmt: '',
         receiptNo: '',
         tranDate: getNowFormatDate(),
@@ -425,7 +425,6 @@ export default {
         so: '',
         customsMeterialNo: ''
       },
-      dialogStatus: '',
       textMap: {
         update: '编辑',
         create: '新增'
@@ -576,17 +575,18 @@ export default {
       this.getList()
     },
     resetTemp() {
-      this.temp = {
+      this.addDataModel = {
         billOneCar: '',
         carNum: '',
         custName: '',
         customsDeclarationFee: '',
         enterGateFee: '',
+        po: '',
         payType: '',
-        projectName: '',
+        projectId: '',
         recAmt: '',
         receiptNo: '',
-        tranDate: new Date(),
+        tranDate: getNowFormatDate(),
         items: []
       }
     },
@@ -605,7 +605,6 @@ export default {
     },
     handleCreate() {
       this.resetTemp()
-      this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['addDataForm'].clearValidate()

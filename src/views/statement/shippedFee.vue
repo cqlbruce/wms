@@ -14,7 +14,7 @@
         <el-form-item label="ShptNo">
           <el-input v-model="listQuery.shptNo" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
-        <el-form-item label="出库单号">
+        <el-form-item label="出仓单号">
           <el-input v-model="listQuery.clp" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="项目">
