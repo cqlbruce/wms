@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item class="search">
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-          <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleExport">导出</el-button>
+          <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -271,14 +271,14 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    handleExport() {
-      this.exportShippedGoodsVisible = true
-      this.$nextTick(() => {
-        this.$refs['exportShippedGoodsForm'].clearValidate()
-      })
-    },
+    // handleExport() {
+    //   this.exportShippedGoodsVisible = true
+    //   this.$nextTick(() => {
+    //     this.$refs['exportShippedGoodsForm'].clearValidate()
+    //   })
+    // },
     handleDownload() {
-      this.exportShippedGoodsVisible = false
+      // this.exportShippedGoodsVisible = false
       this.downloadLoading = true
 
       exportShippedGoodsList(this.listQuery).then(response => {
