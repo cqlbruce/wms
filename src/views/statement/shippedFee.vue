@@ -18,7 +18,9 @@
           <el-input v-model="listQuery.clp" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="项目">
-          <el-input v-model="listQuery.projectId" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-select v-model="listQuery.projectId" placeholder="请选择" clearable>
+            <el-option v-for="item in accountArr" :key="item.projectId" :label="item.projectName" :value="item.projectId" />
+          </el-select>
         </el-form-item>
         <el-form-item class="search">
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
