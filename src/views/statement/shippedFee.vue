@@ -36,7 +36,7 @@
       </el-table-column>
       <el-table-column label="项目" style="width: 20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.projectId }}</span>
+          <span>{{ scope.row.projectName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="进仓日期" style="width: 20%" align="center">
@@ -96,7 +96,7 @@
             <el-form-item label="客户:">{{ detailTemp.custShortName }}</el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="项目:">{{ detailTemp.projectId }}</el-form-item>
+            <el-form-item label="项目:">{{ detailTemp.projectName }}</el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="出仓日期:">{{ detailTemp.shippedDate }}</el-form-item>
@@ -305,6 +305,16 @@ export default {
       })
       return str
     },
+    // 项目匹配
+    matchProject(value) {
+      let str = '--'
+      this.accountArr.forEach(item => {
+        if (item.projectId === value) {
+          str = item.projectName
+        }
+      })
+      return str
+    },
     getList() {
       this.listLoading = true
       fetchShippedFeeList(this.listQuery).then(response => {
@@ -315,6 +325,7 @@ export default {
         }
         // 客户类型转换
         this.list.forEach(item => {
+          item.projectName = this.matchProject(item.projectId)
           item.custShortName = this.matchAccount(item.custId)
         })
         setTimeout(() => {
