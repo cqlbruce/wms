@@ -26,7 +26,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div style="width: 50%;">
+    <div style="width: 100%;">
       <el-form ref="analysisForm" :model="shippedStatistics" :label-position="labelPosition" :inline="true">
         <el-row>
           <el-col style="width: 300px">
@@ -34,6 +34,9 @@
           </el-col>
           <el-col style="width: 300px">
             <el-form-item label="当日出仓总体积">{{ shippedStatistics.veryDayShippedVolume }}</el-form-item>
+          </el-col>
+          <el-col style="width: 300px">
+            <el-form-item label="当月出仓总体积">{{ shippedStatistics.currentMonthShippedVolume }}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -124,21 +127,32 @@
             <el-form-item label="入仓落货纸号:">{{ detailTemp.so }}</el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="PO:">{{ detailTemp.po }}</el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="货物款号:">{{ detailTemp.item }}</el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="入仓编号:">{{ detailTemp.inboundNo }}</el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="海关物料号:">{{ detailTemp.customsMeterialNo }}</el-form-item>
+          </el-col>
           <el-col :span="6">
             <el-form-item label="商品编码:">{{ detailTemp.customsMerchNo }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="商品名称:">{{ detailTemp.merchName }}</el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="成交单位:">{{ detailTemp.declaUnit }}</el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="成交数量:">{{ detailTemp.declaCount }}</el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="出仓箱数:">{{ detailTemp.shippedCtns }}</el-form-item>
@@ -146,8 +160,6 @@
           <el-col :span="6">
             <el-form-item label="出仓件数:">{{ detailTemp.shippedPcs }}</el-form-item>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="出仓体积:">{{ detailTemp.shippedVolume }}</el-form-item>
           </el-col>
@@ -299,8 +311,8 @@ export default {
           item.custShortName = this.matchAccount(item.custId)
         })
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['客户', '项目', '出仓日期', '出仓单号', '入仓落货纸号', '货物款号', '入仓编号', '商品编码', '商品名称', '成交单位', '出仓箱数', '出仓件数', '出仓体积', '备注']
-          const filterVal = ['custShortName', 'projectId', 'shippedDate', 'clp', 'so', 'item', 'inboundNo', 'customsMerchNo', 'merchName', 'declaUnit', 'shippedCtns', 'shippedPcs', 'shippedVolume', '']
+          const tHeader = ['客户', '项目', '出仓日期', '出仓单号', '入仓落货纸号', 'PO#', '货物款号', '入仓编号', '海关物料号', '商品编码', '商品名称', '成交单位', '成交数量', '出仓箱数', '出仓件数', '出仓体积', '备注']
+          const filterVal = ['custShortName', 'projectId', 'shippedDate', 'clp', 'so', 'po', 'item', 'inboundNo', 'customsMeterialNo', 'customsMerchNo', 'merchName', 'declaUnit', 'declaCount', 'shippedCtns', 'shippedPcs', 'shippedVolume', '']
           const data = this.formatJson(filterVal, this.exportList)
           excel.export_json_to_excel({
             header: tHeader,
