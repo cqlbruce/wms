@@ -309,10 +309,11 @@ export default {
         // 客户类型转换
         this.exportList.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
+          item.projectName = this.matchProject(item.projectId)
         })
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['客户', '项目', '出仓日期', '出仓单号', '入仓落货纸号', 'PO#', '货物款号', '入仓编号', '海关物料号', '商品编码', '商品名称', '成交单位', '成交数量', '出仓箱数', '出仓件数', '出仓体积', '备注']
-          const filterVal = ['custShortName', 'projectId', 'shippedDate', 'clp', 'so', 'po', 'item', 'inboundNo', 'customsMeterialNo', 'customsMerchNo', 'merchName', 'declaUnit', 'declaCount', 'shippedCtns', 'shippedPcs', 'shippedVolume', '']
+          const filterVal = ['custShortName', 'projectName', 'shippedDate', 'clp', 'so', 'po', 'item', 'inboundNo', 'customsMeterialNo', 'customsMerchNo', 'merchName', 'declaUnit', 'declaCount', 'shippedCtns', 'shippedPcs', 'shippedVolume', '']
           const data = this.formatJson(filterVal, this.exportList)
           excel.export_json_to_excel({
             header: tHeader,

@@ -355,11 +355,12 @@ export default {
         // 客户类型转换
         this.exportList.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
+          item.projectName = this.matchProject(item.projectId)
         })
         console.log(this.exportList)
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['客户', '项目', '进仓日期', '入仓落货纸号', '入仓号', '车牌', '柜号', '入仓总箱数', '入仓总体积', '入仓报关费', '续页费', '闸口费', '装卸单价', '卸货费', '混装费', '加班费', '删单费', '商检费', '运输费', '压车费', '代垫费', '代垫税费', '合计']
-          const filterVal = ['custShortName', 'projectId', 'rcvdDate', 'so', 'inboundNo', 'carNum', 'cntrNo', 'rcvdCtns', 'boxAllVolumeActul', 'customsDeclarationFee', 'continuationSheetFee', 'enterGateFee', 'unloadUnitPrice', 'unloadFee', 'assortedPackingFee', 'overtimeFee', 'delBillFee', 'commercialInspectionFee', 'trafficFee', 'pledgeCarFee', 'paymentInAdvanceFee', 'paymentInAdvanceTaxFee', 'total']
+          const filterVal = ['custShortName', 'projectName', 'rcvdDate', 'so', 'inboundNo', 'carNum', 'cntrNo', 'rcvdCtns', 'boxAllVolumeActul', 'customsDeclarationFee', 'continuationSheetFee', 'enterGateFee', 'unloadUnitPrice', 'unloadFee', 'assortedPackingFee', 'overtimeFee', 'delBillFee', 'commercialInspectionFee', 'trafficFee', 'pledgeCarFee', 'paymentInAdvanceFee', 'paymentInAdvanceTaxFee', 'total']
           const data = this.formatJson(filterVal, this.exportList)
           excel.export_json_to_excel({
             header: tHeader,

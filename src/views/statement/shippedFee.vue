@@ -344,10 +344,11 @@ export default {
         this.exportList = response.data.items
         this.exportList.forEach(item => {
           item.custShortName = this.matchAccount(item.custId)
+          item.projectName = this.matchProject(item.projectId)
         })
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['客户', '项目', '出仓日期', 'shptNo', '出仓单号', '车牌', '柜号', '运输路线', '出仓箱数', '出仓体积', '分拣费', '报关费', '闸口费', '装卸单价', '装货费', '商检费', '运输费', '押车费', '代垫费', '代垫税费', '合计']
-          const filterVal = ['custShortName', 'projectId', 'shippedDate', 'shptNo', 'clp', 'carNum', 'cntrNo', 'trafficLine', 'shippedCtns', 'shippedVolume', 'sortingFee', 'customsDeclarationFee', 'enterGateFee', 'unloadUnitPrice', 'loadFee', 'commercialInspectionFee', 'trafficFee', 'pledgeCarFee', 'paymentInAdvanceFee', 'paymentInAdvanceTaxFee', 'total']
+          const filterVal = ['custShortName', 'projectName', 'shippedDate', 'shptNo', 'clp', 'carNum', 'cntrNo', 'trafficLine', 'shippedCtns', 'shippedVolume', 'sortingFee', 'customsDeclarationFee', 'enterGateFee', 'unloadUnitPrice', 'loadFee', 'commercialInspectionFee', 'trafficFee', 'pledgeCarFee', 'paymentInAdvanceFee', 'paymentInAdvanceTaxFee', 'total']
           const data = this.formatJson(filterVal, this.exportList)
           excel.export_json_to_excel({
             header: tHeader,
